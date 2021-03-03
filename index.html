@@ -175,7 +175,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -211,6 +211,109 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/03/03/08linux-clone-disk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/03/08linux-clone-disk/" class="post-title-link" itemprop="url">将Ubuntu系统迁移到新的磁盘</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-03-03 21:23:50 / 修改时间：22:57:38" itemprop="dateCreated datePublished" datetime="2021-03-03T21:23:50+01:00">2021-03-03</time>
+    </span>
+
+  
+    <span id="/2021/03/03/08linux-clone-disk/" class="post-meta-item leancloud_visitors" data-flag-title="将Ubuntu系统迁移到新的磁盘" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。</p>
+<h2 id="克隆整个硬盘"><a href="#克隆整个硬盘" class="headerlink" title="克隆整个硬盘"></a>克隆整个硬盘</h2><p>当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： <code>dd</code></p>
+<p>具体步骤如下：</p>
+<h3 id="列出磁盘（diskutil）"><a href="#列出磁盘（diskutil）" class="headerlink" title="列出磁盘（diskutil）"></a>列出磁盘（<code>diskutil</code>）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ diskutil list</span><br><span class="line">...</span><br><span class="line">&#x2F;dev&#x2F;disk4 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *128.0 GB   disk4</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk4s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk4s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk4s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk4s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk4s5</span><br><span class="line"></span><br><span class="line">&#x2F;dev&#x2F;disk5 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *240.1 GB   disk5</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk5s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk5s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk5s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk5s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk5s5</span><br></pre></td></tr></table></figure>
+<p><code>disk4</code>就是我目前的系统盘128G，<code>disk5</code>是新的磁盘256G，我要把<code>disk4</code>的内容原封不动复制到<code>disk5</code>中去。</p>
+<h3 id="使用-dd-进行克隆"><a href="#使用-dd-进行克隆" class="headerlink" title="使用 dd 进行克隆"></a>使用 <code>dd</code> 进行克隆</h3><img src="/images/hexo_post_08_dd.png" width="128"/>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dd <span class="keyword">if</span>=/dev/rdisk4 of=/dev/rdisk5 bs=128m conv=noerror,sync</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在期间可以通过按 CTL+T 来获取进度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;932+0 records in</span><br><span class="line">&gt;931+0 records out</span><br><span class="line">&gt;124956704768 bytes transferred in 1001.749198 secs (124738512 bytes&#x2F;sec)</span><br><span class="line">&gt;load: 4.10  cmd: dd 68241 uninterruptible 7.02u 16.56s</span><br></pre></td></tr></table></figure>
+<p>克隆结束！将新的磁盘装入计算机，开机，路程原来熟悉的画面。</p>
+</blockquote>
+<h3 id="使用未分配的空间"><a href="#使用未分配的空间" class="headerlink" title="使用未分配的空间"></a>使用未分配的空间</h3><img src="/images/hexo_post_08_gparted.png" width="64"/>
+
+<p>由于我们将小的磁盘克隆的到大的磁盘中，所以结束之后，在大的磁盘中会剩余一些<code>未分配空间</code>出来。以我这次的情况为例，大概有128G的未分配空间。可以直接使用 <code>GParted</code> 软件将未分配空间创建为新的磁盘或者并入原来的分区。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -269,7 +372,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>756</span>
+      <span>754</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -289,7 +392,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="什么是pipenv？"><a href="#什么是pipenv？" class="headerlink" title="什么是pipenv？"></a>什么是pipenv？</h2><p><code>pipenv</code> 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了<code>pip</code>和<code>virtualenv</code>的功能.详细的功能介绍可以参考<a target="_blank" rel="noopener" href="https://docs.pipenv.org/">官方网页</a>。</p>
 <h2 id="如何从github上安装软件包"><a href="#如何从github上安装软件包" class="headerlink" title="如何从github上安装软件包"></a>如何从github上安装软件包</h2><p>最常使用方式是 <code>pipenv install &lt;包名&gt; </code>来安装各种包。比如：<code>pipenv install requests</code>。</p>
-<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;">&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
+<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#x2e;&#99;&#111;&#109;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
 <blockquote>
 <p><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
 <p>注意: 要加上#egg=xxx，否则会报错。</p>
@@ -977,13 +1080,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">4k</span>
+    <span title="站点总字数">5k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3 分钟</span>
+    <span title="站点阅读时长">4 分钟</span>
   </span>
 </div>
 
