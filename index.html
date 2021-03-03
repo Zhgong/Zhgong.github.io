@@ -175,7 +175,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -211,6 +211,117 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/03/01/07use-pipenv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/01/07use-pipenv/" class="post-title-link" itemprop="url">使用pipenv虚拟环境（从github上面安装软件包）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-01 00:04:00" itemprop="dateCreated datePublished" datetime="2021-03-01T00:04:00+01:00">2021-03-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-03-03 20:51:40" itemprop="dateModified" datetime="2021-03-03T20:51:40+01:00">2021-03-03</time>
+      </span>
+
+  
+    <span id="/2021/03/01/07use-pipenv/" class="post-meta-item leancloud_visitors" data-flag-title="使用pipenv虚拟环境（从github上面安装软件包）" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>756</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="什么是pipenv？"><a href="#什么是pipenv？" class="headerlink" title="什么是pipenv？"></a>什么是pipenv？</h2><p><code>pipenv</code> 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了<code>pip</code>和<code>virtualenv</code>的功能.详细的功能介绍可以参考<a target="_blank" rel="noopener" href="https://docs.pipenv.org/">官方网页</a>。</p>
+<h2 id="如何从github上安装软件包"><a href="#如何从github上安装软件包" class="headerlink" title="如何从github上安装软件包"></a>如何从github上安装软件包</h2><p>最常使用方式是 <code>pipenv install &lt;包名&gt; </code>来安装各种包。比如：<code>pipenv install requests</code>。</p>
+<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;">&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#104;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
+<blockquote>
+<p><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
+<p>注意: 要加上#egg=xxx，否则会报错。</p>
+</blockquote>
+<h2 id="如何已安装包的版本"><a href="#如何已安装包的版本" class="headerlink" title="如何已安装包的版本"></a>如何已安装包的版本</h2><p>查询已安装的包版本一共有三种方式：</p>
+<ol>
+<li><code>pipenv graph</code></li>
+<li><code>pipenv lock -r</code></li>
+<li><code>pip freeze</code></li>
+</ol>
+<p>如果我们安装的是私有的包，2和3是无法显示已安装的包的版本的。只有通过 <code>pipenv graph</code> 才可以显示已安装的软件包的版本。</p>
+<h2 id="如何更新私有软件包"><a href="#如何更新私有软件包" class="headerlink" title="如何更新私有软件包"></a>如何更新私有软件包</h2><p>通过 <code>pipenv update</code> 可以升级已安装的软件包。同样问题又来了，如果安装的是github上面私有的软件包，那怎么解决这个问题呢？</p>
+<blockquote>
+<p>只能先卸载<br><code>pipenv uninstall &lt;package-name&gt;</code><br>然后重新安装：<br><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -344,7 +455,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-23 21:59:57" itemprop="dateModified" datetime="2021-02-23T21:59:57+01:00">2021-02-23</time>
+        <time title="修改时间：2021-02-28 15:26:16" itemprop="dateModified" datetime="2021-02-28T15:26:16+01:00">2021-02-28</time>
       </span>
 
   
@@ -386,7 +497,7 @@
 <h3 id="2-将知识讲解给孩子听"><a href="#2-将知识讲解给孩子听" class="headerlink" title="2. 将知识讲解给孩子听"></a>2. 将知识讲解给孩子听</h3><p>将所学到的知识，或者想要学习的知识，先理解，然后尝试讲给一个孩子听（或者任何一个不了解这个领域的人）。当然这个孩子大概是十一二岁的孩子，有基本的理解能力。这样子就会迫使自己使用简单的，自己熟悉的词汇，而不是套用书中或者资料上面的抽象词汇来进行讲解。人会在潜意识中用复杂的词语来掩盖模糊不清的东西。</p>
 <h3 id="3-获取反馈"><a href="#3-获取反馈" class="headerlink" title="3. 获取反馈"></a>3. 获取反馈</h3><p>在讲述的过程中会卡壳，或者对方表示听不懂，这就说明，在这个知识点上面理解还有问题，接下来要做的就是回到书和资料，重新理解梳理，然后再一次用简单的词汇描述出来。</p>
 <h3 id="4-简化"><a href="#4-简化" class="headerlink" title="4. 简化"></a>4. 简化</h3><p>将前面两个步骤收集的资料和反馈总结，简化，然后尝试重新教给另外一个人。关键在于，不要使用书中的原话，而且要使用更加简单的类比。</p>
-<p>由此可见，费曼学习法不仅仅是好的学习方法，也是窥探不同思维方式的利器。通过将知识掰开揉碎，然后重组，可以加深对观点和知识的理解。<br>总的来说流程如下：<br><img src="/images/hexo_post_feynman.drawio.png"></p>
+<p>由此可见，费曼学习法不仅仅是好的学习方法，也是窥探不同思维方式的利器。通过将知识掰开揉碎，然后重组，可以加深对观点和知识的理解。<br>总的来说流程如下：<br><img src="../images/hexo_post_feynman.drawio.png"></p>
 <h3 id="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"><a href="#费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。" class="headerlink" title="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"></a>费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。</h3><p>费曼学习法在语言学习方面会遇到一些困难，主要是在第二步，教学对象不好找。如果对一个完全不动外语的人讲外语，根本没有任何反馈。但是如果找个外语很好的呢，有的时候也无法作出客观评价。就好像我们做以汉语为母语的人，在没有经过训练的情况下，无法客观地给正在学习汉语的歪果人评价汉语水平。</p>
 <h4 id="那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？"><a href="#那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？" class="headerlink" title="那么在语言学习中如何能实现独自的学习-反馈-改进 的闭环？"></a>那么在语言学习中如何能实现独自的<em>学习-反馈-改进</em> 的闭环？</h4><p>作者拿《新概念英语》中的一课《A puma at large》举了个例子：学完之后，将文章总结成一句话就是：</p>
 <blockquote>
@@ -866,13 +977,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">3k</span>
+    <span title="站点总字数">4k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2 分钟</span>
+    <span title="站点阅读时长">3 分钟</span>
   </span>
 </div>
 

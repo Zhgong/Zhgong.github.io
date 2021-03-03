@@ -23,18 +23,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
+<meta name="description" content="如何添加 google analytics如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。 工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图： 获取GA ID: G-xxxxx根据网站上的指引，创">
 <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://justdong.net/tags/index.html">
+<meta property="og:title" content="博客搭建（三）链接google分析">
+<meta property="og:url" content="https://justdong.net/wexin/weixin_03google-analytics.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="如何添加 google analytics如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。 工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图： 获取GA ID: G-xxxxx根据网站上的指引，创">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-05T23:14:58.000Z">
-<meta property="article:modified_time" content="2021-02-05T23:15:10.295Z">
+<meta property="og:image" content="https://justdong.net/images/images/hexo_post_ga.drawio.png">
+<meta property="og:image" content="https://justdong.net/images/images/hexo_post_ga_id.png">
+<meta property="article:published_time" content="2021-02-06T16:50:33.000Z">
+<meta property="article:modified_time" content="2021-03-03T19:52:01.088Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/images/images/hexo_post_ga.drawio.png">
 
 
-<link rel="canonical" href="https://justdong.net/tags/">
+<link rel="canonical" href="https://justdong.net/wexin/weixin_03google-analytics">
 
 
 <script class="page-configurations">
@@ -46,7 +51,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>tags | ～加斯东's blog～
+<title>博客搭建（三）链接google分析 | ～加斯东's blog～
 </title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
@@ -152,7 +157,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -165,6 +170,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0-google-analytics"><span class="nav-number">1.</span> <span class="nav-text">如何添加 google analytics</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96GA-ID-G-xxxxx"><span class="nav-number">1.1.</span> <span class="nav-text">获取GA ID: G-xxxxx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9Next%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">更改Next配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9Hexo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84Url"><span class="nav-number">1.3.</span> <span class="nav-text">更改Hexo配置文件的Url</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,7 +229,7 @@
     
     <div class="post-block" lang="zh-CN"><header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">tags
+<h1 class="post-title" itemprop="name headline">博客搭建（三）链接google分析
 </h1>
 
 <div class="post-meta-container">
@@ -233,15 +239,14 @@
 
       
       
-      <div class="post-body"><div class="tag-cloud">
-  <div class="tag-cloud-title">
-    目前共计 1 个标签
-  </div>
-  <div class="tag-cloud-tags">
-    <a href="/tags/hexo/" style="font-size: 12px;" class="tag-cloud-0">hexo</a>
-  </div>
-</div>
-
+      <div class="post-body">
+          <h1 id="如何添加-google-analytics"><a href="#如何添加-google-analytics" class="headerlink" title="如何添加 google analytics"></a>如何添加 google analytics</h1><p>如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。</p>
+<p>工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：<br><img src="https://justdong.net/images/images/hexo_post_ga.drawio.png"></p>
+<h2 id="获取GA-ID-G-xxxxx"><a href="#获取GA-ID-G-xxxxx" class="headerlink" title="获取GA ID: G-xxxxx"></a>获取GA ID: G-xxxxx</h2><p>根据网站上的指引，创建数据流，然后就可以拿到ID了。ID是以G开头的一串字符。<br><img src="https://justdong.net/images/images/hexo_post_ga_id.png"></p>
+<h2 id="更改Next配置文件"><a href="#更改Next配置文件" class="headerlink" title="更改Next配置文件"></a>更改Next配置文件</h2><p>在next的_config.yml中添加以下的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Google Analytics</span><br><span class="line"># See: https:&#x2F;&#x2F;analytics.google.com</span><br><span class="line">google_analytics:</span><br><span class="line">  tracking_id: &lt;app_id&gt;</span><br><span class="line">  # By default, NexT will load an external gtag.js script on your site.</span><br><span class="line">  # If you only need the pageview feature, set the following option to true to get a better performance.</span><br><span class="line">  only_pageview: false</span><br></pre></td></tr></table></figure>
+<h2 id="更改Hexo配置文件的Url"><a href="#更改Hexo配置文件的Url" class="headerlink" title="更改Hexo配置文件的Url"></a>更改Hexo配置文件的Url</h2><p>在_config.yml中url的默认设置为example.com，在这里我们需要改成自己的host。否则gtag.js不会启动。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;justdong.net</span><br></pre></td></tr></table></figure>
       </div>
       
       
