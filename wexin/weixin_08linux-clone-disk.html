@@ -23,22 +23,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语） 什么是费曼学习法？通过将知识教授被别人来促进自己更好学习的方法。在油管上面有个视频的资料，据说作者依靠这个方法从学渣变成学霸，还读了博士。比较有意思的是他在很短的时间内掌握韩语和日语，">
+<meta name="description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。 克隆整个硬盘当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： dd 具体步骤如下：">
 <meta property="og:type" content="website">
-<meta property="og:title" content="费曼学习法">
-<meta property="og:url" content="https://justdong.net/wexin/weixin_05feynman-technique.html">
+<meta property="og:title" content="将Ubuntu系统迁移到新的磁盘">
+<meta property="og:url" content="https://justdong.net/wexin/weixin_08linux-clone-disk.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
-<meta property="og:description" content="费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语） 什么是费曼学习法？通过将知识教授被别人来促进自己更好学习的方法。在油管上面有个视频的资料，据说作者依靠这个方法从学渣变成学霸，还读了博士。比较有意思的是他在很短的时间内掌握韩语和日语，">
+<meta property="og:description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。 克隆整个硬盘当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： dd 具体步骤如下：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://justdong.net/images/images/hexo_post_feynman.drawio.png">
-<meta property="article:published_time" content="2021-02-16T23:15:10.000Z">
-<meta property="article:modified_time" content="2021-03-03T21:58:18.963Z">
+<meta property="og:image" content="https://justdong.net/images/hexo_post_08_dd.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_post_08_gparted.png">
+<meta property="article:published_time" content="2021-03-03T20:23:50.000Z">
+<meta property="article:modified_time" content="2021-03-04T20:37:48.799Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://justdong.net/images/images/hexo_post_feynman.drawio.png">
+<meta name="twitter:image" content="https://justdong.net/images/hexo_post_08_dd.png">
 
 
-<link rel="canonical" href="https://justdong.net/wexin/weixin_05feynman-technique">
+<link rel="canonical" href="https://justdong.net/wexin/weixin_08linux-clone-disk">
 
 
 <script class="page-configurations">
@@ -50,7 +51,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>费曼学习法 | ～加斯东's blog～
+<title>将Ubuntu系统迁移到新的磁盘 | ～加斯东's blog～
 </title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
@@ -169,7 +170,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%B9%E6%9B%BC%E5%AD%A6%E4%B9%A0%E6%B3%95%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是费曼学习法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AD%A6%E4%B9%A0%E7%9F%A5%E8%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">1. 学习知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%86%E7%9F%A5%E8%AF%86%E8%AE%B2%E8%A7%A3%E7%BB%99%E5%AD%A9%E5%AD%90%E5%90%AC"><span class="nav-number">2.2.</span> <span class="nav-text">2. 将知识讲解给孩子听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%8E%B7%E5%8F%96%E5%8F%8D%E9%A6%88"><span class="nav-number">2.3.</span> <span class="nav-text">3. 获取反馈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%AE%80%E5%8C%96"><span class="nav-number">2.4.</span> <span class="nav-text">4. 简化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%B9%E6%9B%BC%E5%AD%A6%E4%B9%A0%E6%B3%95%E5%A6%82%E4%BD%95%E5%9C%A8%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E6%96%B9%E9%9D%A2%E8%BF%9B%E8%A1%8C%E5%AE%9E%E8%B7%B5%EF%BC%9F%E5%8F%A3%E8%AF%AD%EF%BC%8C%E5%90%AC%E5%8A%9B%EF%BC%8C%E5%86%99%E4%BD%9C%E9%98%85%E8%AF%BB%E3%80%82"><span class="nav-number">2.5.</span> <span class="nav-text">费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E5%9C%A8%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%A6%82%E4%BD%95%E8%83%BD%E5%AE%9E%E7%8E%B0%E7%8B%AC%E8%87%AA%E7%9A%84%E5%AD%A6%E4%B9%A0-%E5%8F%8D%E9%A6%88-%E6%94%B9%E8%BF%9B-%E7%9A%84%E9%97%AD%E7%8E%AF%EF%BC%9F"><span class="nav-number">2.5.1.</span> <span class="nav-text">那么在语言学习中如何能实现独自的学习-反馈-改进 的闭环？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%8B%E9%9A%86%E6%95%B4%E4%B8%AA%E7%A1%AC%E7%9B%98"><span class="nav-number">1.</span> <span class="nav-text">克隆整个硬盘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E5%87%BA%E7%A3%81%E7%9B%98%EF%BC%88diskutil%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">列出磁盘（diskutil）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-dd-%E8%BF%9B%E8%A1%8C%E5%85%8B%E9%9A%86"><span class="nav-number">1.2.</span> <span class="nav-text">使用 dd 进行克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9C%AA%E5%88%86%E9%85%8D%E7%9A%84%E7%A9%BA%E9%97%B4"><span class="nav-number">1.3.</span> <span class="nav-text">使用未分配的空间</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -228,7 +229,7 @@
     
     <div class="post-block" lang="zh-CN"><header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">费曼学习法
+<h1 class="post-title" itemprop="name headline">将Ubuntu系统迁移到新的磁盘
 </h1>
 
 <div class="post-meta-container">
@@ -239,38 +240,22 @@
       
       
       <div class="post-body">
-          <p>费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语）</p>
-<h2 id="什么是费曼学习法？"><a href="#什么是费曼学习法？" class="headerlink" title="什么是费曼学习法？"></a>什么是费曼学习法？</h2><p>通过将知识教授被别人来促进自己更好学习的方法。在油管上面有个视频的资料，据说作者依靠这个方法从学渣变成学霸，还读了博士。比较有意思的是他在很短的时间内掌握韩语和日语，然后跨专业读经济学博士。在读博士之前的花了两个月弄懂了经济学的基础概念，然后一上来就可以跟导师直接讨论课题了。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-学习知识"><a href="#1-学习知识" class="headerlink" title="1. 学习知识"></a>1. 学习知识</h3><p>找到相应的主题进行学习，在油管上面的一个视频里面介绍，找到一个想了解的概念，比如统计学里面的自由度。通过查资料，上网搜索等让自己了解这个概念。当觉得自己了解这个知识以后，然后进入下一步。</p>
-<h3 id="2-将知识讲解给孩子听"><a href="#2-将知识讲解给孩子听" class="headerlink" title="2. 将知识讲解给孩子听"></a>2. 将知识讲解给孩子听</h3><p>将所学到的知识，或者想要学习的知识，先理解，然后尝试讲给一个孩子听（或者任何一个不了解这个领域的人）。当然这个孩子大概是十一二岁的孩子，有基本的理解能力。这样子就会迫使自己使用简单的，自己熟悉的词汇，而不是套用书中或者资料上面的抽象词汇来进行讲解。人会在潜意识中用复杂的词语来掩盖模糊不清的东西。</p>
-<h3 id="3-获取反馈"><a href="#3-获取反馈" class="headerlink" title="3. 获取反馈"></a>3. 获取反馈</h3><p>在讲述的过程中会卡壳，或者对方表示听不懂，这就说明，在这个知识点上面理解还有问题，接下来要做的就是回到书和资料，重新理解梳理，然后再一次用简单的词汇描述出来。</p>
-<h3 id="4-简化"><a href="#4-简化" class="headerlink" title="4. 简化"></a>4. 简化</h3><p>将前面两个步骤收集的资料和反馈总结，简化，然后尝试重新教给另外一个人。关键在于，不要使用书中的原话，而且要使用更加简单的类比。</p>
-<p>由此可见，费曼学习法不仅仅是好的学习方法，也是窥探不同思维方式的利器。通过将知识掰开揉碎，然后重组，可以加深对观点和知识的理解。<br>总的来说流程如下：<br><img src="https://justdong.net/images/images/hexo_post_feynman.drawio.png"></p>
-<h3 id="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"><a href="#费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。" class="headerlink" title="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"></a>费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。</h3><p>费曼学习法在语言学习方面会遇到一些困难，主要是在第二步，教学对象不好找。如果对一个完全不动外语的人讲外语，根本没有任何反馈。但是如果找个外语很好的呢，有的时候也无法作出客观评价。就好像我们做以汉语为母语的人，在没有经过训练的情况下，无法客观地给正在学习汉语的歪果人评价汉语水平。</p>
-<h4 id="那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？"><a href="#那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？" class="headerlink" title="那么在语言学习中如何能实现独自的学习-反馈-改进 的闭环？"></a>那么在语言学习中如何能实现独自的<em>学习-反馈-改进</em> 的闭环？</h4><p>作者拿《新概念英语》中的一课《A puma at large》举了个例子：学完之后，将文章总结成一句话就是：</p>
+          <p>目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。</p>
+<h2 id="克隆整个硬盘"><a href="#克隆整个硬盘" class="headerlink" title="克隆整个硬盘"></a>克隆整个硬盘</h2><p>当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： <code>dd</code></p>
+<p>具体步骤如下：</p>
+<h3 id="列出磁盘（diskutil）"><a href="#列出磁盘（diskutil）" class="headerlink" title="列出磁盘（diskutil）"></a>列出磁盘（<code>diskutil</code>）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ diskutil list</span><br><span class="line">...</span><br><span class="line">&#x2F;dev&#x2F;disk4 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *128.0 GB   disk4</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk4s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk4s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk4s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk4s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk4s5</span><br><span class="line"></span><br><span class="line">&#x2F;dev&#x2F;disk5 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *240.1 GB   disk5</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk5s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk5s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk5s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk5s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk5s5</span><br></pre></td></tr></table></figure>
+<p><code>disk4</code>就是我目前的系统盘128G，<code>disk5</code>是新的磁盘256G，我要把<code>disk4</code>的内容原封不动复制到<code>disk5</code>中去。</p>
+<h3 id="使用-dd-进行克隆"><a href="#使用-dd-进行克隆" class="headerlink" title="使用 dd 进行克隆"></a>使用 <code>dd</code> 进行克隆</h3><img src="/images/hexo_post_08_dd.png" width="128"/>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dd <span class="keyword">if</span>=/dev/rdisk4 of=/dev/rdisk5 bs=128m conv=noerror,sync</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>有一只美洲狮从动物园中跑了出来，专家试图去抓捕，但是没有成功。</p>
+<p>在期间可以通过按 CTL+T 来获取进度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;932+0 records in</span><br><span class="line">&gt;931+0 records out</span><br><span class="line">&gt;124956704768 bytes transferred in 1001.749198 secs (124738512 bytes&#x2F;sec)</span><br><span class="line">&gt;load: 4.10  cmd: dd 68241 uninterruptible 7.02u 16.56s</span><br></pre></td></tr></table></figure>
+<p>克隆结束！将新的磁盘装入计算机，开机，还是原来熟悉的画面。</p>
 </blockquote>
-<p>合上书然后围绕这这句话，将整个故事慢慢扩充起来：</p>
-<blockquote>
-<p>刚刚开始是如何发现美洲狮逃出来的？<br>出现了哪些证据？<br>专家做了哪些尝试？<br>结果如何？</p>
-</blockquote>
-<p>然后把自己补充的内容根原文比较，看看差别在哪里。</p>
-<p>然后合上书本，重新开始填充故事，直到差距慢慢缩小。如果想练习写作，就要拿笔写下来，如果想改进口语，就要录音。</p>
-<blockquote>
-<p>不断重复这几个步骤直到能够对这最先的概括能够准确无误地复述出所有的细节为止。</p>
-</blockquote>
-<p>用这种方法学习方法刚开始的时候进度会稍慢，但是外语会以几何指数提高。</p>
-<p>作者不仅仅用这个方法学习了语言，而且用这套方法解决了小论文，学术会议等难题。</p>
-<p>这个像极了<strong>演绎-模仿-改进</strong>的方法。据说有人用这个方法来学习做设计。大体的步骤就是：</p>
-<blockquote>
-<p>找到行业顶尖的设计<br>然后观察，看看是如何作出这种设计的<br>尝试自己作出同样册设计<br>找出差距，重复步骤</p>
-</blockquote>
-<p>好了，学习的武林绝学暂时了解到这里了，接下来就等着去实践了~~</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hh9kFKVKpSM&t=180s">油管</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/25783654/">如何高效学习</a></li>
-</ul>
+<h3 id="使用未分配的空间"><a href="#使用未分配的空间" class="headerlink" title="使用未分配的空间"></a>使用未分配的空间</h3><img src="/images/hexo_post_08_gparted.png" width="64"/>
+
+<p>由于我们将小的磁盘克隆的到大的磁盘中，所以结束之后，在大的磁盘中会剩余一些<code>未分配空间</code>出来。以我这次的情况为例，大概有128G的未分配空间。可以直接使用 <code>GParted</code> 软件将未分配空间创建为新的磁盘或者并入原来的分区。</p>
 
       </div>
       
