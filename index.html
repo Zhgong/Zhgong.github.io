@@ -243,10 +243,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-03-03 21:23:50 / 修改时间：22:57:38" itemprop="dateCreated datePublished" datetime="2021-03-03T21:23:50+01:00">2021-03-03</time>
+      <time title="创建时间：2021-03-03 21:23:50" itemprop="dateCreated datePublished" datetime="2021-03-03T21:23:50+01:00">2021-03-03</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-03-07 14:11:38" itemprop="dateModified" datetime="2021-03-07T14:11:38+01:00">2021-03-07</time>
+      </span>
 
   
     <span id="/2021/03/03/08linux-clone-disk/" class="post-meta-item leancloud_visitors" data-flag-title="将Ubuntu系统迁移到新的磁盘" title="阅读次数">
@@ -282,22 +288,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。</p>
-<h2 id="克隆整个硬盘"><a href="#克隆整个硬盘" class="headerlink" title="克隆整个硬盘"></a>克隆整个硬盘</h2><p>当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： <code>dd</code></p>
-<p>具体步骤如下：</p>
-<h3 id="列出磁盘（diskutil）"><a href="#列出磁盘（diskutil）" class="headerlink" title="列出磁盘（diskutil）"></a>列出磁盘（<code>diskutil</code>）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ diskutil list</span><br><span class="line">...</span><br><span class="line">&#x2F;dev&#x2F;disk4 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *128.0 GB   disk4</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk4s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk4s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk4s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk4s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk4s5</span><br><span class="line"></span><br><span class="line">&#x2F;dev&#x2F;disk5 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *240.1 GB   disk5</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk5s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk5s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk5s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk5s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk5s5</span><br></pre></td></tr></table></figure>
-<p><code>disk4</code>就是我目前的系统盘128G，<code>disk5</code>是新的磁盘256G，我要把<code>disk4</code>的内容原封不动复制到<code>disk5</code>中去。</p>
-<h3 id="使用-dd-进行克隆"><a href="#使用-dd-进行克隆" class="headerlink" title="使用 dd 进行克隆"></a>使用 <code>dd</code> 进行克隆</h3><img src="/images/hexo_post_08_dd.png" width="128"/>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dd <span class="keyword">if</span>=/dev/rdisk4 of=/dev/rdisk5 bs=128m conv=noerror,sync</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在期间可以通过按 CTL+T 来获取进度</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;932+0 records in</span><br><span class="line">&gt;931+0 records out</span><br><span class="line">&gt;124956704768 bytes transferred in 1001.749198 secs (124738512 bytes&#x2F;sec)</span><br><span class="line">&gt;load: 4.10  cmd: dd 68241 uninterruptible 7.02u 16.56s</span><br></pre></td></tr></table></figure>
-<p>克隆结束！将新的磁盘装入计算机，开机，路程原来熟悉的画面。</p>
-</blockquote>
-<h3 id="使用未分配的空间"><a href="#使用未分配的空间" class="headerlink" title="使用未分配的空间"></a>使用未分配的空间</h3><img src="/images/hexo_post_08_gparted.png" width="64"/>
-
-<p>由于我们将小的磁盘克隆的到大的磁盘中，所以结束之后，在大的磁盘中会剩余一些<code>未分配空间</code>出来。以我这次的情况为例，大概有128G的未分配空间。可以直接使用 <code>GParted</code> 软件将未分配空间创建为新的磁盘或者并入原来的分区。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/03/08linux-clone-disk/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -354,7 +352,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-03-03 20:51:40" itemprop="dateModified" datetime="2021-03-03T20:51:40+01:00">2021-03-03</time>
+        <time title="修改时间：2021-03-07 14:11:45" itemprop="dateModified" datetime="2021-03-07T14:11:45+01:00">2021-03-07</time>
       </span>
 
   
@@ -372,7 +370,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>755</span>
+      <span>757</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -391,24 +389,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="什么是pipenv？"><a href="#什么是pipenv？" class="headerlink" title="什么是pipenv？"></a>什么是pipenv？</h2><p><code>pipenv</code> 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了<code>pip</code>和<code>virtualenv</code>的功能.详细的功能介绍可以参考<a target="_blank" rel="noopener" href="https://docs.pipenv.org/">官方网页</a>。</p>
-<h2 id="如何从github上安装软件包"><a href="#如何从github上安装软件包" class="headerlink" title="如何从github上安装软件包"></a>如何从github上安装软件包</h2><p>最常使用方式是 <code>pipenv install &lt;包名&gt; </code>来安装各种包。比如：<code>pipenv install requests</code>。</p>
-<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;">&#x67;&#105;&#116;&#x40;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
-<blockquote>
-<p><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
-<p>注意: 要加上#egg=xxx，否则会报错。</p>
-</blockquote>
-<h2 id="如何已安装包的版本"><a href="#如何已安装包的版本" class="headerlink" title="如何已安装包的版本"></a>如何已安装包的版本</h2><p>查询已安装的包版本一共有三种方式：</p>
-<ol>
-<li><code>pipenv graph</code></li>
-<li><code>pipenv lock -r</code></li>
-<li><code>pip freeze</code></li>
-</ol>
-<p>如果我们安装的是私有的包，2和3是无法显示已安装的包的版本的。只有通过 <code>pipenv graph</code> 才可以显示已安装的软件包的版本。</p>
-<h2 id="如何更新私有软件包"><a href="#如何更新私有软件包" class="headerlink" title="如何更新私有软件包"></a>如何更新私有软件包</h2><p>通过 <code>pipenv update</code> 可以升级已安装的软件包。同样问题又来了，如果安装的是github上面私有的软件包，那怎么解决这个问题呢？</p>
-<blockquote>
-<p>只能先卸载<br><code>pipenv uninstall &lt;package-name&gt;</code><br>然后重新安装：<br><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
-</blockquote>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/01/07use-pipenv/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -457,10 +445,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-02-21 22:14:39 / 修改时间：22:44:05" itemprop="dateCreated datePublished" datetime="2021-02-21T22:14:39+01:00">2021-02-21</time>
+      <time title="创建时间：2021-02-21 22:14:39" itemprop="dateCreated datePublished" datetime="2021-02-21T22:14:39+01:00">2021-02-21</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-03-07 14:15:05" itemprop="dateModified" datetime="2021-03-07T14:15:05+01:00">2021-03-07</time>
+      </span>
 
   
     <span id="/2021/02/21/06url-searchengine/" class="post-meta-item leancloud_visitors" data-flag-title="本站被搜索引擎收录情况" title="阅读次数">
@@ -477,7 +471,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>29</span>
+      <span>42</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -495,13 +489,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="google"><a href="#google" class="headerlink" title="google"></a>google</h2><p><img src="../images/hexo_post_06_google.png"></p>
-<h2 id="baidu"><a href="#baidu" class="headerlink" title="baidu"></a>baidu</h2><p><img src="../images/hexo_post_06_baidu.png"></p>
-<h2 id="bing"><a href="#bing" class="headerlink" title="bing"></a>bing</h2><p><img src="../images/hexo_post_06_bing_cn.png"></p>
-<h2 id="yahoo"><a href="#yahoo" class="headerlink" title="yahoo"></a>yahoo</h2><p><img src="../images/hexo_post_06_yahoo.png"></p>
-<h2 id="sougou"><a href="#sougou" class="headerlink" title="sougou"></a>sougou</h2><p><img src="../images/hexo_post_06_sougou.png"></p>
-<h2 id="360"><a href="#360" class="headerlink" title="360"></a>360</h2><p><img src="../images/hexo_post_06_360.png"></p>
-
+          <p>本站被搜索引擎的收录情况。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/21/06url-searchengine/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -558,7 +554,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-28 15:26:16" itemprop="dateModified" datetime="2021-02-28T15:26:16+01:00">2021-02-28</time>
+        <time title="修改时间：2021-03-07 14:13:14" itemprop="dateModified" datetime="2021-03-07T14:13:14+01:00">2021-03-07</time>
       </span>
 
   
@@ -595,38 +591,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语）</p>
-<h2 id="什么是费曼学习法？"><a href="#什么是费曼学习法？" class="headerlink" title="什么是费曼学习法？"></a>什么是费曼学习法？</h2><p>通过将知识教授被别人来促进自己更好学习的方法。在油管上面有个视频的资料，据说作者依靠这个方法从学渣变成学霸，还读了博士。比较有意思的是他在很短的时间内掌握韩语和日语，然后跨专业读经济学博士。在读博士之前的花了两个月弄懂了经济学的基础概念，然后一上来就可以跟导师直接讨论课题了。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-学习知识"><a href="#1-学习知识" class="headerlink" title="1. 学习知识"></a>1. 学习知识</h3><p>找到相应的主题进行学习，在油管上面的一个视频里面介绍，找到一个想了解的概念，比如统计学里面的自由度。通过查资料，上网搜索等让自己了解这个概念。当觉得自己了解这个知识以后，然后进入下一步。</p>
-<h3 id="2-将知识讲解给孩子听"><a href="#2-将知识讲解给孩子听" class="headerlink" title="2. 将知识讲解给孩子听"></a>2. 将知识讲解给孩子听</h3><p>将所学到的知识，或者想要学习的知识，先理解，然后尝试讲给一个孩子听（或者任何一个不了解这个领域的人）。当然这个孩子大概是十一二岁的孩子，有基本的理解能力。这样子就会迫使自己使用简单的，自己熟悉的词汇，而不是套用书中或者资料上面的抽象词汇来进行讲解。人会在潜意识中用复杂的词语来掩盖模糊不清的东西。</p>
-<h3 id="3-获取反馈"><a href="#3-获取反馈" class="headerlink" title="3. 获取反馈"></a>3. 获取反馈</h3><p>在讲述的过程中会卡壳，或者对方表示听不懂，这就说明，在这个知识点上面理解还有问题，接下来要做的就是回到书和资料，重新理解梳理，然后再一次用简单的词汇描述出来。</p>
-<h3 id="4-简化"><a href="#4-简化" class="headerlink" title="4. 简化"></a>4. 简化</h3><p>将前面两个步骤收集的资料和反馈总结，简化，然后尝试重新教给另外一个人。关键在于，不要使用书中的原话，而且要使用更加简单的类比。</p>
-<p>由此可见，费曼学习法不仅仅是好的学习方法，也是窥探不同思维方式的利器。通过将知识掰开揉碎，然后重组，可以加深对观点和知识的理解。<br>总的来说流程如下：<br><img src="../images/hexo_post_feynman.drawio.png"></p>
-<h3 id="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"><a href="#费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。" class="headerlink" title="费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。"></a>费曼学习法如何在语言学习方面进行实践？口语，听力，写作阅读。</h3><p>费曼学习法在语言学习方面会遇到一些困难，主要是在第二步，教学对象不好找。如果对一个完全不动外语的人讲外语，根本没有任何反馈。但是如果找个外语很好的呢，有的时候也无法作出客观评价。就好像我们做以汉语为母语的人，在没有经过训练的情况下，无法客观地给正在学习汉语的歪果人评价汉语水平。</p>
-<h4 id="那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？"><a href="#那么在语言学习中如何能实现独自的学习-反馈-改进-的闭环？" class="headerlink" title="那么在语言学习中如何能实现独自的学习-反馈-改进 的闭环？"></a>那么在语言学习中如何能实现独自的<em>学习-反馈-改进</em> 的闭环？</h4><p>作者拿《新概念英语》中的一课《A puma at large》举了个例子：学完之后，将文章总结成一句话就是：</p>
-<blockquote>
-<p>有一只美洲狮从动物园中跑了出来，专家试图去抓捕，但是没有成功。</p>
-</blockquote>
-<p>合上书然后围绕这这句话，将整个故事慢慢扩充起来：</p>
-<blockquote>
-<p>刚刚开始是如何发现美洲狮逃出来的？<br>出现了哪些证据？<br>专家做了哪些尝试？<br>结果如何？</p>
-</blockquote>
-<p>然后把自己补充的内容根原文比较，看看差别在哪里。</p>
-<p>然后合上书本，重新开始填充故事，直到差距慢慢缩小。如果想练习写作，就要拿笔写下来，如果想改进口语，就要录音。</p>
-<blockquote>
-<p>不断重复这几个步骤直到能够对这最先的概括能够准确无误地复述出所有的细节为止。</p>
-</blockquote>
-<p>用这种方法学习方法刚开始的时候进度会稍慢，但是外语会以几何指数提高。</p>
-<p>作者不仅仅用这个方法学习了语言，而且用这套方法解决了小论文，学术会议等难题。</p>
-<p>这个像极了<strong>演绎-模仿-改进</strong>的方法。据说有人用这个方法来学习做设计。大体的步骤就是：</p>
-<blockquote>
-<p>找到行业顶尖的设计<br>然后观察，看看是如何作出这种设计的<br>尝试自己作出同样册设计<br>找出差距，重复步骤</p>
-</blockquote>
-<p>好了，学习的武林绝学暂时了解到这里了，接下来就等着去实践了~~</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hh9kFKVKpSM&t=180s">油管</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/25783654/">如何高效学习</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/17/05feynman-technique/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -683,7 +655,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-07 00:43:06" itemprop="dateModified" datetime="2021-02-07T00:43:06+01:00">2021-02-07</time>
+        <time title="修改时间：2021-03-07 14:12:23" itemprop="dateModified" datetime="2021-03-07T14:12:23+01:00">2021-03-07</time>
       </span>
 
   
@@ -719,11 +691,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-word-counter</span><br></pre></td></tr></table></figure>
-<h2 id="Hexo-配置"><a href="#Hexo-配置" class="headerlink" title="Hexo 配置"></a>Hexo 配置</h2><p>在hexo的_config.yml中添加以下的配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># count symbols</span><br><span class="line">symbols_count_time:</span><br><span class="line">  symbols: true</span><br><span class="line">  time: true</span><br><span class="line">  total_symbols: true</span><br><span class="line">  total_time: true</span><br><span class="line">  exclude_codeblock: false</span><br><span class="line">  awl: 4</span><br><span class="line">  wpm: 275</span><br><span class="line">  suffix: &quot;mins.&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="next-配置"><a href="#next-配置" class="headerlink" title="next 配置"></a>next 配置</h2><p>在next的_config.yml中添加以下的配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https:&#x2F;&#x2F;github.com&#x2F;next-theme&#x2F;hexo-word-counter</span><br><span class="line">symbols_count_time:</span><br><span class="line">  separated_meta: true</span><br><span class="line">  item_text_post: true</span><br><span class="line">  item_text_total: false</span><br></pre></td></tr></table></figure>
+          <h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/06/04symbol-count/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -780,7 +756,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-07 00:42:58" itemprop="dateModified" datetime="2021-02-07T00:42:58+01:00">2021-02-07</time>
+        <time title="修改时间：2021-03-07 14:13:37" itemprop="dateModified" datetime="2021-03-07T14:13:37+01:00">2021-03-07</time>
       </span>
 
   
@@ -817,12 +793,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="如何添加-google-analytics"><a href="#如何添加-google-analytics" class="headerlink" title="如何添加 google analytics"></a>如何添加 google analytics</h1><p>如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。</p>
-<p>工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：<br><img src="/images/hexo_post_ga.drawio.png"></p>
-<h2 id="获取GA-ID-G-xxxxx"><a href="#获取GA-ID-G-xxxxx" class="headerlink" title="获取GA ID: G-xxxxx"></a>获取GA ID: G-xxxxx</h2><p>根据网站上的指引，创建数据流，然后就可以拿到ID了。ID是以G开头的一串字符。<br><img src="/images/hexo_post_ga_id.png"></p>
-<h2 id="更改Next配置文件"><a href="#更改Next配置文件" class="headerlink" title="更改Next配置文件"></a>更改Next配置文件</h2><p>在next的_config.yml中添加以下的配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Google Analytics</span><br><span class="line"># See: https:&#x2F;&#x2F;analytics.google.com</span><br><span class="line">google_analytics:</span><br><span class="line">  tracking_id: &lt;app_id&gt;</span><br><span class="line">  # By default, NexT will load an external gtag.js script on your site.</span><br><span class="line">  # If you only need the pageview feature, set the following option to true to get a better performance.</span><br><span class="line">  only_pageview: false</span><br></pre></td></tr></table></figure>
-<h2 id="更改Hexo配置文件的Url"><a href="#更改Hexo配置文件的Url" class="headerlink" title="更改Hexo配置文件的Url"></a>更改Hexo配置文件的Url</h2><p>在_config.yml中url的默认设置为example.com，在这里我们需要改成自己的host。否则gtag.js不会启动。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;justdong.net</span><br></pre></td></tr></table></figure>
+<p>工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/06/03google-analytics/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -879,7 +858,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-07 00:42:51" itemprop="dateModified" datetime="2021-02-07T00:42:51+01:00">2021-02-07</time>
+        <time title="修改时间：2021-03-07 14:15:59" itemprop="dateModified" datetime="2021-03-07T14:15:59+01:00">2021-03-07</time>
       </span>
 
   
@@ -897,7 +876,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>54</span>
+      <span>66</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -915,8 +894,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="如何链接-google-域名"><a href="#如何链接-google-域名" class="headerlink" title="如何链接 google 域名"></a>如何链接 google 域名</h2><p>除了输入github pages的地址。还要输入几个github的IP地址才行。如图：<br><img src="/images/hexo_post_Google_Domains_DNS.png"></p>
-
+          <p>如何链接 google 域名</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/06/02google-domain/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -973,7 +959,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-07 22:27:15" itemprop="dateModified" datetime="2021-02-07T22:27:15+01:00">2021-02-07</time>
+        <time title="修改时间：2021-03-07 14:13:53" itemprop="dateModified" datetime="2021-03-07T14:13:53+01:00">2021-03-07</time>
       </span>
 
   
@@ -1010,16 +996,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="博客搭建结构"><a href="#博客搭建结构" class="headerlink" title="博客搭建结构"></a>博客搭建结构</h2><p>打算开个博客记录一些文字。经过好友kenshinji的提点，我决定搭建静态博客试试。经google搜索，最终确定了方案:</p>
-<p><a target="_blank" rel="noopener" href="https://docs.github.com/cn/github/working-with-github-pages">github pages</a> + <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a></p>
-<p>下图中包括了博客的几个大方面：</p>
-<ul>
-<li>主要步骤</li>
-<li>需要的功能</li>
-<li>使用步骤</li>
-</ul>
-<p><img src="/images/hexo_post_structure_1.drawio.png"><br>主要参考文章见下面的链接，本文之记录一些特殊的配置。</p>
-<h3 id="主要参考文章"><a href="#主要参考文章" class="headerlink" title="主要参考文章"></a>主要参考文章</h3><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017986794">超详细Hexo+Github Page搭建技术博客教程【持续更新】</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/03/01first-post/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
