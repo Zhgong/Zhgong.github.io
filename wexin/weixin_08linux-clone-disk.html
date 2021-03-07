@@ -23,17 +23,17 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。 克隆整个硬盘当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： dd 具体步骤如下：">
+<meta name="description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="将Ubuntu系统迁移到新的磁盘">
 <meta property="og:url" content="https://justdong.net/wexin/weixin_08linux-clone-disk.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
-<meta property="og:description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。 克隆整个硬盘当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： dd 具体步骤如下：">
+<meta property="og:description" content="目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://justdong.net/images/hexo_post_08_dd.png">
 <meta property="og:image" content="https://justdong.net/images/hexo_post_08_gparted.png">
 <meta property="article:published_time" content="2021-03-03T20:23:50.000Z">
-<meta property="article:modified_time" content="2021-03-04T20:37:48.799Z">
+<meta property="article:modified_time" content="2021-03-07T09:51:04.835Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://justdong.net/images/hexo_post_08_dd.png">
@@ -241,6 +241,8 @@
       
       <div class="post-body">
           <p>目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。</p>
+<a id="more"></a>
+
 <h2 id="克隆整个硬盘"><a href="#克隆整个硬盘" class="headerlink" title="克隆整个硬盘"></a>克隆整个硬盘</h2><p>当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： <code>dd</code></p>
 <p>具体步骤如下：</p>
 <h3 id="列出磁盘（diskutil）"><a href="#列出磁盘（diskutil）" class="headerlink" title="列出磁盘（diskutil）"></a>列出磁盘（<code>diskutil</code>）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ diskutil list</span><br><span class="line">...</span><br><span class="line">&#x2F;dev&#x2F;disk4 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *128.0 GB   disk4</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk4s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk4s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk4s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk4s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk4s5</span><br><span class="line"></span><br><span class="line">&#x2F;dev&#x2F;disk5 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *240.1 GB   disk5</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk5s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk5s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk5s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk5s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk5s5</span><br></pre></td></tr></table></figure>
