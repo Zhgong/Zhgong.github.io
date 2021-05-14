@@ -23,20 +23,28 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="什么是pipenv？pipenv 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了pip和virtualenv的功能.详细的功能介绍可以参考官方网页。">
+<meta name="description" content="什么是telegram？ telegrem有什么特点？ 跟微信相比如何？ 使用 telegram的https api 来发送消息 1. 手机注册一个telegram账号 2. 创建聊天机器人 3. 找到手机端的聊天id （chatid） 4. 发送消息到手机   总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用pipenv虚拟环境（从github上面安装软件包）">
-<meta property="og:url" content="https://justdong.net/2021/03/01/07use-pipenv/index.html">
+<meta property="og:title" content="通过 telegram 来发送消息到手机 （只需两行代码）">
+<meta property="og:url" content="https://justdong.net/2021/05/12/10telegram-https-api/index.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
-<meta property="og:description" content="什么是pipenv？pipenv 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了pip和virtualenv的功能.详细的功能介绍可以参考官方网页。">
+<meta property="og:description" content="什么是telegram？ telegrem有什么特点？ 跟微信相比如何？ 使用 telegram的https api 来发送消息 1. 手机注册一个telegram账号 2. 创建聊天机器人 3. 找到手机端的聊天id （chatid） 4. 发送消息到手机   总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-28T23:04:00.000Z">
-<meta property="article:modified_time" content="2021-03-07T13:11:45.336Z">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web1.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web2.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web3.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web4.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web5.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web6.png">
+<meta property="og:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web7.png">
+<meta property="article:published_time" content="2021-05-12T21:51:29.000Z">
+<meta property="article:modified_time" content="2021-05-14T20:38:04.147Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/2021/05/12/images/hexo_post_Telegram-Web1.png">
 
 
-<link rel="canonical" href="https://justdong.net/2021/03/01/07use-pipenv/">
+<link rel="canonical" href="https://justdong.net/2021/05/12/10telegram-https-api/">
 
 
 <script class="page-configurations">
@@ -48,7 +56,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>使用pipenv虚拟环境（从github上面安装软件包） | ～加斯东's blog～</title>
+<title>通过 telegram 来发送消息到手机 （只需两行代码） | ～加斯东's blog～</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
     <script>
@@ -166,7 +174,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFpipenv%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是pipenv？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8Egithub%E4%B8%8A%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">如何从github上安装软件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%B7%B2%E5%AE%89%E8%A3%85%E5%8C%85%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">如何已安装包的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9B%B4%E6%96%B0%E7%A7%81%E6%9C%89%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="nav-number">4.</span> <span class="nav-text">如何更新私有软件包</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFtelegram%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是telegram？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#telegrem%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">telegrem有什么特点？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9F%E5%BE%AE%E4%BF%A1%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">跟微信相比如何？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-telegram%E7%9A%84https-api-%E6%9D%A5%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF"><span class="nav-number">4.</span> <span class="nav-text">使用 telegram的https api 来发送消息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%8B%E6%9C%BA%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AAtelegram%E8%B4%A6%E5%8F%B7"><span class="nav-number">4.1.</span> <span class="nav-text">1. 手机注册一个telegram账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-number">4.2.</span> <span class="nav-text">2. 创建聊天机器人</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%89%BE%E5%88%B0%E6%89%8B%E6%9C%BA%E7%AB%AF%E7%9A%84%E8%81%8A%E5%A4%A9id-%EF%BC%88chatid%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">3. 找到手机端的聊天id （chatid）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%88%B0%E6%89%8B%E6%9C%BA"><span class="nav-number">4.4.</span> <span class="nav-text">4. 发送消息到手机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,7 +234,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/03/01/07use-pipenv/">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/05/12/10telegram-https-api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -239,7 +247,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用pipenv虚拟环境（从github上面安装软件包）
+          通过 telegram 来发送消息到手机 （只需两行代码）
         </h1>
 
         <div class="post-meta-container">
@@ -250,18 +258,18 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-03-01 00:04:00" itemprop="dateCreated datePublished" datetime="2021-03-01T00:04:00+01:00">2021-03-01</time>
+      <time title="创建时间：2021-05-12 23:51:29" itemprop="dateCreated datePublished" datetime="2021-05-12T23:51:29+02:00">2021-05-12</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-03-07 14:11:45" itemprop="dateModified" datetime="2021-03-07T14:11:45+01:00">2021-03-07</time>
+        <time title="修改时间：2021-05-14 22:38:04" itemprop="dateModified" datetime="2021-05-14T22:38:04+02:00">2021-05-14</time>
       </span>
 
   
-    <span id="/2021/03/01/07use-pipenv/" class="post-meta-item leancloud_visitors" data-flag-title="使用pipenv虚拟环境（从github上面安装软件包）" title="阅读次数">
+    <span id="/2021/05/12/10telegram-https-api/" class="post-meta-item leancloud_visitors" data-flag-title="通过 telegram 来发送消息到手机 （只需两行代码）" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -275,14 +283,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>754</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -293,25 +301,73 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="什么是pipenv？"><a href="#什么是pipenv？" class="headerlink" title="什么是pipenv？"></a>什么是pipenv？</h2><p><code>pipenv</code> 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了<code>pip</code>和<code>virtualenv</code>的功能.详细的功能介绍可以参考<a target="_blank" rel="noopener" href="https://docs.pipenv.org/">官方网页</a>。</p>
-<a id="more"></a>
-<h2 id="如何从github上安装软件包"><a href="#如何从github上安装软件包" class="headerlink" title="如何从github上安装软件包"></a>如何从github上安装软件包</h2><p>最常使用方式是 <code>pipenv install &lt;包名&gt; </code>来安装各种包。比如：<code>pipenv install requests</code>。</p>
-<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
-<blockquote>
-<p><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
-<p>注意: 要加上#egg=xxx，否则会报错。</p>
-</blockquote>
-<h2 id="如何已安装包的版本"><a href="#如何已安装包的版本" class="headerlink" title="如何已安装包的版本"></a>如何已安装包的版本</h2><p>查询已安装的包版本一共有三种方式：</p>
+        <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFtelegram">什么是telegram？</a></li>
+<li><a href="#telegrem%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9">telegrem有什么特点？</a></li>
+<li><a href="#%E8%B7%9F%E5%BE%AE%E4%BF%A1%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95">跟微信相比如何？</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-telegram%E7%9A%84https-api-%E6%9D%A5%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF">使用 telegram的https api 来发送消息</a><ul>
+<li><a href="#1-%E6%89%8B%E6%9C%BA%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AAtelegram%E8%B4%A6%E5%8F%B7">1. 手机注册一个telegram账号</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA">2. 创建聊天机器人</a></li>
+<li><a href="#3-%E6%89%BE%E5%88%B0%E6%89%8B%E6%9C%BA%E7%AB%AF%E7%9A%84%E8%81%8A%E5%A4%A9id-chatid">3. 找到手机端的聊天id （<code>chatid</code>）</a></li>
+<li><a href="#4-%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%88%B0%E6%89%8B%E6%9C%BA">4. 发送消息到手机</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a><a id="more"></a>
+
+</li>
+</ul>
+<h2 id="什么是telegram？"><a href="#什么是telegram？" class="headerlink" title="什么是telegram？"></a>什么是telegram？</h2><p>telegram是一款即时通讯软件。目前在国外比较流行，尤其是whatsapp爆出漏洞之后，很多人开始转战telegram。我从四五年前开始就使用telegram的机器人发送消息到手机上。总体来说是非常可靠的。不过这款软件目前在国内是无法直接使用，必须结合科学上网使用。</p>
+<p>所以本文应该对国外地区的朋友比较有意义。好了，言归正传。</p>
+<h2 id="telegrem有什么特点？"><a href="#telegrem有什么特点？" class="headerlink" title="telegrem有什么特点？"></a>telegrem有什么特点？</h2><ul>
+<li>提供手机和网页客户端</li>
+<li>官方提供<code>https api</code> （发送消息最简单的方式，只需要一行代码。本文涉及）</li>
+<li>官方提供python库</li>
+</ul>
+<h2 id="跟微信相比如何？"><a href="#跟微信相比如何？" class="headerlink" title="跟微信相比如何？"></a>跟微信相比如何？</h2><p>微信最大的缺点就是，发送消息到手机<strong>非常麻烦</strong>，除非注册企业微信，没有官方的渠道（腾讯官方其实的是反对使用程序操作微信的）。目前<code>github</code>上面有一些基于python的，可以收发微信消息的库，底层都是基于微信网页版的。这个用起来会有风险，可能会导致微信号被封。我当年就是因为用自己的账号玩微信机器人而导致直到现在再也无法使用网页版的微信了。。。</p>
+<p>telegram的最大的缺点就是，前面提到的<strong>无法在国内直接使用</strong></p>
+<h2 id="使用-telegram的https-api-来发送消息"><a href="#使用-telegram的https-api-来发送消息" class="headerlink" title="使用 telegram的https api 来发送消息"></a>使用 telegram的https api 来发送消息</h2><p>主要步骤：</p>
 <ol>
-<li><code>pipenv graph</code></li>
-<li><code>pipenv lock -r</code></li>
-<li><code>pip freeze</code></li>
+<li>用手机注册一个telegram账号</li>
+<li>创建一个bot（python到时候用这个bot来发送消息）</li>
+<li>找到手机端的聊天id （chatid）</li>
+<li>使用两行代码就可以发送消息了</li>
 </ol>
-<p>如果我们安装的是私有的包，2和3是无法显示已安装的包的版本的。只有通过 <code>pipenv graph</code> 才可以显示已安装的软件包的版本。</p>
-<h2 id="如何更新私有软件包"><a href="#如何更新私有软件包" class="headerlink" title="如何更新私有软件包"></a>如何更新私有软件包</h2><p>通过 <code>pipenv update</code> 可以升级已安装的软件包。同样问题又来了，如果安装的是github上面私有的软件包，那怎么解决这个问题呢？</p>
+<h3 id="1-手机注册一个telegram账号"><a href="#1-手机注册一个telegram账号" class="headerlink" title="1. 手机注册一个telegram账号"></a>1. 手机注册一个telegram账号</h3><p>注册账号跟其他的聊天的软件没有什么区别，应用到手机上然后根据引导一步一步注册。</p>
+<h3 id="2-创建聊天机器人"><a href="#2-创建聊天机器人" class="headerlink" title="2. 创建聊天机器人"></a>2. 创建聊天机器人</h3><p>在telegram里面创建聊天机器人是通过聊天形式来创建的，找到一个叫<code>BotFather</code>的联系人，通过跟它发消息来实现。其实<code>BotFather</code>也是个机器人.</p>
 <blockquote>
-<p>只能先卸载<br><code>pipenv uninstall &lt;package-name&gt;</code><br>然后重新安装：<br><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
+<p>输入这个命令创建机器人</p>
+<p><code>/newbot</code></p>
 </blockquote>
+<p>然后需要给机器人取个名字：</p>
+<blockquote>
+<p>我这里取的名字是<code>new-test-bot</code>（这个名字可以随便取）</p>
+</blockquote>
+<p>接下来要你给机器人取个用户名（username）：</p>
+<blockquote>
+<p>我这里取的名字是<code>newtestquantbot</code>（这个名字必须是系统里面唯一的，必须以<code>bot</code>结尾）<br><img src="../images/hexo_post_Telegram-Web1.png"><br>然后一切顺利的话，系统会创建好一个<code>机器人（bot）</code>，并给你一长串的字符<code>token</code>，这个<code>token</code>就是用来控制机器人的，一定要保管好，不要泄漏。</p>
+</blockquote>
+<p><img src="../images/hexo_post_Telegram-Web2.png"></p>
+<p><strong>有了token就可以控制机器人给手机发消息了</strong></p>
+<h3 id="3-找到手机端的聊天id-（chatid）"><a href="#3-找到手机端的聊天id-（chatid）" class="headerlink" title="3. 找到手机端的聊天id （chatid）"></a>3. 找到手机端的聊天id （<code>chatid</code>）</h3><p>上面我们有了<code>token</code>，通过<code>token</code>我们的机器人发消息了，接下来我们得知道发给谁不是？在telegram里面每一个聊天对象都有一个ID，我们的手机端则不例外，接下来我们的任务就是要找到我们手机上面的聊天id（<code>chatid</code>）。</p>
+<p>在浏览器中输入获取机器人消息的网址：<code>https://api.telegram.org/bot你的token/getUpdates</code></p>
+<p>比token是：”dfa33:393ffa3faefpki”，网址就是：<code>https://api.telegram.org/botdfa33:393ffa3faefpki/getUpdates</code></p>
+<blockquote>
+<p>注意<code>bot</code>和<code>token</code>之间是<strong>没有</strong>空格的</p>
+</blockquote>
+<p><img src="../images/hexo_post_Telegram-Web3.png"></p>
+<p>上面我的机器人获取的消息为空，当然是空的，因为至今为止还没有任何人给机器人发过消息。</p>
+<p>接下来用我们的手机客户端给机器人发条消息，然后在网页上刷新机器人的消息列表试试。</p>
+<ul>
+<li>在左边的框里面搜索<code>newtestquantbot</code>找到我们刚刚创建的机器人</li>
+<li>点击选择机器人</li>
+<li>点击“start”开始聊天，或者尝试发送一条“测试”消息。</li>
+<li><img src="../images/hexo_post_Telegram-Web4.png"></li>
+</ul>
+<p><img src="../images/hexo_post_Telegram-Web5.png"><br><img src="../images/hexo_post_Telegram-Web6.png"></p>
+<h3 id="4-发送消息到手机"><a href="#4-发送消息到手机" class="headerlink" title="4. 发送消息到手机"></a>4. 发送消息到手机</h3><p>下面是代码，总共五行，如果将<code>token</code>和<code>chat_id</code>硬编码到url中，去掉最后那一行输出。就只剩两行了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">token = <span class="string">&quot;1876xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2NhVRI&quot;</span> <span class="comment"># 替换成你自己的token</span></span><br><span class="line">chat_id = <span class="number">130000006</span> <span class="comment"># 替换成你自己的chat_id</span></span><br><span class="line">r = requests.post(<span class="string">f&#x27;https://api.telegram.org/bot<span class="subst">&#123;token&#125;</span>/sendMessage&#x27;</span>, json=&#123;<span class="string">&quot;chat_id&quot;</span>: chat_id, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;【机器人】测试消息&quot;</span>&#125;)</span><br><span class="line">print(r.json())</span><br></pre></td></tr></table></figure>
+<p><img src="../images/hexo_post_Telegram-Web7.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>除了刚刚开始的时候生成<code>token</code>和找到<code>chat_id</code>略微花费点时间外，<code>telegram</code>用起来还是很方便的。这里介绍的程序只能发送消息到手机上。如果使用<code>telegram</code>官方的库，程序还可以用来接收消息，这样子就可以通过手机发送消息来控制程序了。</p>
 
     </div>
 
@@ -325,14 +381,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/02/21/06url-searchengine/" rel="prev" title="本站被搜索引擎收录情况">
-                  <i class="fa fa-chevron-left"></i> 本站被搜索引擎收录情况
+                <a href="/2021/03/31/09raspberrypi-camera/" rel="prev" title="在树莓派上使用motioneye（docker版）">
+                  <i class="fa fa-chevron-left"></i> 在树莓派上使用motioneye（docker版）
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/03/03/08linux-clone-disk/" rel="next" title="将Ubuntu系统迁移到新的磁盘">
-                  将Ubuntu系统迁移到新的磁盘 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
