@@ -2,7 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://justdong.net/wexin/weixin_11google-adsense.html</loc>
+    <loc>https://justdong.net/2021/12/07/11google-adsense/</loc>
+    
+    <lastmod>2021-12-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/2021/03/03/08linux-clone-disk/</loc>
     
     <lastmod>2021-12-07</lastmod>
     
@@ -16,7 +23,7 @@
   </url>
   
   <url>
-    <loc>https://justdong.net/wexin/weixin_02google-domain.html</loc>
+    <loc>https://justdong.net/wexin/weixin_06url-searchengine.html</loc>
     
     <lastmod>2021-12-07</lastmod>
     
@@ -30,20 +37,6 @@
   </url>
   
   <url>
-    <loc>https://justdong.net/wexin/weixin_05feynman-technique.html</loc>
-    
-    <lastmod>2021-12-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/wexin/weixin_06url-searchengine.html</loc>
-    
-    <lastmod>2021-12-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://justdong.net/wexin/weixin_08linux-clone-disk.html</loc>
     
     <lastmod>2021-12-07</lastmod>
@@ -51,7 +44,28 @@
   </url>
   
   <url>
+    <loc>https://justdong.net/wexin/weixin_11google-adsense.html</loc>
+    
+    <lastmod>2021-12-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/wexin/weixin_02google-domain.html</loc>
+    
+    <lastmod>2021-12-07</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://justdong.net/wexin/weixin_04symbol-count.html</loc>
+    
+    <lastmod>2021-12-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/wexin/weixin_05feynman-technique.html</loc>
     
     <lastmod>2021-12-07</lastmod>
     
@@ -73,13 +87,6 @@
   
   <url>
     <loc>https://justdong.net/wexin/weixin_10telegram-https-api.html</loc>
-    
-    <lastmod>2021-12-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/2021/12/07/11google-adsense/</loc>
     
     <lastmod>2021-12-07</lastmod>
     
@@ -143,13 +150,6 @@
   
   <url>
     <loc>https://justdong.net/2021/03/01/07use-pipenv/</loc>
-    
-    <lastmod>2021-03-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/2021/03/03/08linux-clone-disk/</loc>
     
     <lastmod>2021-03-07</lastmod>
     

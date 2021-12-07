@@ -23,15 +23,15 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。">
+<meta name="description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。  概要： 总共分两步： 在谷歌的网站上申请 Google AdSense的账号 将谷歌的广告链接加入页面的 Head 中第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的htm">
 <meta property="og:type" content="website">
 <meta property="og:title" content="博客搭建 (四) 接入 Google AdSense (NexT v8.2.1)">
 <meta property="og:url" content="https://justdong.net/wexin/weixin_11google-adsense.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
-<meta property="og:description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。">
+<meta property="og:description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。  概要： 总共分两步： 在谷歌的网站上申请 Google AdSense的账号 将谷歌的广告链接加入页面的 Head 中第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的htm">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-07T20:52:37.000Z">
-<meta property="article:modified_time" content="2021-12-07T21:34:13.835Z">
+<meta property="article:modified_time" content="2021-12-07T21:45:06.706Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
 
@@ -239,7 +239,6 @@
       
       <div class="post-body">
           <p>既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。</p>
-<a id="more"></a>
 <blockquote>
 <h2 id="概要："><a href="#概要：" class="headerlink" title="概要："></a>概要：</h2><ul>
 <li>总共分两步：<ol>
