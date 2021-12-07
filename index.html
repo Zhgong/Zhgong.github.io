@@ -176,7 +176,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -221,6 +221,114 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/12/07/11google-adsense/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/12/07/11google-adsense/" class="post-title-link" itemprop="url">博客搭建 (四) 接入 Google AdSense (NexT v8.2.1)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-12-07 21:52:37 / 修改时间：22:29:08" itemprop="dateCreated datePublished" datetime="2021-12-07T21:52:37+01:00">2021-12-07</time>
+    </span>
+
+  
+    <span id="/2021/12/07/11google-adsense/" class="post-meta-item leancloud_visitors" data-flag-title="博客搭建 (四) 接入 Google AdSense (NexT v8.2.1)" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。</p>
+<blockquote>
+<h2 id="概要："><a href="#概要：" class="headerlink" title="概要："></a>概要：</h2><ul>
+<li>总共分两步：<ol>
+<li>在谷歌的网站上申请 Google AdSense的账号</li>
+<li>将谷歌的广告链接加入页面的 <code>Head</code> 中<br>第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的html文件之后，如果接下来运行 <code>hexo deloy</code>，会将原来的修改直接覆盖掉。下面我们着重讨论这个问题。</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<h2 id="在谷歌的网站上申请-Google-AdSense的账号"><a href="#在谷歌的网站上申请-Google-AdSense的账号" class="headerlink" title="在谷歌的网站上申请 Google AdSense的账号"></a>在谷歌的网站上申请 Google AdSense的账号</h2><p>这一步比较简单，参考这个链接<a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a>。完成这一部之后谷歌会给你一个脚本的链接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src&#x3D;&quot;https:&#x2F;&#x2F;pagead2.googlesyndication.com&#x2F;pagead&#x2F;js&#x2F;adsbygoogle.js?client&#x3D;ca-pub-8151465709714450&quot; </span><br><span class="line">crossorigin&#x3D;&quot;anonymous&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<p>提示你应该把它加到页面的 <code>Head</code> 中，我们先不按照它提示的方法操作。</p>
+<h2 id="将Google-AdSense的链接加入blog"><a href="#将Google-AdSense的链接加入blog" class="headerlink" title="将Google AdSense的链接加入blog"></a>将Google AdSense的链接加入blog</h2><p>根据官方的文档, 可以通过<a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/advanced-settings/custom-files.html">Custom Files</a>来订制<code>Head</code>。</p>
+<p>先找到 <code>themes/next/_config.yml</code> 将 <code>head</code> 这一行注释取消掉，让它生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Create your custom files in site directory &#96;source&#x2F;_data&#96; and uncomment needed files below.</span><br><span class="line">custom_file_path:</span><br><span class="line">  head: source&#x2F;_data&#x2F;head.njk</span><br><span class="line">  #header: source&#x2F;_data&#x2F;header.njk</span><br><span class="line">  #sidebar: source&#x2F;_data&#x2F;sidebar.njk</span><br><span class="line">  #postMeta: source&#x2F;_data&#x2F;post-meta.njk</span><br><span class="line">  #postBodyEnd: source&#x2F;_data&#x2F;post-body-end.njk</span><br><span class="line">  #footer: source&#x2F;_data&#x2F;footer.njk</span><br><span class="line">  #bodyEnd: source&#x2F;_data&#x2F;body-end.njk</span><br><span class="line">  #variable: source&#x2F;_data&#x2F;variables.styl</span><br><span class="line">  #mixin: source&#x2F;_data&#x2F;mixins.styl</span><br><span class="line">  #style: source&#x2F;_data&#x2F;styles.styl</span><br></pre></td></tr></table></figure>
+<p>然后在项目的根目录下面的 <code>source</code> 下面创建文件夹和文件：<code>source/_data/head.njk</code>，注意，这里的 <code>source</code> 指的是项目根目录下面的 <code>source</code> ，<strong>不是</strong> <del><code>themes/next/source</code></del>。</p>
+<p>接下来运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p>重新生成部署，然后刷新博客，右键查看网页的源码，确认谷歌的广告链接已经生效。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/05/12/10telegram-https-api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -252,7 +360,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-05-14 23:05:16" itemprop="dateModified" datetime="2021-05-14T23:05:16+02:00">2021-05-14</time>
+        <time title="修改时间：2021-12-07 21:54:31" itemprop="dateModified" datetime="2021-12-07T21:54:31+01:00">2021-12-07</time>
       </span>
 
   
@@ -292,14 +400,7 @@
 <li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFtelegram">什么是telegram？</a></li>
 <li><a href="#telegrem%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9">telegrem有什么特点？</a></li>
 <li><a href="#%E8%B7%9F%E5%BE%AE%E4%BF%A1%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95">跟微信相比如何？</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8-telegram%E7%9A%84https-api-%E6%9D%A5%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF">使用 telegram的https api 来发送消息</a><ul>
-<li><a href="#1-%E6%89%8B%E6%9C%BA%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AAtelegram%E8%B4%A6%E5%8F%B7">1. 手机注册一个telegram账号</a></li>
-<li><a href="#2-%E5%88%9B%E5%BB%BA%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA">2. 创建聊天机器人</a></li>
-<li><a href="#3-%E6%89%BE%E5%88%B0%E6%89%8B%E6%9C%BA%E7%AB%AF%E7%9A%84%E8%81%8A%E5%A4%A9id-chatid">3. 找到手机端的聊天id （<code>chatid</code>）</a></li>
-<li><a href="#4-%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%88%B0%E6%89%8B%E6%9C%BA">4. 发送消息到手机</a></li>
-</ul>
-</li>
-<li><a href="#%E6%80%BB%E7%BB%93">总结</a>
+<li><a href="#%E4%BD%BF%E7%94%A8-telegram%E7%9A%84https-api-%E6%9D%A5%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF">使用 telegram的https api 来发送消息</a>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/05/12/10telegram-https-api/#more" rel="contents">
@@ -1134,107 +1235,9 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/02/03/01first-post/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="zhou">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="～加斯东's blog～">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/03/01first-post/" class="post-title-link" itemprop="url">博客搭建 (一) 开始</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-02-03 23:26:09" itemprop="dateCreated datePublished" datetime="2021-02-03T23:26:09+01:00">2021-02-03</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-03-07 14:13:53" itemprop="dateModified" datetime="2021-03-07T14:13:53+01:00">2021-03-07</time>
-      </span>
-
-  
-    <span id="/2021/02/03/01first-post/" class="post-meta-item leancloud_visitors" data-flag-title="博客搭建 (一) 开始" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>174</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="博客搭建结构"><a href="#博客搭建结构" class="headerlink" title="博客搭建结构"></a>博客搭建结构</h2><p>打算开个博客记录一些文字。经过好友kenshinji的提点，我决定搭建静态博客试试。经google搜索，最终确定了方案:</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/03/01first-post/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 <script>
@@ -1278,13 +1281,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">8k</span>
+    <span title="站点总字数">9k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7 分钟</span>
+    <span title="站点阅读时长">8 分钟</span>
   </span>
 </div>
 

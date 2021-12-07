@@ -23,16 +23,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"justdong.net","root":"/","images":"/images","scheme":"Mist","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
+<meta name="description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。  概要： 总共分两步： 在谷歌的网站上申请 Google AdSense的账号 将谷歌的广告链接加入页面的 Head 中第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的htm">
 <meta property="og:type" content="website">
-<meta property="og:title" content="～加斯东&#39;s blog～">
-<meta property="og:url" content="https://justdong.net/tags/hexo/index.html">
+<meta property="og:title" content="博客搭建 (四) 接入 Google AdSense (NexT v8.2.1)">
+<meta property="og:url" content="https://justdong.net/wexin/weixin_11google-adsense.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。  概要： 总共分两步： 在谷歌的网站上申请 Google AdSense的账号 将谷歌的广告链接加入页面的 Head 中第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的htm">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-07T20:52:37.000Z">
+<meta property="article:modified_time" content="2021-12-07T21:32:53.500Z">
 <meta property="article:author" content="zhou">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://justdong.net/tags/hexo/">
+<link rel="canonical" href="https://justdong.net/wexin/weixin_11google-adsense">
 
 
 <script class="page-configurations">
@@ -45,7 +49,8 @@
   };
 </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8151465709714450"
      crossorigin="anonymous"></script>
-<title>标签: hexo | ～加斯东's blog～</title>
+<title>博客搭建 (四) 接入 Google AdSense (NexT v8.2.1) | ～加斯东's blog～
+</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
     <script>
@@ -150,7 +155,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -163,6 +168,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A6%81%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">概要：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%B0%B7%E6%AD%8C%E7%9A%84%E7%BD%91%E7%AB%99%E4%B8%8A%E7%94%B3%E8%AF%B7-Google-AdSense%E7%9A%84%E8%B4%A6%E5%8F%B7"><span class="nav-number">2.</span> <span class="nav-text">在谷歌的网站上申请 Google AdSense的账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86Google-AdSense%E7%9A%84%E9%93%BE%E6%8E%A5%E5%8A%A0%E5%85%A5blog"><span class="nav-number">3.</span> <span class="nav-text">将Google AdSense的链接加入blog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,50 +217,58 @@
 </noscript>
 
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner page posts-expand">
+  
+  
 
 
-  
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">hexo
-          <small>标签</small>
-        </h2>
-      </div>
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">博客搭建 (四) 接入 Google AdSense (NexT v8.2.1)
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-02-03T23:26:09+01:00"
-              content="2021-02-03">
-          02-03
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/02/03/01first-post/" itemprop="url">
-            <span itemprop="name">博客搭建 (一) 开始</span>
-          </a>
-      </div>
-
       
-    </header>
-  </article>
+      <div class="post-body">
+          <p>既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够受到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。</p>
+<blockquote>
+<h2 id="概要："><a href="#概要：" class="headerlink" title="概要："></a>概要：</h2><ul>
+<li>总共分两步：<ol>
+<li>在谷歌的网站上申请 Google AdSense的账号</li>
+<li>将谷歌的广告链接加入页面的 <code>Head</code> 中<br>第1步基本上每什么问题。关键在第2步，如果直接修改Hexo生成的html文件之后，如果接下来运行 <code>hexo deloy</code>，会将原来的修改直接覆盖掉。下面我们着重讨论这个问题。</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<h2 id="在谷歌的网站上申请-Google-AdSense的账号"><a href="#在谷歌的网站上申请-Google-AdSense的账号" class="headerlink" title="在谷歌的网站上申请 Google AdSense的账号"></a>在谷歌的网站上申请 Google AdSense的账号</h2><p>这一步比较简单，参考这个链接<a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a>。完成这一部之后谷歌会给你一个脚本的链接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src&#x3D;&quot;https:&#x2F;&#x2F;pagead2.googlesyndication.com&#x2F;pagead&#x2F;js&#x2F;adsbygoogle.js?client&#x3D;ca-pub-8151465709714450&quot; </span><br><span class="line">crossorigin&#x3D;&quot;anonymous&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<p>提示你应该把它加到页面的 <code>Head</code> 中，我们先不按照它提示的方法操作。</p>
+<h2 id="将Google-AdSense的链接加入blog"><a href="#将Google-AdSense的链接加入blog" class="headerlink" title="将Google AdSense的链接加入blog"></a>将Google AdSense的链接加入blog</h2><p>根据官方的文档, 可以通过<a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/advanced-settings/custom-files.html">Custom Files</a>来订制<code>Head</code>。</p>
+<p>先找到 <code>themes/next/_config.yml</code> 将 <code>head</code> 这一行注释取消掉，让它生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Create your custom files in site directory &#96;source&#x2F;_data&#96; and uncomment needed files below.</span><br><span class="line">custom_file_path:</span><br><span class="line">  head: source&#x2F;_data&#x2F;head.njk</span><br><span class="line">  #header: source&#x2F;_data&#x2F;header.njk</span><br><span class="line">  #sidebar: source&#x2F;_data&#x2F;sidebar.njk</span><br><span class="line">  #postMeta: source&#x2F;_data&#x2F;post-meta.njk</span><br><span class="line">  #postBodyEnd: source&#x2F;_data&#x2F;post-body-end.njk</span><br><span class="line">  #footer: source&#x2F;_data&#x2F;footer.njk</span><br><span class="line">  #bodyEnd: source&#x2F;_data&#x2F;body-end.njk</span><br><span class="line">  #variable: source&#x2F;_data&#x2F;variables.styl</span><br><span class="line">  #mixin: source&#x2F;_data&#x2F;mixins.styl</span><br><span class="line">  #style: source&#x2F;_data&#x2F;styles.styl</span><br></pre></td></tr></table></figure>
+<p>然后在项目的根目录下面的 <code>source</code> 下面创建文件夹和文件：<code>source/_data/head.njk</code>，注意，这里的 <code>source</code> 指的是项目根目录下面的 <code>source</code> ，<strong>不是</strong> <del><code>themes/next/source</code></del>。</p>
+<p>接下来运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p>重新生成部署，然后刷新博客，右键查看网页的源码，确认谷歌的广告链接已经生效。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a></p>
 
+      </div>
+      
+      
+      
     </div>
-  </div>
-  
-  
-  
+
+    
+    
+
 
 
 <script>
