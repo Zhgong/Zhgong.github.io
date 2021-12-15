@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -100,6 +100,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -138,6 +139,7 @@
         <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
         <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-rss"><a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a></li>
   </ul>
 </nav>
 
@@ -260,13 +262,16 @@
 </blockquote>
 <h2 id="在谷歌的网站上申请-Google-AdSense的账号"><a href="#在谷歌的网站上申请-Google-AdSense的账号" class="headerlink" title="在谷歌的网站上申请 Google AdSense的账号"></a>在谷歌的网站上申请 Google AdSense的账号</h2><p>这一步比较简单，参考这个链接<a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a>。完成这一部之后谷歌会给你一个脚本的链接：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src&#x3D;&quot;https:&#x2F;&#x2F;pagead2.googlesyndication.com&#x2F;pagead&#x2F;js&#x2F;adsbygoogle.js?client&#x3D;ca-pub-8151465709714450&quot; </span><br><span class="line">crossorigin&#x3D;&quot;anonymous&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
 <p>提示你应该把它加到页面的 <code>Head</code> 中，我们先不按照它提示的方法操作。</p>
 <h2 id="将Google-AdSense的链接加入blog"><a href="#将Google-AdSense的链接加入blog" class="headerlink" title="将Google AdSense的链接加入blog"></a>将Google AdSense的链接加入blog</h2><p>根据官方的文档, 可以通过<a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/advanced-settings/custom-files.html">Custom Files</a>来订制<code>Head</code>。</p>
 <p>先找到 <code>themes/next/_config.yml</code> 将 <code>head</code> 这一行注释取消掉，让它生效。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Create your custom files in site directory &#96;source&#x2F;_data&#96; and uncomment needed files below.</span><br><span class="line">custom_file_path:</span><br><span class="line">  head: source&#x2F;_data&#x2F;head.njk</span><br><span class="line">  #header: source&#x2F;_data&#x2F;header.njk</span><br><span class="line">  #sidebar: source&#x2F;_data&#x2F;sidebar.njk</span><br><span class="line">  #postMeta: source&#x2F;_data&#x2F;post-meta.njk</span><br><span class="line">  #postBodyEnd: source&#x2F;_data&#x2F;post-body-end.njk</span><br><span class="line">  #footer: source&#x2F;_data&#x2F;footer.njk</span><br><span class="line">  #bodyEnd: source&#x2F;_data&#x2F;body-end.njk</span><br><span class="line">  #variable: source&#x2F;_data&#x2F;variables.styl</span><br><span class="line">  #mixin: source&#x2F;_data&#x2F;mixins.styl</span><br><span class="line">  #style: source&#x2F;_data&#x2F;styles.styl</span><br></pre></td></tr></table></figure>
+
 <p>然后在项目的根目录下面的 <code>source</code> 下面创建文件夹和文件：<code>source/_data/head.njk</code>，注意，这里的 <code>source</code> 指的是项目根目录下面的 <code>source</code> ，<strong>不是</strong> <del><code>themes/next/source</code></del>。</p>
 <p>接下来运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
 <p>重新生成部署，然后刷新博客，右键查看网页的源码，确认谷歌的广告链接已经生效。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.boris1993.com/others/hexo-next-enable-google-adsense.html">在 NexT 主题中接入 Google AdSense </a></p>
 

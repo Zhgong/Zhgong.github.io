@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -103,6 +103,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -141,6 +142,7 @@
         <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
         <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-rss"><a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a></li>
   </ul>
 </nav>
 
@@ -252,7 +254,7 @@
       
       <div class="post-body">
           <p>目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="克隆整个硬盘"><a href="#克隆整个硬盘" class="headerlink" title="克隆整个硬盘"></a>克隆整个硬盘</h2><p>当然最先开始想到的方法就是克隆整个硬盘，克隆硬盘的工具也是一大堆，本着不折腾的原则。选择最简单的： <code>dd</code></p>
 <p>具体步骤如下：</p>
 <h3 id="列出磁盘（diskutil）"><a href="#列出磁盘（diskutil）" class="headerlink" title="列出磁盘（diskutil）"></a>列出磁盘（<code>diskutil</code>）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ diskutil list</span><br><span class="line">...</span><br><span class="line">&#x2F;dev&#x2F;disk4 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *128.0 GB   disk4</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk4s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk4s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk4s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk4s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk4s5</span><br><span class="line"></span><br><span class="line">&#x2F;dev&#x2F;disk5 (external, physical):</span><br><span class="line">   #:                       TYPE NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        *240.1 GB   disk5</span><br><span class="line">   1:       Microsoft Basic Data ⁨⁩                        651.3 KB   disk5s1</span><br><span class="line">   2:        Bios Boot Partition ⁨⁩                        1.0 MB     disk5s2</span><br><span class="line">   3:                        EFI ⁨usbboot⁩                 255.9 MB   disk5s3</span><br><span class="line">   4:           Linux Filesystem ⁨⁩                        2.8 GB     disk5s4</span><br><span class="line">   5:           Linux Filesystem ⁨⁩                        125.0 GB   disk5s5</span><br></pre></td></tr></table></figure>
@@ -260,11 +262,12 @@
 <h3 id="使用-dd-进行克隆"><a href="#使用-dd-进行克隆" class="headerlink" title="使用 dd 进行克隆"></a>使用 <code>dd</code> 进行克隆</h3><img src="/images/hexo_post_08_dd.png" width="128"/>
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dd <span class="keyword">if</span>=/dev/rdisk4 of=/dev/rdisk5 bs=128m conv=noerror,sync</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>在期间可以通过按 CTL+T 来获取进度</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;932+0 records in</span><br><span class="line">&gt;931+0 records out</span><br><span class="line">&gt;124956704768 bytes transferred in 1001.749198 secs (124738512 bytes&#x2F;sec)</span><br><span class="line">&gt;load: 4.10  cmd: dd 68241 uninterruptible 7.02u 16.56s</span><br></pre></td></tr></table></figure>
-<p>克隆结束！将新的磁盘装入计算机，开机，路程原来熟悉的画面。</p>
 </blockquote>
+<p>克隆结束！将新的磁盘装入计算机，开机，路程原来熟悉的画面。</p>
 <h3 id="使用未分配的空间"><a href="#使用未分配的空间" class="headerlink" title="使用未分配的空间"></a>使用未分配的空间</h3><img src="/images/hexo_post_08_gparted.png" width="64"/>
 
 <p>由于我们将小的磁盘克隆的到大的磁盘中，所以结束之后，在大的磁盘中会剩余一些<code>未分配空间</code>出来。以我这次的情况为例，大概有128G的未分配空间。可以直接使用 <code>GParted</code> 软件将未分配空间创建为新的磁盘或者并入原来的分区。</p>
