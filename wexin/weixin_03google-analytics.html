@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
 <meta property="og:description" content="如何添加 google analytics如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。 工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://justdong.net/images/images/hexo_post_ga.drawio.png">
-<meta property="og:image" content="https://justdong.net/images/images/hexo_post_ga_id.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_post_ga.drawio.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_post_ga_id.png">
 <meta property="article:published_time" content="2021-02-06T16:50:33.000Z">
-<meta property="article:modified_time" content="2021-12-18T11:25:13.500Z">
+<meta property="article:modified_time" content="2021-12-18T22:29:17.403Z">
 <meta property="article:author" content="加斯东">
 <meta property="article:tag" content="博客搭建">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://justdong.net/images/images/hexo_post_ga.drawio.png">
+<meta name="twitter:image" content="https://justdong.net/images/hexo_post_ga.drawio.png">
 
 
 <link rel="canonical" href="https://justdong.net/wexin/weixin_03google-analytics">
@@ -141,13 +141,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -210,8 +210,8 @@
 <p>工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：</p>
 <span id="more"></span>
 
-<p><img src="https://justdong.net/images/images/hexo_post_ga.drawio.png"></p>
-<h2 id="获取GA-ID-G-xxxxx"><a href="#获取GA-ID-G-xxxxx" class="headerlink" title="获取GA ID: G-xxxxx"></a>获取GA ID: G-xxxxx</h2><p>根据网站上的指引，创建数据流，然后就可以拿到ID了。ID是以G开头的一串字符。<br><img src="https://justdong.net/images/images/hexo_post_ga_id.png"></p>
+<p><img src="https://justdong.net/images/hexo_post_ga.drawio.png"></p>
+<h2 id="获取GA-ID-G-xxxxx"><a href="#获取GA-ID-G-xxxxx" class="headerlink" title="获取GA ID: G-xxxxx"></a>获取GA ID: G-xxxxx</h2><p>根据网站上的指引，创建数据流，然后就可以拿到ID了。ID是以G开头的一串字符。<br><img src="https://justdong.net/images/hexo_post_ga_id.png"></p>
 <h2 id="更改Next配置文件"><a href="#更改Next配置文件" class="headerlink" title="更改Next配置文件"></a>更改Next配置文件</h2><p>在next的_config.yml中添加以下的配置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Google Analytics</span><br><span class="line"># See: https:&#x2F;&#x2F;analytics.google.com</span><br><span class="line">google_analytics:</span><br><span class="line">  tracking_id: &lt;app_id&gt;</span><br><span class="line">  # By default, NexT will load an external gtag.js script on your site.</span><br><span class="line">  # If you only need the pageview feature, set the following option to true to get a better performance.</span><br><span class="line">  only_pageview: false</span><br></pre></td></tr></table></figure>
 
@@ -270,13 +270,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">12k</span>
+    <span title="站点总字数">21k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">11 分钟</span>
+    <span title="站点阅读时长">19 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
