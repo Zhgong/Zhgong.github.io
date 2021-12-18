@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2021-12-16T23:35:31.556Z</updated>
+  <updated>2021-12-18T00:12:30.955Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -17,11 +17,26 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>机器学习的数学 （一）回归</title>
+    <link href="https://justdong.net/2021/12/12/12math-machine-learning-01/"/>
+    <id>https://justdong.net/2021/12/12/12math-machine-learning-01/</id>
+    <published>2021-12-11T23:36:54.000Z</published>
+    <updated>2021-12-18T00:12:30.955Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;前段时间想了解机器学习的原理和作用，搜索“机器学习”可以找到铺天盖地的资料，可是目前大部分找到的资料是讲解，如何使用机器学习的库来快速搭建可用的机器学习程序。对我来说，可能更加重要是了解机器学习的原理而不是把它当成一个黑盒子来用。我想搞清楚几个问题：什么是机器学习？机器学习适用于哪些问题？。带着这些问题，请教了X博士，X是机器学习方面的博士后，简单交流之后，X说，需要一些基础的数学知识：&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>博客搭建 (五) 接入 Google AdSense (NexT v8.2.1)</title>
     <link href="https://justdong.net/2021/12/07/11google-adsense/"/>
     <id>https://justdong.net/2021/12/07/11google-adsense/</id>
     <published>2021-12-07T20:52:37.000Z</published>
-    <updated>2021-12-16T23:35:31.556Z</updated>
+    <updated>2021-12-18T00:07:42.593Z</updated>
     
     
     <summary type="html">&lt;p&gt;既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够收到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。&lt;/p&gt;</summary>
@@ -132,7 +147,7 @@
     <link href="https://justdong.net/2021/02/06/04symbol-count/"/>
     <id>https://justdong.net/2021/02/06/04symbol-count/</id>
     <published>2021-02-06T22:31:46.000Z</published>
-    <updated>2021-12-16T23:35:31.556Z</updated>
+    <updated>2021-12-18T00:07:42.593Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;安装插件&quot;&gt;&lt;a href=&quot;#安装插件&quot; class=&quot;headerlink&quot; title=&quot;安装插件&quot;&gt;&lt;/a&gt;安装插件&lt;/h2&gt;</summary>
@@ -149,7 +164,7 @@
     <link href="https://justdong.net/2021/02/06/03google-analytics/"/>
     <id>https://justdong.net/2021/02/06/03google-analytics/</id>
     <published>2021-02-06T16:50:33.000Z</published>
-    <updated>2021-12-16T23:35:31.556Z</updated>
+    <updated>2021-12-18T00:07:42.593Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;如何添加-google-analytics&quot;&gt;&lt;a href=&quot;#如何添加-google-analytics&quot; class=&quot;headerlink&quot; title=&quot;如何添加 google analytics&quot;&gt;&lt;/a&gt;如何添加 google analytics&lt;/h1&gt;&lt;p&gt;如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。&lt;/p&gt;
@@ -167,7 +182,7 @@
     <link href="https://justdong.net/2021/02/06/02google-domain/"/>
     <id>https://justdong.net/2021/02/06/02google-domain/</id>
     <published>2021-02-06T16:49:30.000Z</published>
-    <updated>2021-12-16T23:35:31.556Z</updated>
+    <updated>2021-12-18T00:07:42.593Z</updated>
     
     
     <summary type="html">&lt;p&gt;如何链接 google 域名&lt;/p&gt;</summary>
@@ -184,7 +199,7 @@
     <link href="https://justdong.net/2021/02/03/01first-post/"/>
     <id>https://justdong.net/2021/02/03/01first-post/</id>
     <published>2021-02-03T22:26:09.000Z</published>
-    <updated>2021-12-16T23:35:31.552Z</updated>
+    <updated>2021-12-18T00:07:42.593Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;博客搭建结构&quot;&gt;&lt;a href=&quot;#博客搭建结构&quot; class=&quot;headerlink&quot; title=&quot;博客搭建结构&quot;&gt;&lt;/a&gt;博客搭建结构&lt;/h2&gt;&lt;p&gt;打算开个博客记录一些文字。经过好友kenshinji的提点，我决定搭建静态博客试试。经google搜索，最终确定了方案:&lt;/p&gt;</summary>
