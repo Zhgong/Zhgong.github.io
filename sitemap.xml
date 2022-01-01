@@ -2,56 +2,63 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://justdong.net/2021/12/18/13hexo-next-waline/</loc>
+    <loc>https://justdong.net/2021/12/20/14linear-algebra-01/</loc>
     
-    <lastmod>2021-12-18</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/wexin/weixin_01first-post.html</loc>
-    
-    <lastmod>2021-12-18</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/wexin/weixin_02google-domain.html</loc>
-    
-    <lastmod>2021-12-18</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/wexin/weixin_03google-analytics.html</loc>
-    
-    <lastmod>2021-12-18</lastmod>
+    <lastmod>2022-01-01</lastmod>
     
   </url>
   
   <url>
     <loc>https://justdong.net/wexin/weixin_05feynman-technique.html</loc>
     
-    <lastmod>2021-12-18</lastmod>
+    <lastmod>2021-12-20</lastmod>
     
   </url>
   
   <url>
     <loc>https://justdong.net/wexin/weixin_06url-searchengine.html</loc>
     
-    <lastmod>2021-12-18</lastmod>
+    <lastmod>2021-12-20</lastmod>
     
   </url>
   
   <url>
     <loc>https://justdong.net/wexin/weixin_10telegram-https-api.html</loc>
     
-    <lastmod>2021-12-18</lastmod>
+    <lastmod>2021-12-20</lastmod>
     
   </url>
   
   <url>
     <loc>https://justdong.net/wexin/weixin_12math-machine-learning-01.html</loc>
+    
+    <lastmod>2021-12-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/wexin/weixin_01first-post.html</loc>
+    
+    <lastmod>2021-12-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/wexin/weixin_02google-domain.html</loc>
+    
+    <lastmod>2021-12-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/wexin/weixin_03google-analytics.html</loc>
+    
+    <lastmod>2021-12-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://justdong.net/2021/12/18/13hexo-next-waline/</loc>
     
     <lastmod>2021-12-18</lastmod>
     
@@ -186,7 +193,7 @@
 
   <url>
     <loc>https://justdong.net/</loc>
-    <lastmod>2021-12-20</lastmod>
+    <lastmod>2022-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -194,21 +201,21 @@
   
   <url>
     <loc>https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-hexo/</loc>
-    <lastmod>2021-12-20</lastmod>
+    <lastmod>2022-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2021-12-20</lastmod>
+    <lastmod>2022-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://justdong.net/tags/Hexo-NexT/</loc>
-    <lastmod>2021-12-20</lastmod>
+    <lastmod>2022-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2021-12-18T22:29:17.403Z</updated>
+  <updated>2022-01-01T22:35:03.609Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MIT线性代数(Linear Algebra)公开课笔记 (一) 线性方程的几何表示</title>
+    <link href="https://justdong.net/2021/12/20/14linear-algebra-01/"/>
+    <id>https://justdong.net/2021/12/20/14linear-algebra-01/</id>
+    <published>2021-12-20T15:11:20.000Z</published>
+    <updated>2022-01-01T22:35:03.609Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;假设有一个矩阵，跟向量相乘，结果是另外一个向量。你会怎么做？如何来理解矩阵的乘法？&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>博客使用 waline 评论系统</title>
