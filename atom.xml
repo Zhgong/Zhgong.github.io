@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-07-23T20:48:12.926Z</updated>
+  <updated>2024-07-23T20:51:33.375Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -21,10 +21,10 @@
     <link href="https://justdong.net/2024/07/22/15lbasi/15lbasi01/"/>
     <id>https://justdong.net/2024/07/22/15lbasi/15lbasi01/</id>
     <published>2024-07-22T20:28:55.000Z</published>
-    <updated>2024-07-23T20:48:12.926Z</updated>
+    <updated>2024-07-23T20:51:33.375Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;从零开始写个简单的解释器（1）&quot;&gt;&lt;a href=&quot;#从零开始写个简单的解释器（1）&quot; class=&quot;headerlink&quot; title=&quot;从零开始写个简单的解释器（1）&quot;&gt;&lt;/a&gt;从零开始写个简单的解释器（1）&lt;/h1&gt;&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part1/&quot;&gt;Let’s Build A Simple Interpreter. Part 1.&lt;/a&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part1/&quot;&gt;Let’s Build A Simple Interpreter. Part 1.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;译文：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;”如果你不知道编译器是如何工作的，那么你就不知道计算机是如何工作的。如果你不能百分百确定你是否知道编译器是如何工作的，那么你就不知道编译器是如何工作的。“- Steve Yegge&lt;/p&gt;
