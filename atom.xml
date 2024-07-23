@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>～加斯东&#39;s blog～</title>
+  <icon>https://justdong.net/icon.png</icon>
+  
+  <link href="https://justdong.net/atom.xml" rel="self"/>
+  
+  <link href="https://justdong.net/"/>
+  <updated>2024-07-23T20:48:12.926Z</updated>
+  <id>https://justdong.net/</id>
+  
+  <author>
+    <name>加斯东</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（1）</title>
+    <link href="https://justdong.net/2024/07/22/15lbasi/15lbasi01/"/>
+    <id>https://justdong.net/2024/07/22/15lbasi/15lbasi01/</id>
+    <published>2024-07-22T20:28:55.000Z</published>
+    <updated>2024-07-23T20:48:12.926Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;从零开始写个简单的解释器（1）&quot;&gt;&lt;a href=&quot;#从零开始写个简单的解释器（1）&quot; class=&quot;headerlink&quot; title=&quot;从零开始写个简单的解释器（1）&quot;&gt;&lt;/a&gt;从零开始写个简单的解释器（1）&lt;/h1&gt;&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part1/&quot;&gt;Let’s Build A Simple Interpreter. Part 1.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;”如果你不知道编译器是如何工作的，那么你就不知道计算机是如何工作的。如果你不能百分百确定你是否知道编译器是如何工作的，那么你就不知道编译器是如何工作的。“- Steve Yegge&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这句话道出了真理。无论你是新手还是经验丰富的软件开发者，这都不重要：如果你不了解编译器和解释器的工作原理，那么你就不了解计算机的工作原理。就这么简单。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MIT线性代数(Linear Algebra)公开课笔记 (一) 线性方程的几何表示</title>
+    <link href="https://justdong.net/2021/12/20/14linear-algebra-01/"/>
+    <id>https://justdong.net/2021/12/20/14linear-algebra-01/</id>
+    <published>2021-12-20T15:11:20.000Z</published>
+    <updated>2024-07-22T20:56:47.554Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;假设有一个矩阵，跟向量相乘，结果是另外一个向量。你会怎么做？如何来理解矩阵的乘法？&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>博客使用 waline 评论系统</title>
+    <link href="https://justdong.net/2021/12/18/13hexo-next-waline/"/>
+    <id>https://justdong.net/2021/12/18/13hexo-next-waline/</id>
+    <published>2021-12-18T11:04:56.000Z</published>
+    <updated>2024-03-31T20:34:13.617Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;之前博客的评论系统只支持 Disqus 评论系统。但是这个评论系统在墙内无法使用。为了方便交流，琢磨着怎么也得用上一个不用梯子也能使用的评论系统。又是一番搜索折腾最后还是决定使用 &lt;a href=&quot;https://waline.js.org/&quot;&gt;waline&lt;/a&gt;。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Hexo NexT" scheme="https://justdong.net/tags/Hexo-NexT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习的数学 （一）回归</title>
+    <link href="https://justdong.net/2021/12/12/12math-machine-learning-01/"/>
+    <id>https://justdong.net/2021/12/12/12math-machine-learning-01/</id>
+    <published>2021-12-11T23:36:54.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;前段时间想了解机器学习的原理和作用，搜索“机器学习”可以找到铺天盖地的资料，可是目前大部分找到的资料是讲解，如何使用机器学习的库来快速搭建可用的机器学习程序。对我来说，可能更加重要是了解机器学习的原理而不是把它当成一个黑盒子来用。我想搞清楚几个问题：什么是机器学习？机器学习适用于哪些问题？。带着这些问题，请教了X博士，X是机器学习方面的博士后，简单交流之后，X说，需要一些基础的数学知识：&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>博客搭建 (五) 接入 Google AdSense (NexT v8.2.1)</title>
+    <link href="https://justdong.net/2021/12/07/11google-adsense/"/>
+    <id>https://justdong.net/2021/12/07/11google-adsense/</id>
+    <published>2021-12-07T20:52:37.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够收到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过 telegram 来发送消息到手机 （只需两行代码）</title>
+    <link href="https://justdong.net/2021/05/12/10telegram-https-api/"/>
+    <id>https://justdong.net/2021/05/12/10telegram-https-api/</id>
+    <published>2021-05-12T21:51:29.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E4%BB%80%E4%B9%88%E6%98%AFtelegram&quot;&gt;什么是telegram？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#telegrem%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9&quot;&gt;telegrem有什么特点？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%B7%9F%E5%BE%AE%E4%BF%A1%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95&quot;&gt;跟微信相比如何？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E4%BD%BF%E7%94%A8-telegram%E7%9A%84https-api-%E6%9D%A5%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF&quot;&gt;使用 telegram的https api 来发送消息&lt;/a&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在树莓派上使用motioneye（docker版）</title>
+    <link href="https://justdong.net/2021/03/31/09raspberrypi-camera/"/>
+    <id>https://justdong.net/2021/03/31/09raspberrypi-camera/</id>
+    <published>2021-03-31T19:53:05.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;本来想在树莓派4上尝试一下新的摄像头，看看效果如何。将摄像头连接好。通过命令行测试：&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>将Ubuntu系统迁移到新的磁盘</title>
+    <link href="https://justdong.net/2021/03/03/08linux-clone-disk/"/>
+    <id>https://justdong.net/2021/03/03/08linux-clone-disk/</id>
+    <published>2021-03-03T20:23:50.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>使用pipenv虚拟环境（从github上面安装软件包）</title>
+    <link href="https://justdong.net/2021/03/01/07use-pipenv/"/>
+    <id>https://justdong.net/2021/03/01/07use-pipenv/</id>
+    <published>2021-02-28T23:04:00.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;什么是pipenv？&quot;&gt;&lt;a href=&quot;#什么是pipenv？&quot; class=&quot;headerlink&quot; title=&quot;什么是pipenv？&quot;&gt;&lt;/a&gt;什么是pipenv？&lt;/h2&gt;&lt;p&gt;&lt;code&gt;pipenv&lt;/code&gt; 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了&lt;code&gt;pip&lt;/code&gt;和&lt;code&gt;virtualenv&lt;/code&gt;的功能.详细的功能介绍可以参考&lt;a href=&quot;https://docs.pipenv.org/&quot;&gt;官方网页&lt;/a&gt;。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>本站被搜索引擎收录情况</title>
+    <link href="https://justdong.net/2021/02/21/06url-searchengine/"/>
+    <id>https://justdong.net/2021/02/21/06url-searchengine/</id>
+    <published>2021-02-21T21:14:39.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;本站被搜索引擎的收录情况。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>费曼学习法</title>
+    <link href="https://justdong.net/2021/02/17/05feynman-technique/"/>
+    <id>https://justdong.net/2021/02/17/05feynman-technique/</id>
+    <published>2021-02-16T23:15:10.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语）&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>博客搭建 (四) 显示文章的字数和阅读时长</title>
+    <link href="https://justdong.net/2021/02/06/04symbol-count/"/>
+    <id>https://justdong.net/2021/02/06/04symbol-count/</id>
+    <published>2021-02-06T22:31:46.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;安装插件&quot;&gt;&lt;a href=&quot;#安装插件&quot; class=&quot;headerlink&quot; title=&quot;安装插件&quot;&gt;&lt;/a&gt;安装插件&lt;/h2&gt;</summary>
+    
+    
+    
+    
+    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>博客搭建 (三) 链接google分析</title>
+    <link href="https://justdong.net/2021/02/06/03google-analytics/"/>
+    <id>https://justdong.net/2021/02/06/03google-analytics/</id>
+    <published>2021-02-06T16:50:33.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;如何添加-google-analytics&quot;&gt;&lt;a href=&quot;#如何添加-google-analytics&quot; class=&quot;headerlink&quot; title=&quot;如何添加 google analytics&quot;&gt;&lt;/a&gt;如何添加 google analytics&lt;/h1&gt;&lt;p&gt;如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。&lt;/p&gt;
+&lt;p&gt;工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>博客搭建 (二) 链接谷歌域名</title>
+    <link href="https://justdong.net/2021/02/06/02google-domain/"/>
+    <id>https://justdong.net/2021/02/06/02google-domain/</id>
+    <published>2021-02-06T16:49:30.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;如何链接 google 域名&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>博客搭建 (一) 开始</title>
+    <link href="https://justdong.net/2021/02/03/01first-post/"/>
+    <id>https://justdong.net/2021/02/03/01first-post/</id>
+    <published>2021-02-03T22:26:09.000Z</published>
+    <updated>2024-03-31T20:34:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;博客搭建结构&quot;&gt;&lt;a href=&quot;#博客搭建结构&quot; class=&quot;headerlink&quot; title=&quot;博客搭建结构&quot;&gt;&lt;/a&gt;博客搭建结构&lt;/h2&gt;&lt;p&gt;打算开个博客记录一些文字。经过好友kenshinji的提点，我决定搭建静态博客试试。经google搜索，最终确定了方案:&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="博客搭建 - hexo" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-hexo/"/>
+    
+  </entry>
+  
+</feed>

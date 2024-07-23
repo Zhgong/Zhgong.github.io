@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前段时间想了解机器学习的原理和作用，搜索“机器学习”可以找到铺天盖地的资料，可是目前大部分找到的资料是讲解，如何使用机器学习的库来快速搭建可用的机器学习程序。对我来说，可能更加重要是了解机器学习的原理而不是把它当成一个黑盒子来用。我想搞清楚几个问题：什么是机器学习？机器学习适用于哪些问题？。带着这些问题，请教了X博士，X是机器学习方面的博士后，简单交流之后，X说，需要一些基础的数学知识：">
+<meta property="og:type" content="website">
+<meta property="og:title" content="机器学习的数学 （一）回归">
+<meta property="og:url" content="https://justdong.net/wexin/weixin_12math-machine-learning-01.html">
+<meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="前段时间想了解机器学习的原理和作用，搜索“机器学习”可以找到铺天盖地的资料，可是目前大部分找到的资料是讲解，如何使用机器学习的库来快速搭建可用的机器学习程序。对我来说，可能更加重要是了解机器学习的原理而不是把它当成一个黑盒子来用。我想搞清楚几个问题：什么是机器学习？机器学习适用于哪些问题？。带着这些问题，请教了X博士，X是机器学习方面的博士后，简单交流之后，X说，需要一些基础的数学知识：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://justdong.net/images/hexo_12_plot_xy.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_12_plot_xy_ab.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_12_plot_xy_ab_dev.png">
+<meta property="og:image" content="https://justdong.net/images/hexo_12_regression_animation.gif">
+<meta property="article:published_time" content="2021-12-11T23:36:54.000Z">
+<meta property="article:modified_time" content="2024-03-31T20:34:13.669Z">
+<meta property="article:author" content="加斯东">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/images/hexo_12_plot_xy.png">
+
+<link rel="canonical" href="https://justdong.net/wexin/weixin_12math-machine-learning-01">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>机器学习的数学 （一）回归 | ～加斯东's blog～
+</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">～加斯东's blog～</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content page posts-expand">
+            
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">机器学习的数学 （一）回归
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <p>前段时间想了解机器学习的原理和作用，搜索“机器学习”可以找到铺天盖地的资料，可是目前大部分找到的资料是讲解，如何使用机器学习的库来快速搭建可用的机器学习程序。对我来说，可能更加重要是了解机器学习的原理而不是把它当成一个黑盒子来用。我想搞清楚几个问题：什么是机器学习？机器学习适用于哪些问题？。带着这些问题，请教了X博士，X是机器学习方面的博士后，简单交流之后，X说，需要一些基础的数学知识：</p>
+<span id="more"></span>
+<ul>
+<li>线性代数</li>
+<li>概率论</li>
+<li>算法</li>
+<li>计算机科学知识</li>
+</ul>
+<p>然后给我推荐了斯坦福大牛写的书 <a target="_blank" rel="noopener" href="https://www.deeplearningbook.org/">《Deep Learning》</a>。我如获至宝，既然是此领域研究前沿的牛人推荐，必定是精品。专门抽出时间来钻研这本书。对于牛人来说”基础”的知识，于我算的上是难啃的骨头，虽然说站在巨人的肩膀上可能看得更远，首先得能爬得上巨人的肩旁才行。</p>
+<p>既然难度太大的吃不消，那就把难度降低一点，直到能够稍微花点力气能够啃下来就行。搜索一番，果然找到一本适合我目前水平的书《白话机器学习的数学》。听书名就是面向基础读者。买来一读，果然如我所料。本书的特色之一在内容的表现形式上，采用的是两个程序员的对话讨论的形式来表达书中的知识点。一个请教，一个回答，通俗易懂。计算机书籍中还有一个系列教《head first》系列，成书的风格也很相似，如果你看过《head fist》系列觉得还不错的话，那么这本书也应该会对你的胃口。</p>
+<p>书中介绍了机器学习中下面几大块需要的数学知识：</p>
+<ul>
+<li>回归</li>
+<li>分类</li>
+<li>聚类</li>
+</ul>
+<p>以及如何来评估所使用的机器学习的模型。最后一章是使用<code>python</code>来编程实现书中前面章节所介绍的内容，可谓是实际动手操作。书中所介绍的基本知识和类型，很少会在实际的问题中应用，不过这些知识可以帮助我们更好的理解机器学习原理。</p>
+<h2 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h2><p>先从简单的回归讲起，假设有一段数据， <code>x，y</code> 如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">x,  y</span><br><span class="line">235,591</span><br><span class="line">216,539</span><br><span class="line">148,413</span><br><span class="line">35,310</span><br><span class="line">85,308</span><br><span class="line">204,519</span><br><span class="line">49,325</span><br><span class="line">25,332</span><br><span class="line">173,498</span><br><span class="line">191,498</span><br><span class="line">134,392</span><br><span class="line">99,334</span><br><span class="line">117,385</span><br><span class="line">112,387</span><br><span class="line">162,425</span><br><span class="line">272,659</span><br><span class="line">159,400</span><br><span class="line">159,427</span><br><span class="line">59,319</span><br><span class="line">198,522</span><br></pre></td></tr></table></figure>
+<p>画图出来是这样：<br><img src="https://justdong.net/images/hexo_12_plot_xy.png"><br>x：假设是广告版面的大小。y：假设是广告费用。我们知道这两种是线性的关系。那么如何把这两者的线性关系表示出来呢？当初的物理课上，做完实验之后，老师说，这两者是线性关系，说完拿着尺子，刷地一下就直线给画出来了。</p>
+<p>接着不紧不慢地说，只需要把直线画到让我们实验结果中的点能够均<code>匀地分布在直线的两侧</code>即可。</p>
+<h2 id="要处理的问题是什么？"><a href="#要处理的问题是什么？" class="headerlink" title="要处理的问题是什么？"></a>要处理的问题是什么？</h2><p>稍微总结一下，目前的情况是：</p>
+<ol>
+<li>已知：我们已经知道数据表示两者之间的关系是线性的（线性关系已知）</li>
+<li>目标：我们需要把这条线找出来</li>
+<li>怎么评估这条线？平面上面这么多值线，凭什么说你找到的就比我找到的线要好？</li>
+</ol>
+<p>从我们直接的感官来判断，B 线 A 线要更好，原因是什么？<br><img src="https://justdong.net/images/hexo_12_plot_xy_ab.png"></p>
+<blockquote>
+<p>因为 B 线离我们的采集的点更近.</p>
+</blockquote>
+<p>到目前为止， 我们都是用我们直观的感受来划线，评价所画的线的优劣，然后画更好的线。</p>
+<blockquote>
+<p>理解机器学习最重要的一点就是，<strong>如何将我们通过直观和经验达到的结果，用计算机（机器）来实现？</strong></p>
+</blockquote>
+<h2 id="如何评估直线的优劣？"><a href="#如何评估直线的优劣？" class="headerlink" title="如何评估直线的优劣？"></a>如何评估直线的优劣？</h2><p>之前我们说到，要让计算机来实现我们人通过<code>直观</code>获得的结果，在我们具体的例子当中，两步：</p>
+<blockquote>
+<p>直观的做法：</p>
+<ol>
+<li>随便画一条线</li>
+<li>确认这条线偏离数据大概的程度</li>
+<li>朝着偏离程度小的方向画另一条更好的线</li>
+</ol>
+</blockquote>
+<h2 id="如何把直观变成数值"><a href="#如何把直观变成数值" class="headerlink" title="如何把直观变成数值"></a>如何把直观变成数值</h2><p>如果我们想通过机器来实现上面的几步，得怎么做？</p>
+<ol>
+<li><p>随便画一条线<br> 这个好实现，计算机生成一条曲线还不是分分钟的事情</p>
+</li>
+<li><p>确认这条线偏离数据大概的程度<br> 机器没法跟人一样用眼睛区去观察，那么我们得想个办法把我们直观观察到的偏离程度变成一个数字，用这个<code>数值的大小</code>来指示<code>偏离程度的大小</code>。这里是理解机器学习关键的一步：将我们日常生活中的<strong>直观经验用数值来体现</strong>。</p>
+<p> 下图中蓝色线段<code>1</code>是某个点跟<code>A</code>线的偏差，<code>2</code>是同一个点到<code>B</code>的偏差。2的长度小于1，说明对这个点来说，<code>B</code>比<code>A</code>更好。<br> <img src="https://justdong.net/images/hexo_12_plot_xy_ab_dev.png"></p>
+</li>
+<li><p>朝着偏离程度小的方向画另一条更好的线</p>
+</li>
+</ol>
+<h2 id="误差"><a href="#误差" class="headerlink" title="误差"></a>误差</h2><p>目前来看是有了些头绪，我们通过比较某个点跟我们画出的直线之间的距离来确定直线的优劣，但是稍等，刚刚我们只是考虑了我们数据中的一个点，然后我们的表格中一共有20个点。我们怎么样才能把所有的点都考虑进取？</p>
+<p>最简单的方法是，我们把每个点跟直线之间的距离加起来，把这个数值作为这条直线对应于所有数据的误差：</p>
+<blockquote>
+<p>A直线的误差 = 第1个点到A的偏差 + 第2个点到A的偏差 + … + 第20个点到A的偏差<br>B直线的误差 = 第1个点到B的偏差 + 第2个点到B的偏差 + … + 第20个点到B的偏差<br>（这里的偏差指的是线段的长度，都是正值）</p>
+</blockquote>
+<p>到此为止，我们既找考虑了所有的点，也达到了用一个数值来表达直线优劣的方法。因此我们把上面的这个公式叫做<strong>误差公式（误差函数）</strong>。这个根据这个误差公式计算出来的数值越小，说明我们的直线越好。</p>
+<h2 id="重新审视问题"><a href="#重新审视问题" class="headerlink" title="重新审视问题"></a>重新审视问题</h2><p>稍微总结一下，结合我们之前的结果，解决问题的步骤是：</p>
+<blockquote>
+<ol>
+<li>随便选取一条曲线 <code>y = a*x + b</code> (a, b的数字随便选)</li>
+<li>用我们表中的20个数据（点）来计算这条曲线的<code>误差</code></li>
+<li>根据误差值，调整a, b</li>
+<li>重复1，2，直到误差小到一定程度或者无明显变化即可。</li>
+</ol>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里我们参考《白话机器学习的数学》中的内容，着重讲解了，如何计算线性回归的误差。更加重要的是，如何将我们通过肉眼直观解决问题的方法，通过数学的方式表达出来。这是理解机器学习的基础。要注意的是，我们上面讲的<strong>误差函数只是为了方便理解而使用的函数，在实际中是无法使用这种函数的</strong>，我们会在下一篇文章中讲解真正使用的误差函数。而且，这里还有一个问题没有解决，那就是如何来调整a，b？增加还是减小呢？增减多少呢？这些问题我们也会在下一篇文章中来讨论。</p>
+<h2 id="篇外：线性回归动画图"><a href="#篇外：线性回归动画图" class="headerlink" title="篇外：线性回归动画图"></a>篇外：线性回归动画图</h2><p>我根据书中的内容，和数据，制作了一张线性回归的动态图。这里先放出来，直观上能够更好地理解线性回归的过程。<br><img src="/images/hexo_12_regression_animation.gif"></p>
+<h2 id="《白话机器学习的数学》"><a href="#《白话机器学习的数学》" class="headerlink" title="《白话机器学习的数学》"></a>《白话机器学习的数学》</h2><p>电子书：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.cn/gp/search?ie=UTF8&tag=justdong04-23&linkCode=ur2&linkId=0d31fbc7f88797256c4c13b51670d344&camp=536&creative=3200&index=books&keywords=%E7%99%BD%E8%AF%9D%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6">亚马逊</a></li>
+<li><a target="_blank" rel="noopener" href="https://union-click.jd.com/jdc?e=&p=JF8BALMJK1olXDYAVVlYCU0WCl9MRANLAjZbERscSkAJHTdNTwcKBlMdBgABFkkWBGoJHVocQl9HCANtWjJ2CmdQHDJ1IwUYARolFi0UU2hYa1cZbQcyV19eCkoTAWoIHmslXQEyHzBcOEonA2gKE10cXgQEUVZVCXsQA2Y4WQ9FAlBUZG5tC3snM284GGtXMwMHBl9aWBwTUGtcHF4VVVNRXV1fC0pDBjsNElJFCQRSZFxcCU8eMw">京东</a></li>
+</ul>
+<p>纸质书：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://union-click.jd.com/jdc?e=&p=JF8BAMYJK1olVQIGVFdYCkseM2kIGV0RVQcEUVpeOA9IWzFXKwJQGEdAX0BDUA5DX3BTTkRHA1ocUl5fDk8fAmkNH1gKBENeCW4gfBkVWx0AGz53BVl5ESFfYz9nBTxoF1clXDYBVV1fCU8VBm8NK2sVWjZDOl5ZDU8TBl8JK1sSXw4EXV1ZCUofAG04HFscbURWBAELXnsnM2w4K2sVbQUyFjBaChwTAmtaE18cWgIHAFgIW0tEVGcPTFJCCAdWXVwOXHsVAm4MEms">京东</a><h3 id="学习参考链接："><a href="#学习参考链接：" class="headerlink" title="学习参考链接："></a>学习参考链接：</h3><a target="_blank" rel="noopener" href="https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/video-lectures/">麻省理工：线性代数课程</a></li>
+</ul>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92"><span class="nav-number">1.</span> <span class="nav-text">回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%81%E5%A4%84%E7%90%86%E7%9A%84%E9%97%AE%E9%A2%98%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">要处理的问题是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AF%84%E4%BC%B0%E7%9B%B4%E7%BA%BF%E7%9A%84%E4%BC%98%E5%8A%A3%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">如何评估直线的优劣？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%8A%8A%E7%9B%B4%E8%A7%82%E5%8F%98%E6%88%90%E6%95%B0%E5%80%BC"><span class="nav-number">4.</span> <span class="nav-text">如何把直观变成数值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE"><span class="nav-number">5.</span> <span class="nav-text">误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">重新审视问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%87%E5%A4%96%EF%BC%9A%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%8A%A8%E7%94%BB%E5%9B%BE"><span class="nav-number">8.</span> <span class="nav-text">篇外：线性回归动画图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E3%80%8A%E7%99%BD%E8%AF%9D%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6%E3%80%8B"><span class="nav-number">9.</span> <span class="nav-text">《白话机器学习的数学》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="nav-number">9.1.</span> <span class="nav-text">学习参考链接：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">加斯东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">加斯东</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">25k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">23 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从零开始写个简单的解释器（1）原文：Let’s Build A Simple Interpreter. Part 1. 译文：  ”如果你不知道编译器是如何工作的，那么你就不知道计算机是如何工作的。如果你不能百分百确定你是否知道编译器是如何工作的，那么你就不知道编译器是如何工作的。“- Steve Yegge  这句话道出了真理。无论你是新手还是经验丰富的软件开发者，这都不重要：如果你不了解编译器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始写个简单的解释器（1）">
+<meta property="og:url" content="https://justdong.net/2024/07/22/15lbasi/15lbasi01/index.html">
+<meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="从零开始写个简单的解释器（1）原文：Let’s Build A Simple Interpreter. Part 1. 译文：  ”如果你不知道编译器是如何工作的，那么你就不知道计算机是如何工作的。如果你不能百分百确定你是否知道编译器是如何工作的，那么你就不知道编译器是如何工作的。“- Steve Yegge  这句话道出了真理。无论你是新手还是经验丰富的软件开发者，这都不重要：如果你不了解编译器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_i_dont_know.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_omg.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_i_know.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_compiler_interpreter.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_lexer1.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_lexer2.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_lexer3.png">
+<meta property="og:image" content="https://justdong.net/images/01/lsbasi_part1_lexer4.png">
+<meta property="og:image" content="https://justdong.net/2024/07/22/15lbasi/15lbasi01/images/01/lsbasi_exercises2.png">
+<meta property="og:image" content="https://justdong.net/2024/07/22/15lbasi/15lbasi01/images/01/lsbasi_part1_commitment_pledge.png">
+<meta property="og:image" content="https://www.mermaidchart.com/raw/185ef9bd-de4e-46e8-a471-a76b466f1036?theme=light&version=v0.1&format=svg">
+<meta property="article:published_time" content="2024-07-22T20:28:55.000Z">
+<meta property="article:modified_time" content="2024-07-23T20:48:12.926Z">
+<meta property="article:author" content="加斯东">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/images/01/lsbasi_part1_i_dont_know.png">
+
+<link rel="canonical" href="https://justdong.net/2024/07/22/15lbasi/15lbasi01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从零开始写个简单的解释器（1） | ～加斯东's blog～</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">～加斯东's blog～</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/07/22/15lbasi/15lbasi01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="加斯东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从零开始写个简单的解释器（1）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-07-22 22:28:55" itemprop="dateCreated datePublished" datetime="2024-07-22T22:28:55+02:00">2024-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-23 22:48:12" itemprop="dateModified" datetime="2024-07-23T22:48:12+02:00">2024-07-23</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="从零开始写个简单的解释器（1）"><a href="#从零开始写个简单的解释器（1）" class="headerlink" title="从零开始写个简单的解释器（1）"></a>从零开始写个简单的解释器（1）</h1><p>原文：<a target="_blank" rel="noopener" href="https://ruslanspivak.com/lsbasi-part1/">Let’s Build A Simple Interpreter. Part 1.</a></p>
+<p>译文：</p>
+<blockquote>
+<p>”如果你不知道编译器是如何工作的，那么你就不知道计算机是如何工作的。如果你不能百分百确定你是否知道编译器是如何工作的，那么你就不知道编译器是如何工作的。“- Steve Yegge</p>
+</blockquote>
+<p>这句话道出了真理。无论你是新手还是经验丰富的软件开发者，这都不重要：如果你不了解编译器和解释器的工作原理，那么你就不了解计算机的工作原理。就这么简单。</p>
+<span id="more"></span>
+
+<p>那么，你知道编译器和解释器是如何工作的吗？我的意思是，你100%确定自己知道它们的工作原理吗？如果你不确定。</p>
+<p><img src="/images/01/lsbasi_part1_i_dont_know.png"></p>
+<p>或者说，如果你不知道，而且因此感到焦虑。</p>
+<p><img src="/images/01/lsbasi_part1_omg.png"></p>
+<p>不要担心。如果你坚持完成这一系列课程，跟我一起打造一个解释器和编译器，最终你就会明白它们的工作原理。而且你会为自己的成就感到高兴和满足。至少我希望如此。</p>
+<p><img src="/images/01/lsbasi_part1_i_know.png"></p>
+<p>为什么要研究解释器和编译器？我给你三个理由。</p>
+<ol>
+<li>编写解释器或编译器需要你掌握许多技术技能，并在实践中综合运用。这将帮助你提升这些技能，成为更优秀的软件开发人员。此外，这些技能不仅在编写解释器或编译器时有用，在编写任何软件时都很有帮助。</li>
+<li>你真的想了解计算机的工作原理。通常情况下，解释器和编译器看起来像某种魔法，而你不应满足于这种魔法的神秘感。你应该揭开解释器和编译器的构建过程，了解它们的工作原理，掌握其中的奥秘。</li>
+<li>你想创建自己的编程语言或特定领域的语言。如果你创建了一门语言，你还需要为它创建一个解释器或编译器。最近，对新编程语言的兴趣重新兴起，你几乎每天都能看到一种新的编程语言出现。Elixir、Go、Rust只是其中的几个例子。</li>
+</ol>
+<p>那么，什么是解释器和编译器？</p>
+<p>解释器或编译器的目的是将某种高级语言的源程序翻译成其他形式。这让人有些困惑？别急，随着本系列的进行，你会逐渐明白源程序到底被翻译成了什么。</p>
+<p>你可能还想知道解释器和编译器之间的区别。在本系列中，我们约定，如果一个翻译器将源程序翻译成机器语言，那么它就是一个<strong>编译器</strong>。如果一个翻译器不将源程序翻译成机器语言就直接处理和执行源程序，那么它就是一个<strong>解释器</strong>。直观上，它们看起来是这样的。</p>
+<p><img src="/images/01/lsbasi_part1_compiler_interpreter.png"></p>
+<p>希望现在你已经被说服，确实想研究并构建一个解释器和编译器。那么你能从这系列课程中学到哪些关于解释器的知识呢？</p>
+<p>具体来说，我们将创建一个简单的、支持Pascal语言大部分子集的解释器。在本系列的最后，你将拥有一个完全可以工作的Pascal解释器和一个类似Python pdb的源码级调试工具。</p>
+<p>你可能会问，为什么用Pascal语言？首先，这不是我为这个系列创造的语言，而是一门真正的编程语言，拥有许多重要的语言结构。而且，一些经典但有用的计算机科学书籍中经常用Pascal做例子（虽然这不是一个特别有说服力的理由，但学习一门非主流语言也是一种有趣的体验：）</p>
+<p>这里有一个Pascal中阶乘函数的例子，到时候你可以用自己的解释器来解释，并使用你将创建的交互式源码级调试工具进行调试。</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">program</span> factorial;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">factorial</span><span class="params">(n: integer)</span>:</span> longint;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> n = <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">        factorial := <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        factorial := n * factorial(n - <span class="number">1</span>);</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">    n: integer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span> <span class="keyword">to</span> <span class="number">16</span> <span class="keyword">do</span></span><br><span class="line">        writeln(n, <span class="string">&#x27;! = &#x27;</span>, factorial(n));</span><br><span class="line"><span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
+
+<p>我们的Pascal解释器将用Python实现，但你可以使用任何你喜欢的语言，因为所用的思想并不依赖于特定的语言实现。好了，进入正题。预备，开始！</p>
+<p>你将通过编写一个简单的算术表达式解释器（也叫计算器）开始你对解释器和编译器的第一次尝试。今天的目标很简单：让你的计算器处理两个单数整数的加法，比如3+5。下面是你的计算器的源代码，对不起，是解释器的源码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标记（Token）类型</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 标记EOF(end-of-file)用于表示</span></span><br><span class="line"><span class="comment"># 没有更多的输入需要进行词法分析。</span></span><br><span class="line">INTEGER, PLUS, EOF = <span class="string">&#x27;INTEGER&#x27;</span>, <span class="string">&#x27;PLUS&#x27;</span>, <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Token</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">type</span>, value</span>):</span><br><span class="line">        <span class="comment"># 标记类型: INTEGER, PLUS, or EOF</span></span><br><span class="line">        self.<span class="built_in">type</span> = <span class="built_in">type</span></span><br><span class="line">        <span class="comment"># 标记的值: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, &#x27;+&#x27;, or None</span></span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;类实例的字符串表示。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        例子：</span></span><br><span class="line"><span class="string">            Token(INTEGER, 3)</span></span><br><span class="line"><span class="string">            Token(PLUS &#x27;+&#x27;)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Token(&#123;type&#125;, &#123;value&#125;)&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">            <span class="built_in">type</span>=self.<span class="built_in">type</span>,</span><br><span class="line">            value=<span class="built_in">repr</span>(self.value)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interpreter</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, text</span>):</span><br><span class="line">        <span class="comment"># 输入的字符串，如： &quot;3+5&quot;</span></span><br><span class="line">        self.text = text</span><br><span class="line">        <span class="comment"># self.pos为指向self.text的索引</span></span><br><span class="line">        self.pos = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 当前标记的实例</span></span><br><span class="line">        self.current_token = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Error parsing input&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_next_token</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;词法分析器（也叫扫描器或分词器）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        此方法负责将句子拆分成一个个标记。一次一个标记。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        text = self.text</span><br><span class="line"></span><br><span class="line">        <span class="comment"># self.pos的索引是否超过了self.text的末尾？</span></span><br><span class="line">        <span class="comment"># 如果是，则返回EOF令牌，因为没有其他的</span></span><br><span class="line">        <span class="comment"># 字符需要转换成标记了</span></span><br><span class="line">        <span class="keyword">if</span> self.pos &gt; <span class="built_in">len</span>(text) - <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> Token(EOF, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 在self.pos的位置获取一个字符，然后</span></span><br><span class="line">        <span class="comment"># 根据这个字符来创建标记</span></span><br><span class="line">        current_char = text[self.pos]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果这个字符是数字则转换成整数，</span></span><br><span class="line">        <span class="comment"># 然后创建整数（INTEGER）的标记，将self.pos的索引推进</span></span><br><span class="line">        <span class="comment"># 到当前数字的下一个字符，</span></span><br><span class="line">        <span class="comment"># 然后返回 INTEGER 标记</span></span><br><span class="line">        <span class="keyword">if</span> current_char.isdigit():</span><br><span class="line">            token = Token(INTEGER, <span class="built_in">int</span>(current_char))</span><br><span class="line">            self.pos += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> token</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> current_char == <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">            token = Token(PLUS, current_char)</span><br><span class="line">            self.pos += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> token</span><br><span class="line"></span><br><span class="line">        self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eat</span>(<span class="params">self, token_type</span>):</span><br><span class="line">        <span class="comment"># 比较当前标记的类型与传递进来的标记类型，</span></span><br><span class="line">        <span class="comment"># 如果匹配，则 &quot;吃掉&quot;（eat）当前标记，</span></span><br><span class="line">        <span class="comment"># 并获取下一个标记分配给self.current_token，</span></span><br><span class="line">        <span class="comment"># 否则抛出异常。</span></span><br><span class="line">        <span class="keyword">if</span> self.current_token.<span class="built_in">type</span> == token_type:</span><br><span class="line">            self.current_token = self.get_next_token()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;expr -&gt; INTEGER PLUS INTEGER&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 从输入中获取第一个标记并将其设为当前标记</span></span><br><span class="line">        self.current_token = self.get_next_token()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 期望当前标记是一个只有一位数的整数</span></span><br><span class="line">        left = self.current_token</span><br><span class="line">        self.eat(INTEGER)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 期望当前标记是一个&#x27;+&#x27;号</span></span><br><span class="line">        op = self.current_token</span><br><span class="line">        self.eat(PLUS)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 期望当前标记是一个只有一位数的整数</span></span><br><span class="line">        right = self.current_token</span><br><span class="line">        self.eat(INTEGER)</span><br><span class="line">        <span class="comment"># 经过上述过程后self.current_token会被设为EOF标记</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 至此所有标记都按照 INTEGER PLUS INTEGER 的顺序被找到</span></span><br><span class="line">        <span class="comment"># 方法返回两个整数相加的结果。这样我们就成功实现了对输入的解释</span></span><br><span class="line">        result = left.value + right.value</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 在Python 3中，使用“input”代替“raw_input”</span></span><br><span class="line">            text = <span class="built_in">input</span>(<span class="string">&#x27;calc&gt; &#x27;</span>)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        interpreter = Interpreter(text)</span><br><span class="line">        result = interpreter.expr()</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>将上面的代码保存到calc1.py文件中，或直接从GitHub下载。在深入研究代码之前，在命令行上运行计算器程序，看看它是如何运行的。尽情尝试！下面是我在笔记本电脑上运行的一个例子（如果你在Python 3下运行计算器，需要将raw_input替换为input）。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ python calc1.py</span><br><span class="line">calc&gt; <span class="number">3</span>+<span class="number">4</span></span><br><span class="line"><span class="number">7</span></span><br><span class="line">calc&gt; <span class="number">3</span>+<span class="number">5</span></span><br><span class="line"><span class="number">8</span></span><br><span class="line">calc&gt; <span class="number">3</span>+<span class="number">9</span></span><br><span class="line"><span class="number">12</span></span><br><span class="line">calc&gt;</span><br></pre></td></tr></table></figure>
+<p>为了使你的简单计算器能够正常工作而不抛出异常，你的输入需要遵循一些规则。</p>
+<ul>
+<li><p>输入中只允许个位数整数</p>
+</li>
+<li><p>目前唯一支持的算术运算是加法</p>
+</li>
+<li><p>输入中的任何地方不允许有空格字符</p>
+<p>加入这些限制是为了让计算器更简单。别担心，很快你就会让它变得更复杂。</p>
+</li>
+</ul>
+<p>好了，现在让我们深入了解一下你的解释器是如何工作的，以及它是如何对算术表达式求值的。</p>
+<p>当你在命令行输入一个表达式3+5时，你的解释器会得到一个字符串 “3+5”。为了让解释器真正理解如何处理这个字符串，它首先需要将输入的 “3+5” 分解为称为<strong>标记</strong>的组件。<strong>标记</strong>是一个对象，包含一个类型和一个值。例如，对于字符串 “3”，标记的类型是INTEGER，对应的值是整数3。</p>
+<p>将输入字符串分解成标记的过程称为<strong>词法分析</strong>。所以，解释器需要做的第一步就是读取输入的字符，并将其转换为标记流。解释器中执行这个任务的部分称为<strong>词法分析器</strong>，简称<strong>分词器</strong>。你可能也会遇到其他叫法，如<strong>扫描器</strong>或<strong>标记器</strong>，意思相同：解释器或编译器中将输入的字符变成标记流的部分。</p>
+<p><em>Interpreter</em> 类中的 <em>get_next_token</em> 方法就是你的词法分析器。每次调用它，你都会得到由输入字符生成的下一个标记。让我们仔细看看这个方法是如何将字符转换为标记的。输入被存储在 <em>text</em> 变量中，<em>pos</em> 是字符串的索引（把字符串看作字符数组）。<em>pos</em> 的初始值为0，指向字符‘3’。该方法首先检查该字符是否是数字，如果是，则递增pos，并返回一个标记实例，类型为INTEGER，值为字符串’3’的整数值，即整数3：<br><img src="/images/01/lsbasi_part1_lexer1.png"><br>pos现在指向文本中的’+’字符。下次调用该方法时，它会测试pos位置上的字符是否是数字，然后测试该字符是否是加号，实际上是的，该方法会递增pos，并返回一个新创建的标记，类型为PLUS，值为’+’：<br><img src="/images/01/lsbasi_part1_lexer2.png"><br>pos现在指向字符’5’。当你再次调用get_next_token方法时，该方法会检查它是否是数字，而它确实是数字，所以它递增pos并返回一个新的INTEGER标记，值为整数5：<br><img src="/images/01/lsbasi_part1_lexer3.png"><br>因为pos索引已经超过了字符串 “3+5” 的末端，所以每次调用get_next_token方法都会返回EOF标记：<br><img src="/images/01/lsbasi_part1_lexer4.png"><br>动手试试看，看看你的计算器的分词器是如何工作的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> calc1 <span class="keyword">import</span> Interpreter</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>interpreter = Interpreter(<span class="string">&#x27;3+5&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>interpreter.get_next_token()</span><br><span class="line">Token(INTEGER, <span class="number">3</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>interpreter.get_next_token()</span><br><span class="line">Token(PLUS, <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>interpreter.get_next_token()</span><br><span class="line">Token(INTEGER, <span class="number">5</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>interpreter.get_next_token()</span><br><span class="line">Token(EOF, <span class="literal">None</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>所以，现在你的解释器可以访问由输入字符组成的标记流，它需要在从分词器的 <em>get_next_token</em> 获取的标记流中找到相应的结构。你的解释器预期在这个流中找到以下结构：INTEGER -&gt; PLUS -&gt; INTEGER。也就是说，它试图找到一个标记序列：整数后面是加号，再后面是整数。</p>
+<p>负责查找和解释该结构的方法是 <em>expr</em>。该方法验证标记序列是否符合预期，即INTEGER -&gt; PLUS -&gt; INTEGER。当它成功确认了这个结构后，它通过将 PLUS 左边和右边标记的值相加来解释输入的算术表达式。</p>
+<p><em>expr</em> 方法使用辅助方法 <em>eat</em> 来验证传递给它的标记类型是否与当前标记类型匹配。匹配后，<em>eat</em> 方法获取下一个标记，并将其分配给 <em>current_token</em> 变量，从而 “吃掉” 当前匹配的标记，并推进标记流中的虚指针。如果标记流的结构不符合预期的 INTEGER PLUS INTEGER 顺序，<em>eat</em> 方法会抛出异常。</p>
+<p>让我们回顾一下你的解释器是如何对算术表达式求值的。</p>
+<ul>
+<li>解释器接受一个输入字符串，例如 “3+5”</li>
+<li>解释器调用 <em>expr</em> 方法，在词法分析器 <em>get_next_token</em> 返回的标记流中找到一个结构。它试图找到的结构是 <em>INTEGER PLUS INTEGER</em>。确认该结构后，通过将两个INTEGER标记的值相加来对输入求值，因为到目前为止，解释器明白需要将两个整数——3和5——相加。</li>
+</ul>
+<p>恭喜你！你刚刚学会了如何打造你的第一个解释器！</p>
+<p>练习时间</p>
+<p><img src="images/01/lsbasi_exercises2.png"></p>
+<p>你不会以为光看了这篇文章就够了吧？赶紧动手做下面的练习吧。</p>
+<ol>
+<li>修改代码，允许输入多位数整数，例如 “12+3”</li>
+<li>添加忽略空格字符的方法，这样计算器可以处理带空格的输入，如 “12 + 3”</li>
+<li>修改代码，用 “-“ 代替 “+” 处理减法，如 “7-5”</li>
+</ol>
+<h2 id="检查你是否完全理解了"><a href="#检查你是否完全理解了" class="headerlink" title="检查你是否完全理解了"></a>检查你是否完全理解了</h2><ol>
+<li>什么是解释器？</li>
+<li>什么是编译器？</li>
+<li>解释器和编译器有什么区别？</li>
+<li>什么是标记？</li>
+<li>将输入分割成标记的过程叫什么？</li>
+<li>解释器中做词法分析的部分叫什么？</li>
+<li>解释器或编译器的那部分还有哪些常见名称？</li>
+</ol>
+<p>在我写完这篇文章之前，我真的希望你能认真研究解释器和编译器。我希望你现在就去做。不要把它抛到脑后。别等了。如果你已经略读了这篇文章，就从头再来。如果你已经仔细阅读了，但还没有做练习——现在就去做。如果你只做了部分练习，那就把剩下的做完。你明白了吗？今天就签署承诺书，开始学习解释器和编译器吧！</p>
+<p>我，_______，在此承诺，从今天开始，我承诺学习解释器和编译器，并将达到100%了解它们的工作原理的程度。</p>
+<p>签名：</p>
+<p>日期：</p>
+<p><img src="images/01/lsbasi_part1_commitment_pledge.png"></p>
+<p>签上名字，写上日期，并把它放在每天都能看到的地方，以确保你坚持承诺。牢记承诺的定义。</p>
+<blockquote>
+<p>承诺就是即使在你已经离当时说话的心境很久以后，仍然做你说过你要做的事情。</p>
+</blockquote>
+<h2 id="最后奉上我们的程序结构图，帮你更好地了解各个部分是如何交互的。"><a href="#最后奉上我们的程序结构图，帮你更好地了解各个部分是如何交互的。" class="headerlink" title="最后奉上我们的程序结构图，帮你更好地了解各个部分是如何交互的。"></a>最后奉上我们的程序结构图，帮你更好地了解各个部分是如何交互的。</h2><p><img src="https://www.mermaidchart.com/raw/185ef9bd-de4e-46e8-a471-a76b466f1036?theme=light&version=v0.1&format=svg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/20/14linear-algebra-01/" rel="prev" title="MIT线性代数(Linear Algebra)公开课笔记 (一) 线性方程的几何表示">
+      <i class="fa fa-chevron-left"></i> MIT线性代数(Linear Algebra)公开课笔记 (一) 线性方程的几何表示
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%86%99%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E8%A7%A3%E9%87%8A%E5%99%A8%EF%BC%881%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">从零开始写个简单的解释器（1）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E6%98%AF%E5%90%A6%E5%AE%8C%E5%85%A8%E7%90%86%E8%A7%A3%E4%BA%86"><span class="nav-number">1.1.</span> <span class="nav-text">检查你是否完全理解了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%A5%89%E4%B8%8A%E6%88%91%E4%BB%AC%E7%9A%84%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84%E5%9B%BE%EF%BC%8C%E5%B8%AE%E4%BD%A0%E6%9B%B4%E5%A5%BD%E5%9C%B0%E4%BA%86%E8%A7%A3%E5%90%84%E4%B8%AA%E9%83%A8%E5%88%86%E6%98%AF%E5%A6%82%E4%BD%95%E4%BA%A4%E4%BA%92%E7%9A%84%E3%80%82"><span class="nav-number">1.2.</span> <span class="nav-text">最后奉上我们的程序结构图，帮你更好地了解各个部分是如何交互的。</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">加斯东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">加斯东</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">25k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">23 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
