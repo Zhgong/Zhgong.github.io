@@ -212,7 +212,7 @@
         <h2 id="什么是pipenv？"><a href="#什么是pipenv？" class="headerlink" title="什么是pipenv？"></a>什么是pipenv？</h2><p><code>pipenv</code> 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了<code>pip</code>和<code>virtualenv</code>的功能.详细的功能介绍可以参考<a target="_blank" rel="noopener" href="https://docs.pipenv.org/">官方网页</a>。</p>
 <span id="more"></span>
 <h2 id="如何从github上安装软件包"><a href="#如何从github上安装软件包" class="headerlink" title="如何从github上安装软件包"></a>如何从github上安装软件包</h2><p>最常使用方式是 <code>pipenv install &lt;包名&gt; </code>来安装各种包。比如：<code>pipenv install requests</code>。</p>
-<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
+<p>但是如果我想使用pipenv来安装一个私有的包，怎么操作？比如，我在github上面有一个私有的包（<a href="mailto:&#103;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#103;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>:<my-private-package>.git），我如果通过pipenv来安装？</p>
 <blockquote>
 <p><code>pipenv install -e git+git@github.com:&lt;my-private-package&gt;.git#egg=&lt;package-name&gt;</code></p>
 <p>注意: 要加上#egg=xxx，否则会报错。</p>
