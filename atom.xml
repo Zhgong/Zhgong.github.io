@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-07-25T20:42:33.553Z</updated>
+  <updated>2024-07-30T20:34:54.459Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（2）</title>
+    <link href="https://justdong.net/2024/07/30/15lbasi/15lbasi02/"/>
+    <id>https://justdong.net/2024/07/30/15lbasi/15lbasi02/</id>
+    <published>2024-07-30T20:06:40.000Z</published>
+    <updated>2024-07-30T20:34:54.459Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part2/&quot;&gt;Let’s Build A Simple Interpreter. Part 2.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;在《有效思考的5大元素》一书中，作者 Burger 和 Starbird 分享了一个故事，讲述了国际知名的小号演奏家托尼·普洛格如何在大师班中指导学生的经历。学生们首先演奏了复杂的段落，他们表现得非常出色。但当他们被要求演奏非常简单的音符时，这些音符听起来很幼稚。而当托尼演奏同样的音符时，这些音符却显得不再幼稚。托尼解释说，掌握简单音符的演奏有助于在演奏复杂乐曲时更有控制力。这堂课表明，要培养高超的演奏技巧，必须首先专注于基本理念的掌握。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>从零开始写个简单的解释器（1）</title>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原文：Let’s Build A Simple Interpreter. Part 2. 译文： 在《有效思考的5大元素》一书中，作者 Burger 和 Starbird 分享了一个故事，讲述了国际知名的小号演奏家托尼·普洛格如何在大师班中指导学生的经历。学生们首先演奏了复杂的段落，他们表现得非常出色。但当他们被要求演奏非常简单的音符时，这些音符听起来很幼稚。而当托尼演奏同样的音符时，这些音符却显">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始写个简单的解释器（2）">
+<meta property="og:url" content="https://justdong.net/2024/07/30/15lbasi/15lbasi02/index.html">
+<meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="原文：Let’s Build A Simple Interpreter. Part 2. 译文： 在《有效思考的5大元素》一书中，作者 Burger 和 Starbird 分享了一个故事，讲述了国际知名的小号演奏家托尼·普洛格如何在大师班中指导学生的经历。学生们首先演奏了复杂的段落，他们表现得非常出色。但当他们被要求演奏非常简单的音符时，这些音符听起来很幼稚。而当托尼演奏同样的音符时，这些音符却显">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://justdong.net/images/02/lsbasi_part2_lexemes.png">
+<meta property="og:image" content="https://justdong.net/images/02/lsbasi_part2_exercises.png">
+<meta property="article:published_time" content="2024-07-30T20:06:40.000Z">
+<meta property="article:modified_time" content="2024-07-30T20:34:54.459Z">
+<meta property="article:author" content="加斯东">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/images/02/lsbasi_part2_lexemes.png">
+
+<link rel="canonical" href="https://justdong.net/2024/07/30/15lbasi/15lbasi02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从零开始写个简单的解释器（2） | ～加斯东's blog～</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">～加斯东's blog～</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/07/30/15lbasi/15lbasi02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="加斯东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从零开始写个简单的解释器（2）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-30 22:06:40 / 修改时间：22:34:54" itemprop="dateCreated datePublished" datetime="2024-07-30T22:06:40+02:00">2024-07-30</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>原文：<a target="_blank" rel="noopener" href="https://ruslanspivak.com/lsbasi-part2/">Let’s Build A Simple Interpreter. Part 2.</a></p>
+<p>译文：</p>
+<p>在《有效思考的5大元素》一书中，作者 Burger 和 Starbird 分享了一个故事，讲述了国际知名的小号演奏家托尼·普洛格如何在大师班中指导学生的经历。学生们首先演奏了复杂的段落，他们表现得非常出色。但当他们被要求演奏非常简单的音符时，这些音符听起来很幼稚。而当托尼演奏同样的音符时，这些音符却显得不再幼稚。托尼解释说，掌握简单音符的演奏有助于在演奏复杂乐曲时更有控制力。这堂课表明，要培养高超的演奏技巧，必须首先专注于基本理念的掌握。</p>
+<span id="more"></span>
+<p>这个道理不仅适用于音乐，也适用于软件开发。它提醒我们，即使有时看似在倒退，也不要忽视对基本概念的深入理解。熟练掌握工具或框架固然重要，但了解其背后的原理同样关键。正如拉尔夫·沃尔多·爱默生所说：</p>
+<blockquote>
+<p>“如果你只学方法，就会被方法束缚。但如果你学的是原理，你可以发明出自己的方法。”</p>
+</blockquote>
+<h3 id="解释器和编译器"><a href="#解释器和编译器" class="headerlink" title="解释器和编译器"></a>解释器和编译器</h3><p>接下来，我们将再次深入研究解释器和编译器。</p>
+<p>今天，我将展示一个新版的计算器，它将能够：</p>
+<ol>
+<li>处理输入字符串中的任意空格字符。</li>
+<li>处理输入中的多位数整数。</li>
+<li>实现整数的加法和减法。</li>
+</ol>
+<p>以下是新版计算器的源代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标记（Token）类型</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 标记EOF(end-of-file)用于表示</span></span><br><span class="line"><span class="comment"># 没有更多的输入需要进行词法分析。</span></span><br><span class="line">INTEGER, PLUS, MINUS, EOF = <span class="string">&#x27;INTEGER&#x27;</span>, <span class="string">&#x27;PLUS&#x27;</span>, <span class="string">&#x27;MINUS&#x27;</span>, <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Token</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">type</span>, value</span>):</span><br><span class="line">        <span class="comment"># 标记类型: INTEGER, PLUS, or EOF</span></span><br><span class="line">        self.<span class="built_in">type</span> = <span class="built_in">type</span></span><br><span class="line">        <span class="comment"># 标记的值: 非负整数, &#x27;+&#x27;, &#x27;-&#x27;, 或者 None</span></span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="string">&quot;&quot;&quot;类实例的字符串表示。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        例子：</span></span><br><span class="line"><span class="string">            Token(INTEGER, 3)</span></span><br><span class="line"><span class="string">            Token(PLUS &#x27;+&#x27;)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Token(&#123;type&#125;, &#123;value&#125;)&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">            <span class="built_in">type</span>=self.<span class="built_in">type</span>,</span><br><span class="line">            value=<span class="built_in">repr</span>(self.value)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interpreter</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, text</span>):</span><br><span class="line">        <span class="comment"># 输入的字符串，如： &quot;3+5&quot;，&quot;12 - 5&quot;,</span></span><br><span class="line">        self.text = text</span><br><span class="line">        <span class="comment"># self.pos为指向self.text的索引</span></span><br><span class="line">        self.pos = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 当前标记的实例</span></span><br><span class="line">        self.current_token = <span class="literal">None</span></span><br><span class="line">        self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Error parsing input&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">advance</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;前移&#x27;pos&#x27;指针，设置&#x27;current_char&#x27;变量。&quot;&quot;&quot;</span></span><br><span class="line">        self.pos += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.pos &gt; <span class="built_in">len</span>(self.text) - <span class="number">1</span>:</span><br><span class="line">            self.current_char = <span class="literal">None</span>  <span class="comment"># 表示输入结束</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">skip_whitespace</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.current_char.isspace():</span><br><span class="line">            self.advance()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">integer</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回从输入端处理过来的（多位数）整数。&quot;&quot;&quot;</span></span><br><span class="line">        result = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.current_char.isdigit():</span><br><span class="line">            result += self.current_char</span><br><span class="line">            self.advance()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(result)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_next_token</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;词法分析器（也叫做扫描器或者分词器）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        此方法负责将句子拆分成一个个标记。一次一个标记。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char.isspace():</span><br><span class="line">                self.skip_whitespace()</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char.isdigit():</span><br><span class="line">                <span class="keyword">return</span> Token(INTEGER, self.integer())</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(PLUS, <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(MINUS, <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Token(EOF, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eat</span>(<span class="params">self, token_type</span>):</span><br><span class="line">        <span class="comment"># 比较当前标记的类型与传递进来的标记的类型，</span></span><br><span class="line">        <span class="comment"># 如果两者匹配，则 &quot;吃掉&quot;（eat）当前标记，</span></span><br><span class="line">        <span class="comment"># 并获取下一个标记分配给self.current_token，</span></span><br><span class="line">        <span class="comment"># 否则会抛出异常。</span></span><br><span class="line">        <span class="keyword">if</span> self.current_token.<span class="built_in">type</span> == token_type:</span><br><span class="line">            self.current_token = self.get_next_token()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;解析器/解释器</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        expr -&gt; INTEGER PLUS INTEGER</span></span><br><span class="line"><span class="string">        expr -&gt; INTEGER MINUS INTEGER</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 从输入中获取第一个标记并把它当作当前标记</span></span><br><span class="line">        self.current_token = self.get_next_token()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 我们期望当前的标记是一个整数</span></span><br><span class="line">        left = self.current_token</span><br><span class="line">        self.eat(INTEGER)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 我们期望当前的标记是一个&#x27;+&#x27;或者&#x27;-&#x27;号</span></span><br><span class="line">        op = self.current_token</span><br><span class="line">        <span class="keyword">if</span> op.<span class="built_in">type</span> == PLUS:</span><br><span class="line">            self.eat(PLUS)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.eat(MINUS)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 我们期望当前的标记是一个整数</span></span><br><span class="line">        right = self.current_token</span><br><span class="line">        self.eat(INTEGER)</span><br><span class="line">        <span class="comment"># 经过所有上述过程之后self.current_token会被设为EOF标记</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 至此所有的标记都被成功地按照 INTEGER PLUS INTEGER 或者 </span></span><br><span class="line">        <span class="comment"># INTEGER MINUS INTEGER的顺序找到</span></span><br><span class="line">        <span class="comment"># 方法只需返回两个整数相加或者相减的结果。</span></span><br><span class="line">        <span class="comment"># 这样我们就成功实现了对终端输入的解释</span></span><br><span class="line">        <span class="keyword">if</span> op.<span class="built_in">type</span> == PLUS:</span><br><span class="line">            result = left.value + right.value</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result = left.value - right.value</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 在python3环境下，使用“input”代替“raw_input”</span></span><br><span class="line">            text = raw_input(<span class="string">&#x27;calc&gt; &#x27;</span>)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        interpreter = Interpreter(text)</span><br><span class="line">        result = interpreter.expr()</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>将上述代码保存为 calc2.py 文件，或者直接从<a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part2/calc2.py">GitHub</a>下载。运行代码，验证其功能是否符合预期：处理输入中的空白字符，接受多位数的整数，并能进行加减法运算。</p>
+<p>以下是我在笔记本电脑上运行的示例：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python calc2.py</span><br><span class="line">calc&gt; 27 + 3</span><br><span class="line">30</span><br><span class="line">calc&gt; 27 - 7</span><br><span class="line">20</span><br><span class="line">calc&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="词位、解析和解析器"><a href="#词位、解析和解析器" class="headerlink" title="词位、解析和解析器"></a>词位、解析和解析器</h3><p>与<a href="/2024/07/22/15lbasi/15lbasi01/">第1部分</a>相比，主要的代码变化有：</p>
+<ol>
+<li>重构了 get_next_token 方法，将指针增量逻辑提取到一个独立的方法中。</li>
+<li>增加了两个新方法：<em>skip_whitespace</em> 用于忽略空白字符，<em>integer</em> 用于处理多位数整数。</li>
+<li>修改了 <em>expr</em> 方法，使其除了识别 INTEGER -&gt; PLUS -&gt; INTEGER 序列外，还能识别 INTEGER -&gt; MINUS -&gt; INTEGER 序列，并能进行相应的加减法运算。</li>
+</ol>
+<p>在<a href="/2024/07/22/15lbasi/15lbasi01/">第1部分</a>中，你已经学到了<strong>标记</strong>和<strong>词法解析器</strong>的概念。今天我们将讨论<strong>词位</strong>、<strong>解析</strong>和<strong>解析器</strong>。</p>
+<p>你已经了解了什么是<strong>标记</strong>。为了更好地理解标记，我们需要介绍词位。什么是词位？<strong>词位</strong>是组成标记的一串字符串。下面的图片展示了一些标记和词位的例子，帮助你更好地理解它们之间的关系：</p>
+<p><img src="/images/02/lsbasi_part2_lexemes.png"></p>
+<p>还记得我们的 <em>expr</em> 方法吗？我之前提到过，它用于解释算术表达式。在解释之前，首先需要识别表达式的类型，是加法还是减法。这就是 <em>expr</em> 方法的核心功能：在从 <em>get_next_token</em> 方法获取的标识流中找到结构，然后对识别出的表达式进行解释，计算结果。</p>
+<p>在标识流中寻找结构的过程，或者说识别算式的过程，称为<strong>解析</strong>。执行这项工作的部分称为<strong>解析器</strong>。</p>
+<p>现在你知道了 <em>expr</em> 方法在解释器中负责<strong>解析</strong>和<strong>解释</strong>：首先识别标识流中的INTEGER -&gt; PLUS -&gt; INTEGER或INTEGER -&gt; MINUS -&gt; INTEGER短语，然后对其进行解释，返回结果。</p>
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><p>现在是练习时间：</p>
+<p><img src="/images/02/lsbasi_part2_exercises.png"></p>
+<ol>
+<li>将计算器扩展到能处理两个整数的乘法运算。</li>
+<li>将计算器扩展到能处理两个整数的除法运算。</li>
+<li>修改代码以处理包含任意数量加减法的表达式，例如 “9 - 5 + 3 + 11”。</li>
+</ol>
+<h3 id="检查你的理解"><a href="#检查你的理解" class="headerlink" title="检查你的理解"></a>检查你的理解</h3><ol>
+<li>什么是词位？</li>
+<li>在标记流中找到结构的过程叫什么？</li>
+<li>解释器或编译器中进行解析的部分叫什么？</li>
+</ol>
+<p>希望你喜欢今天的课程。在本系列的下一篇文章中，你将扩展计算器以处理更复杂的算术表达式，敬请期待。</p>
+<p>推荐书单：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/193435645X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=193435645X&linkCode=as2&tag=russblo0b-20&linkId=MP4DCXDV6DJMEJBL">Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages (Pragmatic Programmers)</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0470177071/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0470177071&linkCode=as2&tag=russblo0b-20&linkId=UCLGQTPIYSWYKRRM">Writing Compilers and Interpreters: A Software Engineering Approach</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/052182060X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=052182060X&linkCode=as2&tag=russblo0b-20&linkId=ZSKKZMV7YWR22NMW">Modern Compiler Implementation in Java</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/1461446988/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1461446988&linkCode=as2&tag=russblo0b-20&linkId=PAXWJP5WCPZ7RKRD">Modern Compiler Design</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0321486811/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321486811&linkCode=as2&tag=russblo0b-20&linkId=GOEGDQG4HIHU56FQ">Compilers: Principles, Techniques, and Tools (2nd Edition)</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/07/22/15lbasi/15lbasi01/" rel="prev" title="从零开始写个简单的解释器（1）">
+      <i class="fa fa-chevron-left"></i> 从零开始写个简单的解释器（1）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8C%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">解释器和编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E4%BD%8D%E3%80%81%E8%A7%A3%E6%9E%90%E5%92%8C%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">词位、解析和解析器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">检查你的理解</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">加斯东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">加斯东</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">30k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">27 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
