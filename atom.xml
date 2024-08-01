@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-07-30T20:34:54.459Z</updated>
+  <updated>2024-08-01T20:23:23.724Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（3）</title>
+    <link href="https://justdong.net/2024/08/01/15lbasi/15lbasi03/"/>
+    <id>https://justdong.net/2024/08/01/15lbasi/15lbasi03/</id>
+    <published>2024-08-01T20:12:18.000Z</published>
+    <updated>2024-08-01T20:23:23.724Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part3/&quot;&gt;Let’s Build A Simple Interpreter. Part 3.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;今天早上醒来后，我在想：“为什么我们觉得学习一项新技能这么难？”&lt;/p&gt;
+&lt;p&gt;我认为，这不仅仅是因为学习本身很难。一个重要原因可能是我们花了大量时间和精力通过阅读和观看获取知识，却没有足够的时间通过练习将知识转化为技能。以游泳为例。你可以花很多时间读几百本关于游泳的书，与有经验的游泳运动员和教练交流几个小时，观看所有的训练视频，但当你第一次跳进泳池时，还是会像石头一样沉下去。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>从零开始写个简单的解释器（2）</title>
