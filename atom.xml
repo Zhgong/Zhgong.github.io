@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-01T20:34:27.353Z</updated>
+  <updated>2024-08-02T21:55:06.454Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（4）</title>
+    <link href="https://justdong.net/2024/08/02/15lbasi/15lbasi04/"/>
+    <id>https://justdong.net/2024/08/02/15lbasi/15lbasi04/</id>
+    <published>2024-08-02T21:34:49.000Z</published>
+    <updated>2024-08-02T21:55:06.454Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part4/&quot;&gt;Let’s Build A Simple Interpreter. Part 4.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;br&gt;你是被动地学习这些文章中的内容，还是一直在积极实践？我希望你一直在积极实践。我真的是这样想的 :)&lt;/p&gt;
+&lt;p&gt;还记得孔子说过什么吗？（其实是孔子的弟子荀子在《儒孝篇》中的名句）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不闻不若闻之&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>从零开始写个简单的解释器（3）</title>

@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://justdong.net/2024/08/02/15lbasi/15lbasi04/</loc>
+    
+    <lastmod>2024-08-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://justdong.net/2024/08/01/15lbasi/15lbasi03/</loc>
     
     <lastmod>2024-08-01</lastmod>
@@ -200,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://justdong.net/2021/02/17/05feynman-technique/</loc>
+    <loc>https://justdong.net/2021/02/21/06url-searchengine/</loc>
     
     <lastmod>2024-03-31</lastmod>
     
@@ -209,7 +218,7 @@
   </url>
   
   <url>
-    <loc>https://justdong.net/2021/02/21/06url-searchengine/</loc>
+    <loc>https://justdong.net/2021/02/17/05feynman-technique/</loc>
     
     <lastmod>2024-03-31</lastmod>
     
@@ -274,7 +283,7 @@
 
   <url>
     <loc>https://justdong.net/</loc>
-    <lastmod>2024-08-01</lastmod>
+    <lastmod>2024-08-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -282,21 +291,21 @@
   
   <url>
     <loc>https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-hexo/</loc>
-    <lastmod>2024-08-01</lastmod>
+    <lastmod>2024-08-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2024-08-01</lastmod>
+    <lastmod>2024-08-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://justdong.net/tags/Hexo-NexT/</loc>
-    <lastmod>2024-08-01</lastmod>
+    <lastmod>2024-08-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

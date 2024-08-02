@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原文：Let’s Build A Simple Interpreter. Part 4. 译文：你是被动地学习这些文章中的内容，还是一直在积极实践？我希望你一直在积极实践。我真的是这样想的 :) 还记得孔子说过什么吗？（其实是孔子的弟子荀子在《儒孝篇》中的名句）  不闻不若闻之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始写个简单的解释器（4）">
+<meta property="og:url" content="https://justdong.net/2024/08/02/15lbasi/15lbasi04/index.html">
+<meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="原文：Let’s Build A Simple Interpreter. Part 4. 译文：你是被动地学习这些文章中的内容，还是一直在积极实践？我希望你一直在积极实践。我真的是这样想的 :) 还记得孔子说过什么吗？（其实是孔子的弟子荀子在《儒孝篇》中的名句）  不闻不若闻之">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://justdong.net/images/04/LSBAWS_confucius_hear.png">
+<meta property="og:image" content="https://justdong.net/images/04/LSBAWS_confucius_see.png">
+<meta property="og:image" content="https://justdong.net/images/04/LSBAWS_confucius_do.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf1.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf2.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf3.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf4.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf5.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_derive1.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_derive2.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_derive3.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf_hmm.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf_yes.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_rules.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_sd.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_exercises.png">
+<meta property="og:image" content="https://justdong.net/images/04/lsbasi_part4_bnf1.png">
+<meta property="article:published_time" content="2024-08-02T21:34:49.000Z">
+<meta property="article:modified_time" content="2024-08-02T21:55:06.454Z">
+<meta property="article:author" content="加斯东">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justdong.net/images/04/LSBAWS_confucius_hear.png">
+
+<link rel="canonical" href="https://justdong.net/2024/08/02/15lbasi/15lbasi04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从零开始写个简单的解释器（4） | ～加斯东's blog～</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">～加斯东's blog～</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/08/02/15lbasi/15lbasi04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="加斯东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从零开始写个简单的解释器（4）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-08-02 23:34:49 / 修改时间：23:55:06" itemprop="dateCreated datePublished" datetime="2024-08-02T23:34:49+02:00">2024-08-02</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>原文：<a target="_blank" rel="noopener" href="https://ruslanspivak.com/lsbasi-part4/">Let’s Build A Simple Interpreter. Part 4.</a></p>
+<p>译文：<br>你是被动地学习这些文章中的内容，还是一直在积极实践？我希望你一直在积极实践。我真的是这样想的 :)</p>
+<p>还记得孔子说过什么吗？（其实是孔子的弟子荀子在《儒孝篇》中的名句）</p>
+<blockquote>
+<p>不闻不若闻之</p>
+</blockquote>
+<span id="more"></span>
+
+<p><img src="/images/04/LSBAWS_confucius_hear.png"></p>
+<blockquote>
+<p>闻之不若见之</p>
+</blockquote>
+<p><img src="/images/04/LSBAWS_confucius_see.png"></p>
+<blockquote>
+<p>见之不若知之，知之不若行之</p>
+</blockquote>
+<p><img src="/images/04/LSBAWS_confucius_do.png"></p>
+<p>在上一篇文章中，你学习了如何解析（识别）和解释含有任意数量加减运算符的算术表达式，例如“7 - 3 + 2 - 1”。你还学习了语法图，以及如何使用它们来确定编程语言的语法。</p>
+<p>今天你要学习的是如何解析和解释包含任意数量乘法和除法运算符的算术表达式，例如“7 * 4 / 2 * 3”。本文中的除法将是整数除法，所以如果表达式是“9 / 4”，那么答案将是一个整数：2。</p>
+<h2 id="文法"><a href="#文法" class="headerlink" title="文法"></a>文法</h2><p>今天我还会讲不少关于另一种被广泛使用的用于指定编程语言语法的符号。它叫做<strong>上下文无关文法</strong>（简称<strong>文法</strong>）或<strong>BNF</strong>（巴科斯范式 Backus-Naur Form）。在本文中，我不会使用纯粹的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form">BNF</a>符号，而更像是一种修改过的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form">EBNF</a>符号。</p>
+<p>这里有几个使用文法的理由：</p>
+<ol>
+<li>文法以简明的方式规定了编程语言的语法。与文法图不同，文法非常紧凑。在以后的文章中，你会看到我越来越多地使用文法。</li>
+<li>文法本身也是很好的文档。</li>
+<li>即使你从头开始手动编写你的解析器，文法也是一个很好的起点。很多时候，你可以按照一套简单的规则将文法转换为代码。</li>
+<li>有一套工具，叫做解析器生成器，它接受一个文法作为输入，并根据这个文法自动为你生成一个解析器。我将在后面的系列文章中讲到这些工具。</li>
+</ol>
+<p>现在，我们来谈谈文法的作用机制，如何？</p>
+<p>这里有一个描述算术表达式的文法，例如“7 * 4 / 2 * 3”（这只是该文法可以生成的众多表达式之一）。</p>
+<p><img src="/images/04/lsbasi_part4_bnf1.png"></p>
+<h2 id="文法规则"><a href="#文法规则" class="headerlink" title="文法规则"></a>文法规则</h2><p>文法由一连串的<em>规则</em>组成，也就是所谓的<em>生产</em>。在我们的文法中，有两条规则。</p>
+<p><img src="/images/04/lsbasi_part4_bnf2.png"></p>
+<p>一条规则由一个<em>非终端</em>组成，称为生产的<strong>头部</strong>或<strong>左侧</strong>，一个冒号，以及终端和/或非终端的序列，称为生产的<strong>主体</strong>或<strong>右侧</strong>。</p>
+<p><img src="/images/04/lsbasi_part4_bnf3.png"></p>
+<p>在我上面展示的文法中，像 MUL、DIV 和 INTEGER 这样的标记称为<strong>终端</strong>，像 <em>expr</em> 和 <em>factor</em> 这样的变量称为<strong>非终端</strong>。非终端通常由一系列的终端和/或非终端组成。</p>
+<p><img src="/images/04/lsbasi_part4_bnf4.png"></p>
+<p>第一条规则左侧的非终端符号称为**<em>起始符号**</em>。在我们的文法中，起始符号是 <em>expr</em>：</p>
+<p><img src="/images/04/lsbasi_part4_bnf5.png"></p>
+<p>你可以把规则 <em>expr</em> 理解为：“一个 expr 可以是一个 <em>因数</em>，后面可以选择一个 <em>乘法</em> 或 <em>除法</em> 运算符，然后是另一个 <em>因数</em>，而这个 <em>因数</em> 后面又可以选择一个 <em>乘法</em> 或 <em>除法</em> 运算符，然后是另一个 <em>因数</em>，以此类推。”</p>
+<p>什么是<em>因数</em>？在本文中，<em>因数</em>只是一个整数。</p>
+<p>让我们快速了解一下文法中使用的符号及其含义：</p>
+<ul>
+<li>| - 可选项。意思是“或”。所以 (MUL | DIV) 表示 MUL 或 DIV。</li>
+<li>( … ) - 开括号和闭括号表示终端和/或非终端的分组，如 (MUL | DIV)。</li>
+<li>( … )* - 在组内匹配内容零次或多次。</li>
+</ul>
+<p>如果你曾使用过正则表达式，那么符号 |、( ) 和 ( … )* 对你来说应该很熟悉。</p>
+<p>文法通过解释可以生成什么句子来定义一种<em>语言</em>。这就是你如何使用文法<em>推导</em>出一个算术表达式的方法：首先你以起始符号 <em>expr</em> 开始，然后用该非终端的规则主体反复替换一个非终端，直到你生成了一个完全由终端组成的句子。这些句子构成了一种由文法定义的<em>语言</em>。</p>
+<p>如果文法不能推导出某个算术表达式，那么它就不支持该表达式，解析器在试图识别该表达式时就会产生语法错误。</p>
+<h2 id="从文法推导出表达式"><a href="#从文法推导出表达式" class="headerlink" title="从文法推导出表达式"></a>从文法推导出表达式</h2><p>我觉得可以举几个例子。文法是这样推导出表达式 3 的：</p>
+<p><img src="/images/04/lsbasi_part4_derive1.png"></p>
+<p>文法就是这样推导出 3 * 7 的表达式的：</p>
+<p><img src="/images/04/lsbasi_part4_derive2.png"></p>
+<p>然后文法就是这样推导出 3 * 7 / 2 的表达式的：</p>
+<p><img src="/images/04/lsbasi_part4_derive3.png"></p>
+<p>哇，相当多的理论就在那里!</p>
+<p>我想，当我第一次读到关于文法，相关的术语，以及所有的内容时，我的感觉是这样的：</p>
+<p><img src="/images/04/lsbasi_part4_bnf_hmm.png"></p>
+<p>我可以向你保证，我当时的感觉绝对不是这样的：</p>
+<p><img src="/images/04/lsbasi_part4_bnf_yes.png"></p>
+<p>我花了一些时间来适应这些符号，来理解它是如何工作的，以及它与解析器和分词器的关系，但我必须告诉你，从长远来看，学习它是有好处的，因为它在实际应用和编译器文献中的使用非常广泛，你早晚会在某些时候碰到它。所以，为什么不早点学呢 :)</p>
+<h2 id="文法转换为代码"><a href="#文法转换为代码" class="headerlink" title="文法转换为代码"></a>文法转换为代码</h2><p>以下是我们将用来将文法转换为源代码的指南。据此，你就可以把文法翻译成一个可用解析器。</p>
+<ul>
+<li>文法中定义的每一条规则 <strong>R</strong>，都会成为一个同名的方法，对该规则的引用也会成为一个方法调用：**<em>R()**</em>。方法的主体</li>
+</ul>
+<p>遵循规则主体的流程，使用相同的准则。</p>
+<ul>
+<li>可选项 <strong>(a1 | a2 | aN)</strong> 成为 <strong><em>if-elif-else</em></strong> 语句。</li>
+<li>可多次匹配的分组 <strong>( … )*** 成为一个 *</strong>while*** 语句，可以循环 0 次或更多次。</li>
+<li>每一个标记引用 <strong>T</strong> 都成为对方法 <strong>eat：eat(T)</strong> 的调用。<em>eat</em> 方法的工作方式是，如果标记 <em>T</em> 与当前的<em>预期</em>的标记相匹配，它就会消耗这个标记，然后从分词器中获取一个新的标记，并将该标记赋值给 current_token 内部变量。</li>
+</ul>
+<p>直观上来看，指南是这样的：</p>
+<p><img src="/images/04/lsbasi_part4_rules.png"></p>
+<p>让我们开始行动起来，按照上面的准则将我们的文法转换为代码。</p>
+<p>在我们的文法中，有两个规则：一个是 <em>expr</em> 规则，一个是 <em>factor</em> 规则。我们先说说 factor 规则（生产）。根据指南，你需要创建一个名为 <em>factor</em> 的方法（指南 1），该方法有一个单次调用 <em>eat</em> 方法来消耗 INTEGER 标记（指南 4）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">factor</span>(<span class="params">self</span>):</span><br><span class="line">    self.eat(INTEGER)</span><br></pre></td></tr></table></figure>
+
+<p>这很容易，对不对？</p>
+<p>继续!</p>
+<p>规则 <em>expr</em> 成为 <em>expr</em> 方法（同样根据准则 1）。规则的主体以对 <em>factor</em> 的引用开始，成为 <em>factor()</em> 方法调用。可选的分组 <em>( … )</em> 变成了一个 <em>while</em> 循环，*(MUL | DIV)* 备选方案变成了一个 <em>if-elif-else</em> 语句。通过将这些片段组合在一起，我们得到了下面的 <em>expr</em> 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">    self.factor()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (MUL, DIV):</span><br><span class="line">        token = self.current_token</span><br><span class="line">        <span class="keyword">if</span> token.<span class="built_in">type</span> == MUL:</span><br><span class="line">            self.eat(MUL)</span><br><span class="line">            self.factor()</span><br><span class="line">        <span class="keyword">elif</span> token.<span class="built_in">type</span> == DIV:</span><br><span class="line">            self.eat(DIV)</span><br><span class="line">            self.factor()</span><br></pre></td></tr></table></figure>
+
+<p>请花点时间，研究一下我是如何将文法映射到源代码的。确保你理解这部分内容，理解之后后面的内容就容易理解了。</p>
+<p>为了减轻你的负担，我把上面的代码放到了 <em>parser.py</em> 文件中，这个文件包含了一个词法器和一个没有解释器的解析器。你可以直接从 <a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part4/parser.py">GitHub</a> 上下载这个文件，然后玩一玩。它有一个交互式的提示，你可以输入表达式，并查看它们是否工作正常：也就是说，根据文法构建的解析器是否能识别表达式。</p>
+<p>在我电脑上运行的一个示例会话：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ python parser.py</span><br><span class="line">calc&gt; 3</span><br><span class="line">calc&gt; 3 * 7</span><br><span class="line">calc&gt; 3 * 7 / 2</span><br><span class="line">calc&gt; 3 *</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 155, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    main()</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 151, <span class="keyword">in</span> main</span><br><span class="line">    parser.parse()</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 136, <span class="keyword">in</span> parse</span><br><span class="line">    self.expr()</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 130, <span class="keyword">in</span> <span class="built_in">expr</span></span><br><span class="line">    self.factor()</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 114, <span class="keyword">in</span> <span class="built_in">factor</span></span><br><span class="line">    self.eat(INTEGER)</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 107, <span class="keyword">in</span> eat</span><br><span class="line">    self.error()</span><br><span class="line">  File <span class="string">&quot;parser.py&quot;</span>, line 97, <span class="keyword">in</span> error</span><br><span class="line">    raise Exception(<span class="string">&#x27;Invalid syntax&#x27;</span>)</span><br><span class="line">Exception: Invalid syntax</span><br></pre></td></tr></table></figure>
+
+<p>试试看!</p>
+<h2 id="语法图"><a href="#语法图" class="headerlink" title="语法图"></a>语法图</h2><p>我忍不住又要提到语法图。同样的 <em>expr</em> 规则的语法图是这样的。</p>
+<p><img src="/images/04/lsbasi_part4_sd.png"></p>
+<p>是时候深入研究一下我们新的算术表达式解释器的源代码了。下面是一个计算器的代码，它可以处理包含整数和任意数量的乘法和除法（整数除法）运算符的有效算术表达式。你还可以看到，我将词法分析器重构为一个独立的类 <em>Lexer</em> ，并更新了 <em>Interpreter</em> 类，以 <em>Lexer</em> 实例为参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标记（Token）类型</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 标记EOF(end-of-file)用于表示</span></span><br><span class="line"><span class="comment"># 没有更多的输入需要进行词法分析。</span></span><br><span class="line">INTEGER, MUL, DIV, EOF = <span class="string">&#x27;INTEGER&#x27;</span>, <span class="string">&#x27;MUL&#x27;</span>, <span class="string">&#x27;DIV&#x27;</span>, <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Token</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">type</span>, value</span>):</span><br><span class="line">        <span class="comment"># 标记类型: INTEGER, MUL, DIV, or EOF</span></span><br><span class="line">        self.<span class="built_in">type</span> = <span class="built_in">type</span></span><br><span class="line">        <span class="comment"># 标记值: 非负的整数, &#x27;*&#x27;, &#x27;/&#x27;, or None</span></span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;类实例的字符串表示。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        例子：</span></span><br><span class="line"><span class="string">            Token(INTEGER, 3)</span></span><br><span class="line"><span class="string">            Token(MUL &#x27;*&#x27;)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Token(&#123;type&#125;, &#123;value&#125;)&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">            <span class="built_in">type</span>=self.<span class="built_in">type</span>,</span><br><span class="line">            value=<span class="built_in">repr</span>(self.value)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Lexer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, text</span>):</span><br><span class="line">        <span class="comment"># 输入的字符串，如：&quot;3 * 5&quot;, &quot;12 / 3 * 4&quot;</span></span><br><span class="line">        self.text = text</span><br><span class="line">        <span class="comment"># self.pos为指向self.text的索引</span></span><br><span class="line">        self.pos = <span class="number">0</span></span><br><span class="line">        self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Invalid character&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">advance</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;推进 `pos` 指针并设置 `current_char` 变量。&quot;&quot;&quot;</span></span><br><span class="line">        self.pos += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.pos &gt; <span class="built_in">len</span>(self.text) - <span class="number">1</span>:</span><br><span class="line">            self.current_char = <span class="literal">None</span>  <span class="comment"># 表示输入结束</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">skip_whitespace</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.current_char.isspace():</span><br><span class="line">            self.advance()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">integer</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回一个从输入中并被消耗掉的（多位数）整数。&quot;&quot;&quot;</span></span><br><span class="line">        result = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span>她她current_char.isdigit():</span><br><span class="line">            result += self.current_char</span><br><span class="line">            self.advance()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(result)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_next_token</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;词汇分析器(又称扫描器或标记器)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        此方法负责断句</span></span><br><span class="line"><span class="string">        分开成标记。一次一个标记。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> selfcurrent_char.isspace():</span><br><span class="line">                self.skip_whitespace()</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> selfcurrent_char.isdigit():</span><br><span class="line">                <span class="keyword">return</span> Token(INTEGER, self.integer())</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> selfcurrent_char == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(MUL, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> selfcurrent_char == <span class="string">&#x27;/&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(DIV, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Token(EOF, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interpreter</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, lexer</span>):</span><br><span class="line">        self.lexer = lexer</span><br><span class="line">        <span class="comment"># 将当前的标记设置为输入中的第一个标记</span></span><br><span class="line">        self.current_token = self.lexer.get_next_token()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Invalid syntax&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eat</span>(<span class="params">self, token_type</span>):</span><br><span class="line">        <span class="comment"># 比较当前标记的类型与传递进来的标记的类型，</span></span><br><span class="line">        <span class="comment"># 如果两者匹配，则 &quot;吃掉&quot;（eat）当前标记，</span></span><br><span class="line">        <span class="comment"># 并获取下一个标记分配给self.current_token，</span></span><br><span class="line">        <span class="comment"># 否则会抛出异常</span></span><br><span class="line">        <span class="keyword">if</span> self.current_token.<span class="built_in">type</span> == token_type:</span><br><span class="line">            self.current_token = self.lexer.get_next_token()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">factor</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回一个INTEGER标记值。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        factor : INTEGER</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        token = self.current_token</span><br><span class="line">        self.eat(INTEGER)</span><br><span class="line">        <span class="keyword">return</span> token.value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;算术表达式解析器/解释器。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        expr   : factor ((MUL | DIV) factor)*</span></span><br><span class="line"><span class="string">        factor : INTEGER</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        result = self.factor()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (MUL, DIV):</span><br><span class="line">            token = self.current_token</span><br><span class="line">            <span class="keyword">if</span> token.<span class="built_in">type</span> == MUL:</span><br><span class="line">                self.eat(MUL)</span><br><span class="line">                result = result * self.factor()</span><br><span class="line">            <span class="keyword">elif</span> token <span class="built_in">type</span> == DIV:</span><br><span class="line">                self.eat(DIV)</span><br><span class="line">                result = result / self.factor()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 在python3环境下，使用“input”代替“raw_input”</span></span><br><span class="line">            text = raw_input(<span class="string">&#x27;calc&gt; &#x27;</span>)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        lexer = Lexer(text)</span><br><span class="line">        interpreter = Interpreter(lexer)</span><br><span class="line">        result = interpreter.expr()</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>将上面的代码保存为 <em>calc4.py</em> 文件，或者直接从 <a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part4/calc4.py">GitHub</a> 下载。跟以前一样，试一试，看看它是否工作正常。</p>
+<p>这是我在电脑上运行的一个示例会话：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ python calc4.py</span><br><span class="line">calc&gt; 7 * 4 / 2</span><br><span class="line">14</span><br><span class="line">calc&gt; 7 * 4 / 2 * 3</span><br><span class="line">42</span><br><span class="line">calc&gt; 10 * 4  * 2 * 3 / 8</span><br><span class="line">30</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我知道你已经迫不及待地想知道这部分的内容了 :) 下面是今天的新练习：<br><img src="/images/04/lsbasi_part4_exercises.png"></p>
+<ul>
+<li>写一个文法来描述包含任意数量的 +、-、* 或 / 运算符的算术表达式。利用该文法，你应该能够推导出“2 + 7 * 4”、“7 - 8 / 4”、“14 + 2 * 3 - 6 / 2”等表达式。</li>
+<li>使用该文法，编写一个解释器，它可以运算包含任意数量的 +、-、* 或 / 运算符的算术表达式。你的解释器应该能够处理“2 + 7 * 4”、“7 - 8 / 4”、“14 + 2 * 3 - 6 / 2”等表达式。</li>
+</ul>
+<p>如果你已经完成了上述练习，请放松并享受 :)</p>
+<h2 id="检查你是否理解了"><a href="#检查你是否理解了" class="headerlink" title="检查你是否理解了"></a>检查你是否理解了</h2><p>牢记今天文章中的文法，根据需要参照下图，回答下列问题：<br><img src="/images/04/lsbasi_part4_bnf1.png"></p>
+<ol>
+<li>什么是上下文无关文法（grammar）？</li>
+<li>文法有多少条规则/产物？</li>
+<li>什么是终端？（找出图片中的所有终端）</li>
+<li>什么是非终端？（找出图片中所有的非终端）</li>
+<li>什么是规则的头？（找出图中所有的头/左手边）</li>
+<li>什么是规则的主体？（找出图中所有的主体/右侧）</li>
+<li>文法的起始符号是什么？</li>
+</ol>
+<p>嘿，你都读到最后了! 这篇文章包含了相当多的理论，所以我真的为你完成它而感到骄傲。</p>
+<p>下一次我会带着新的文章回来——敬请期待，别忘了通过做练习帮你巩固知识。</p>
+<p>下面是我推荐的书单，它们对你学习解释器和编译器非常有帮助：</p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/193435645X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=193435645X&linkCode=as2&tag=russblo0b-20&linkId=MP4DCXDV6DJMEJBL">Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages (Pragmatic Programmers)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0470177071/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0470177071&linkCode=as2&tag=russblo0b-20&linkId=UCLGQTPIYSWYKRRM">Writing Compilers and Interpreters: A Software Engineering Approach</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/052182060X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=052182060X&linkCode=as2&tag=russblo0b-20&linkId=ZSKKZMV7YWR22NMW">Modern Compiler Implementation in Java</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/1461446988/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1461446988&linkCode=as2&tag=russblo0b-20&linkId=PAXWJP5WCPZ7RKRD">Modern Compiler Design</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0321486811/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321486811&linkCode=as2&tag=russblo0b-20&linkId=GOEGDQG4HIHU56FQ">Compilers: Principles, Techniques, and Tools (2nd Edition)</a></p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/08/01/15lbasi/15lbasi03/" rel="prev" title="从零开始写个简单的解释器（3）">
+      <i class="fa fa-chevron-left"></i> 从零开始写个简单的解释器（3）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">文法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%B3%95%E8%A7%84%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">文法规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E6%B3%95%E6%8E%A8%E5%AF%BC%E5%87%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">从文法推导出表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%B3%95%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">文法转换为代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">语法图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E6%98%AF%E5%90%A6%E7%90%86%E8%A7%A3%E4%BA%86"><span class="nav-number">6.</span> <span class="nav-text">检查你是否理解了</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">加斯东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">加斯东</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">45k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">41 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
