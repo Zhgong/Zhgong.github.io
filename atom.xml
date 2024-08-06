@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-02T21:55:06.454Z</updated>
+  <updated>2024-08-06T21:06:10.158Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（5）</title>
+    <link href="https://justdong.net/2024/08/06/15lbasi/15lbasi05/"/>
+    <id>https://justdong.net/2024/08/06/15lbasi/15lbasi05/</id>
+    <published>2024-08-06T19:52:49.000Z</published>
+    <updated>2024-08-06T21:06:10.158Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part5/&quot;&gt;Let’s Build A Simple Interpreter. Part 5.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;理解如何创建解释器或编译器是一个复杂的过程。最初，这可能像是一团需要解开的乱线团，需要一步步将它整理成一个完美的球。&lt;/p&gt;
+&lt;p&gt;实现这一目标的方法是一步步解开每一根线、每一个结。有时候，你可能觉得自己一时理解不了，但只要坚持下去，最终会“豁然开朗”。相信我，如果每次我理解不了的时候都能存25美分，我早就成了富翁 :）。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>从零开始写个简单的解释器（4）</title>
