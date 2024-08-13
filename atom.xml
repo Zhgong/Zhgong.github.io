@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-06T21:06:10.158Z</updated>
+  <updated>2024-08-13T09:59:39.130Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>构建一个简单的解释器(6)</title>
+    <link href="https://justdong.net/2024/08/13/15lbasi/15lbasi06/"/>
+    <id>https://justdong.net/2024/08/13/15lbasi/15lbasi06/</id>
+    <published>2024-08-13T09:02:41.000Z</published>
+    <updated>2024-08-13T09:59:39.130Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part6/&quot;&gt;Let’s Build A Simple Interpreter. Part 6.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;今天是个重要的日子 :) 你可能会问：“为什么？” 因为今天我们将几乎完成对算术表达式的讨论，新增了括号表达式的支持，并且实现了一个能够解析任意深度嵌套括号表达式的解释器。比如表达式 &lt;code&gt;7 + 3 * (10 / (12 / (3 + 1) - 1))&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;让我们开始吧！&lt;/p&gt;
+&lt;p&gt;首先，我们需要修改语法以支持括号内的表达式。如你所记得的第五部分，&lt;code&gt;factor&lt;/code&gt; 规则用于表达式中的基本单元。在那篇文章中，唯一的基本单元是整数。今天我们要添加另一种基本单元——括号表达式。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>从零开始写个简单的解释器（5）</title>
