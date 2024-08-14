@@ -209,6 +209,15 @@
   </url>
   
   <url>
+    <loc>https://justdong.net/2021/02/03/01first-post/</loc>
+    
+    <lastmod>2024-03-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://justdong.net/2021/02/06/03google-analytics/</loc>
     
     <lastmod>2024-03-31</lastmod>
@@ -237,15 +246,6 @@
   
   <url>
     <loc>https://justdong.net/2021/02/21/06url-searchengine/</loc>
-    
-    <lastmod>2024-03-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://justdong.net/2021/02/03/01first-post/</loc>
     
     <lastmod>2024-03-31</lastmod>
     
