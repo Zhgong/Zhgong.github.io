@@ -156,6 +156,240 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/08/16/15lbasi/15lbasi07/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="加斯东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/16/15lbasi/15lbasi07/" class="post-title-link" itemprop="url">从零开始写个简单的解释器（7）：抽象语法树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-08-16 18:20:09" itemprop="dateCreated datePublished" datetime="2024-08-16T18:20:09+02:00">2024-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-08-20 21:52:08" itemprop="dateModified" datetime="2024-08-20T21:52:08+02:00">2024-08-20</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2024/08/16/15lbasi/15lbasi07/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/08/16/15lbasi/15lbasi07/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>原文：<a target="_blank" rel="noopener" href="https://ruslanspivak.com/lsbasi-part7/">Let’s Build A Simple Interpreter. Part 7: Abstract Syntax Trees</a></p>
+<p>译文：</p>
+<p>正如我上次承诺的那样，今天我们将讨论一个在接下来整个系列中都会使用的重要数据结构，所以准备好，我们开始。</p>
+<p>到目前为止，我们将解析器和解释器的代码混合在一起，当解析器识别出某个语言结构（例如加法、减法、乘法或除法）时，解释器会立即对表达式进行求值。这类解释器被称为语法导向解释器，它们通常只对输入进行一次处理，适用于简单的语言应用。为了处理更复杂的Pascal编程语言结构，我们需要构建一种中间表示（IR）。解析器将负责构建IR，而解释器则利用IR来解释输入。</p>
+<p>事实证明，树形结构非常适合用作IR。<br><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_realtree.png"></p>
+<h2 id="树形数据结构的基本概念"><a href="#树形数据结构的基本概念" class="headerlink" title="树形数据结构的基本概念"></a>树形数据结构的基本概念</h2><ul>
+<li>树是一种由一个或多个节点组成的数据结构，这些节点按层次结构组织。</li>
+<li>树有一个根节点，位于树的顶端。</li>
+<li>除了根节点外，所有节点都有唯一的父节点。</li>
+<li>下图中标有星号 <strong>*</strong> 的节点是<em>父</em>节点，标有<strong>2</strong>和<strong>7</strong>的节点是-其<em>子</em>节点，子节点从左到右排列。</li>
+<li>没有子节点的节点称为<em>叶子</em>节点。</li>
+<li>有一个或多个子节点且不是根节点的节点称为<em>内部</em>节点。</li>
+<li>子节点也可以是完整的<em>子树</em>。下图中，<code>+</code>节点的左侧子节点（标有星号）是一个带有自己子节点的完整<em>子树</em>。</li>
+<li>在计算机科学中，我们通常将树形结构倒过来画，根节点在顶部，分支向下延伸。</li>
+</ul>
+<p>这是表达式 <code>2 * 7 + 3</code> 的树形结构：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_tree_terminology.png"></p>
+<h2 id="抽象语法树（AST）与解析树"><a href="#抽象语法树（AST）与解析树" class="headerlink" title="抽象语法树（AST）与解析树"></a>抽象语法树（AST）与解析树</h2><p>我们将使用的<em>中间表示</em>称为抽象语法树（AST）。在深入探讨AST之前，我们先简单介绍一下解析树。虽然我们不会在解释器和编译器中使用<em>解析树</em>，但它们可以帮助你通过可视化解析器的执行过程来理解解析器是如何解析输入的。我们还会将它们与AST进行对比，说明为什么AST更适合作为中间表示。</p>
+<p>那么，什么是解析树？解析树（有时称为具体语法树）是一种根据我们语法定义来表示语言结构的树形结构。它基本上展示了解析器如何识别语言结构，换句话说，它展示了语法的起始符号如何推导出编程语言中的特定字符串。</p>
+<p>解析器的调用堆栈实际上隐含了一个解析树，它由解析器在试图识别某个语言结构时自动构建在内存中。</p>
+<p>让我们看看表达式 <code>2 * 7 + 3</code> 的解析树：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_parsetree_01.png"></p>
+<p>从上图可以看出：</p>
+<ul>
+<li>解析树记录了解析器应用的规则序列，用于识别输入。</li>
+<li>解析树的根节点标有语法起始符号。</li>
+<li>每个内部节点表示一个非终结符，即它代表一个语法规则的应用，在我们的例子中如 <code>expr</code>、<code>term</code> 或 <code>factor</code>。</li>
+<li>每个叶子节点代表一个token。</li>
+</ul>
+<p>正如我之前提到的，我们不会手动构建解析树并将其用于解释器，但解析树可以帮助你通过可视化解析器的调用顺序来理解解析器如何解释输入。</p>
+<p>你可以通过尝试一个名为 <a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/python/genptdot.py"><code>genptdot.py</code></a> 的小工具来查看不同算术表达式的解析树。使用该工具前，你需要先安装<a target="_blank" rel="noopener" href="http://graphviz.org/">Graphviz</a>包。然后运行以下命令，你可以打开生成的 <code>parsetree.png</code> 文件，查看你作为命令行参数传递的表达式的解析树：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python genptdot.py <span class="string">&quot;14 + 2 * 3 - 6 / 2&quot;</span> &gt; \</span><br><span class="line">  parsetree.dot &amp;&amp; dot -Tpng -o parsetree.png parsetree.dot</span><br></pre></td></tr></table></figure>
+
+<p>这是表达式 <code>14 + 2 * 3 - 6 / 2</code> 生成的图像 <code>parsetree.png</code>：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_genptdot_01.png"></p>
+<p>尝试用不同的算术表达式来看看特定表达式的解析树是什么样子。</p>
+<h2 id="抽象语法树（AST）的特点"><a href="#抽象语法树（AST）的特点" class="headerlink" title="抽象语法树（AST）的特点"></a>抽象语法树（AST）的特点</h2><p>现在，让我们讨论*<strong>抽象语法树**<em>（AST）。这是我们将在整个系列中广泛使用的</em></strong>中间表示（IR）***（IR）。它是我们解释器和未来编译器项目的核心数据结构之一。</p>
+<p>让我们通过比较表达式 <code>2 * 7 + 3</code> 的AST和解析树来开始讨论：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_01.png"></p>
+<p>从上图可以看出，AST在保持输入本质的同时更加简洁。</p>
+<p>AST与解析树的主要区别如下：</p>
+<ul>
+<li>AST使用操作符/操作作为根节点和内部节点，并将操作数作为子节点。</li>
+<li>AST不使用内部节点来表示语法规则，而解析树则会这么做。</li>
+<li>AST不表示语法的每一个细节（这也是它们被称为<em>抽象</em>的原因）——例如，没有规则节点和括号。</li>
+<li>相比于解析树，AST更加紧凑。</li>
+</ul>
+<p>那么，什么是抽象语法树？**<em>抽象语法树**</em> (AST) 是一种表示语言结构的抽象语法结构的树形结构，其中每个内部节点和根节点表示一个操作符，而节点的子节点表示该操作符的操作数。</p>
+<p>我之前提到过，AST比解析树更紧凑。让我们看看表达式 <code>7 + ((2 + 3))</code> 的AST和解析树。你可以看到，下面的AST比解析树小得多，但仍然捕捉到了输入的本质。</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_02.png"></p>
+<p>目前为止，一切顺利，但你如何在AST中编码操作符的优先级呢？为了在AST中编码操作符优先级，即表示“X先于Y发生”，你只需将X放在树中比Y更低的位置。在之前的图片中，你已经看到了这一点。</p>
+<p>让我们再看看一些例子。</p>
+<p>在下图左侧，你可以看到表达式 <code>2 * 7 + 3</code> 的AST。通过将 <code>7 + 3</code> 放在括号内，我们改变了优先级。你可以看到右侧的AST是表达式 <code>2 * (7 + 3)</code> 的结构：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_astprecedence_01.png"></p>
+<p>这是表达式 <code>1 + 2 + 3 + 4 + 5</code> 的AST：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_astprecedence_02.png"></p>
+<p>从上面的图中可以看出，优先级较高的操作符最终会在树中位于较低的位置。</p>
+<h2 id="实现AST节点类型并修改解析器生成AST"><a href="#实现AST节点类型并修改解析器生成AST" class="headerlink" title="实现AST节点类型并修改解析器生成AST"></a>实现AST节点类型并修改解析器生成AST</h2><p>接下来，让我们编写一些代码来实现不同的AST节点类型，并修改我们的解析器以生成由这些节点组成的AST。</p>
+<p>首先，我们将创建一个名为 <code>AST</code> 的基础节点类，其他类将从该类继承：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AST</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然这个类本身内容很少，但请记住，AST表示操作符-操作数模型。目前为止，我们有四种操作符和整数操作数：加法、减法、乘法和除法。我们可以为每个操作符创建一个单独的类，如 <code>AddNode</code>、<code>SubNode</code>、<code>MulNode</code> 和 <code>DivNode</code>，但我们将使用一个名为 <code>BinOp</code> 的类来表示所有四种二元操作符（二元操作符是对两个操作数进行操作的操作符）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinOp</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, left, op, right</span>):</span><br><span class="line">        self.left = left</span><br><span class="line">        self.token = self.op = op</span><br><span class="line">        self.right = right</span><br></pre></td></tr></table></figure>
+
+<p>构造函数的参数是 <code>left</code>、<code>op</code> 和 <code>right</code>，其中 <code>left</code> 和 <code>right</code> 分别指向左操作数节点和右操作数节点。<code>op</code> 保存操作符本身的token：对于加法操作符为 <code>Token(PLUS, &#39;+&#39;)</code>，对于减法操作符为 <code>Token(MINUS, &#39;-&#39;)</code>，等等。</p>
+<p>为了在AST中表示整数，我们将定义一个名为 <code>Num</code> 的类，该类保存一个 <code>INTEGER</code> token 及其值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Num</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, token</span>):</span><br><span class="line">        self.token = token</span><br><span class="line">        self.value = token.value</span><br></pre></td></tr></table></figure>
+
+<p>所有节点都存储了用于创建该节点的token，这主要是为了方便，将来可能会用到。</p>
+<p>回想一下表达式 <code>2 * 7 + 3</code> 的AST。我们将在代码中手动创建该表达式的AST：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> spi <span class="keyword">import</span> Token, MUL, PLUS, INTEGER, Num, BinOp</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mul_token = Token(MUL, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plus_token = Token(PLUS, <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mul_node = BinOp(</span><br><span class="line"><span class="meta">... </span>    left=Num(Token(INTEGER, <span class="number">2</span>)),</span><br><span class="line"><span class="meta">... </span>    op=mul_token,</span><br><span class="line"><span class="meta">... </span>    right=Num(Token(INTEGER, <span class="number">7</span>))</span><br><span class="line"><span class="meta">... </span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_node = BinOp(</span><br><span class="line"><span class="meta">... </span>    left=mul_node,</span><br><span class="line"><span class="meta">... </span>    op=plus_token,</span><br><span class="line"><span class="meta">... </span>    right=Num(Token(INTEGER, <span class="number">3</span>))</span><br><span class="line"><span class="meta">... </span>)</span><br></pre></td></tr></table></figure>
+
+<p>这是我们新定义的节点类生成的AST的样子。下图也展示了上述手动构建过程：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_astimpl_01.png"></p>
+<h2 id="修改后的解析器代码"><a href="#修改后的解析器代码" class="headerlink" title="修改后的解析器代码"></a>修改后的解析器代码</h2><p>以下是我们修改后的解析器代码，它在识别输入（算术表达式）后构建并返回一个AST：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AST</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BinOp</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, left, op, right</span>):</span><br><span class="line">        self.left = left</span><br><span class="line">        self.token = self.op = op</span><br><span class="line">        self.right = right</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Num</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, token</span>):</span><br><span class="line">        self.token = token</span><br><span class="line">        self.value = token.value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Parser</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, lexer</span>):</span><br><span class="line">        self.lexer = lexer</span><br><span class="line">        <span class="comment"># 将当前token设置为从输入中获取的第一个token</span></span><br><span class="line">        self.current_token = self.lexer.get_next_token()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;语法错误&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eat</span>(<span class="params">self, token_type</span>):</span><br><span class="line">        <span class="comment"># 将当前token类型与传入的token类型进行比较</span></span><br><span class="line">        <span class="comment"># 如果匹配，则“吃掉”当前token，并将下一个token赋值给self.current_token，</span></span><br><span class="line">        <span class="comment"># 否则抛出异常。</span></span><br><span class="line">        <span class="keyword">if</span> self.current_token.<span class="built_in">type</span> == token_type:</span><br><span class="line">            self.current_token = self.lexer.get_next_token()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">factor</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;factor : INTEGER | LPAREN expr RPAREN&quot;&quot;&quot;</span></span><br><span class="line">        token = self.current_token</span><br><span class="line">        <span class="keyword">if</span> token.<span class="built_in">type</span> == INTEGER:</span><br><span class="line">            self.eat(INTEGER)</span><br><span class="line">            <span class="keyword">return</span> Num(token)</span><br><span class="line">        <span class="keyword">elif</span> token.<span class="built_in">type</span> == LPAREN:</span><br><span class="line">            self.eat(LPAREN)</span><br><span class="line">            node = self.expr()</span><br><span class="line">            self.eat(RPAREN)</span><br><span class="line">            <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">term</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;term : factor ((MUL | DIV) factor)*&quot;&quot;&quot;</span></span><br><span class="line">        node = self.factor()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (MUL, DIV):</span><br><span class="line">            token = self.current_token</span><br><span class="line">            <span class="keyword">if</span> token.<span class="built_in">type</span> == MUL:</span><br><span class="line">                self.eat(MUL)</span><br><span class="line">            <span class="keyword">elif</span> token.<span class="built_in">type</span> == DIV:</span><br><span class="line">                self.eat(DIV)</span><br><span class="line"></span><br><span class="line">            node = BinOp(left=node, op=token, right=self.factor())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        expr   : term ((PLUS | MINUS) term)*</span></span><br><span class="line"><span class="string">        term   : factor ((MUL | DIV) factor)*</span></span><br><span class="line"><span class="string">        factor : INTEGER | LPAREN expr RPAREN</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        node = self.term()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (PLUS, MINUS):</span><br><span class="line">            token = self.current_token</span><br><span class="line">            <span class="keyword">if</span> token.<span class="built_in">type</span> == PLUS:</span><br><span class="line">                self.eat(PLUS)</span><br><span class="line">            <span class="keyword">elif</span> token.<span class="built_in">type</span> == MINUS:</span><br><span class="line">                self.eat(MINUS)</span><br><span class="line"></span><br><span class="line">            node = BinOp(left=node, op=token, right=self.term())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.expr()</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建抽象语法树（AST）的过程"><a href="#构建抽象语法树（AST）的过程" class="headerlink" title="构建抽象语法树（AST）的过程"></a>构建抽象语法树（AST）的过程</h2><p>让我们来回顾一下构建一些算术表达式的AST的过程。</p>
+<p>如果你查看上面的解析器代码，你会发现，它构建AST节点的方式是，每个 <code>BinOp</code> 节点将当前节点变量的值作为左子节点，并将调用 <code>term</code> 或 <code>factor</code> 的结果作为右子节点，因此它实际上是将节点向左推，表达式 <code>1 + 2 + 3 + 4 + 5</code> 的树结构就是一个很好的例子。下面是解析器逐步构建 <code>1 + 2 + 3 + 4 + 5</code> 这个表达式的AST的可视化表示：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_astimpl_02.png"></p>
+<p>为了帮助你更好地理解不同算术表达式的AST，我编写了一个小工具，它将算术表达式作为第一个参数，并生成一个DOT文件，然后通过dot工具处理该文件，实际上为你绘制出一个AST（dot是<a target="_blank" rel="noopener" href="http://graphviz.org/">Graphviz</a>包的一部分，你需要安装该包才能运行dot命令）。以下是生成表达式 <code>7 + 3 * (10 / (12 / (3 + 1) - 1))</code> 的AST图像的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python genastdot.py <span class="string">&quot;7 + 3 * (10 / (12 / (3 + 1) - 1))&quot;</span> &gt; \</span><br><span class="line">  ast.dot &amp;&amp; dot -Tpng -o ast.png ast.dot</span><br></pre></td></tr></table></figure>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_genastdot_01.png"><br>你可以编写一些算术表达式，手动绘制这些表达式的AST，然后使用 <a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/python/genastdot.py"><code>genastdot.py</code></a> 工具生成相同表达式的AST图像，以验证你的结果。这将帮助你更好地理解解析器如何为不同的算术表达式构建AST。</p>
+<p>下面是表达式 <code>2 * 7 + 3</code> 的AST：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_walking_01.png"></p>
+<h2 id="后序遍历AST以解释表达式"><a href="#后序遍历AST以解释表达式" class="headerlink" title="后序遍历AST以解释表达式"></a>后序遍历AST以解释表达式</h2><p>如何遍历树来正确地求值由树表示的表达式？我们使用<em>后序遍历</em>，它是一种深度优先遍历的特例。</p>
+<p>后序遍历从根节点开始，递归地从左到右访问每个节点的子节点。后序遍历会尽可能快地访问离根节点最远的节点。</p>
+<p>以下是后序遍历的伪代码，其中 <code>&lt;&lt;postorder actions&gt;&gt;</code> 是一个占位符，用于表示对 <code>BinOp</code> 节点的加、减、乘、除等操作，或者对于 <code>Num</code> 节点的简单操作，例如返回整数值。</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_visit_postorder.png"></p>
+<p>我们将在解释器中使用后序遍历的原因是：首先，我们需要先计算树中较低位置的内部节点，因为它们代表优先级更高的操作符；其次，我们需要先计算操作数，然后再对这些操作数应用操作符。在下图中，你可以看到，通过后序遍历，我们首先计算表达式 <code>2 * 7</code>，然后才计算 <code>14 + 3</code>，这给出了正确的结果17。</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_walking_02.png"></p>
+<p>为了完整起见，我提一下深度优先遍历有三种类型：<em>前序遍历</em>、<em>中序遍历</em>和<em>后序遍历</em>。遍历方法的名称取决于你在访问代码中放置操作的位置。<br><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_ast_visit_generic.png"></p>
+<p>有时你可能需要在所有这些点（前序、中序和后序）执行某些操作。你将在本篇文章的源代码库中看到一些这样的例子。</p>
+<h2 id="实现解释器以访问和解释AST"><a href="#实现解释器以访问和解释AST" class="headerlink" title="实现解释器以访问和解释AST"></a>实现解释器以访问和解释AST</h2><p>现在，让我们编写一些代码来访问和解释由解析器构建的抽象语法树。</p>
+<p>这是实现<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Visitor_pattern">访问者模式</a>的源代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">NodeVisitor</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit</span>(<span class="params">self, node</span>):</span><br><span class="line">        method_name = <span class="string">&#x27;visit_&#x27;</span> + <span class="built_in">type</span>(node).__name__</span><br><span class="line">        visitor = <span class="built_in">getattr</span>(self, method_name, self.generic_visit)</span><br><span class="line">        <span class="keyword">return</span> visitor(node)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generic_visit</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;没有 visit_&#123;&#125; 方法&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">type</span>(node).__name__))</span><br></pre></td></tr></table></figure>
+
+<p>这是我们继承自 <code>NodeVisitor</code> 类的 <code>Interpreter</code> 类的源代码，它实现了形式为 <code>visit_NodeType</code> 的不同方法，其中 <code>NodeType</code> 被替换为节点的类名，如 <code>BinOp</code>、<code>Num</code> 等：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Interpreter</span>(<span class="title class_ inherited__">NodeVisitor</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parser</span>):</span><br><span class="line">        self.parser = parser</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit_BinOp</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">if</span> node.op.<span class="built_in">type</span> == PLUS:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) + self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == MINUS:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) - self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == MUL:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) * self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == DIV:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) / self.visit(node.right)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit_Num</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">return</span> node.value</span><br></pre></td></tr></table></figure>
+
+<p>这里有两点值得一提：首先，访问者代码与AST节点本身是解耦的。你可以看到，<code>BinOp</code> 和 <code>Num</code>这两个AST节点类中没有提供任何用于操作存储在这些节点中的数据的代码。这些逻辑封装在实现 <code>NodeVisitor</code> 类的 <code>Interpreter</code> 类中。</p>
+<p>其次，在 <code>NodeVisitor</code> 的 <code>visit</code> 方法中，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">visit</span>(<span class="params">node</span>):</span><br><span class="line">    node_type = <span class="built_in">type</span>(node).__name__</span><br><span class="line">    <span class="keyword">if</span> node_type == <span class="string">&#x27;BinOp&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> self.visit_BinOp(node)</span><br><span class="line">    <span class="keyword">elif</span> node_type == <span class="string">&#x27;Num&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> self.visit_Num(node)</span><br><span class="line">    <span class="keyword">elif</span> ...</span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">visit</span>(<span class="params">node</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(node, BinOp):</span><br><span class="line">        <span class="keyword">return</span> self.visit_BinOp(node)</span><br><span class="line">    <span class="keyword">elif</span> <span class="built_in">isinstance</span>(node, Num):</span><br><span class="line">        <span class="keyword">return</span> self.visit_Num(node)</span><br><span class="line">    <span class="keyword">elif</span> ...</span><br></pre></td></tr></table></figure>
+
+<p>访问方法是非常通用的，并根据传递给它的节点类型分派调用到适当的方法。正如我之前提到的，我们的解释器继承自 <code>NodeVisitor</code> 类，并实现了必要的方法。所以如果传递给 <code>visit</code> 方法的节点类型是 <code>BinOp</code>，那么 <code>visit</code> 方法将调用 <code>visit_BinOp</code> 方法；如果节点类型是 <code>Num</code>，那么 <code>visit</code> 方法将调用 <code>visit_Num</code> 方法，依此类推。</p>
+<p>花些时间学习这种方法（标准Python模块 <code>ast</code> 使用相同的机制来遍历节点），因为我们将在未来的解释器中扩展许多新的 <code>visit_NodeType</code> 方法。</p>
+<p><code>generic_visit</code> 方法是一个备用方法，它会引发异常，指示遇到了实现类没有相应 <code>visit_NodeType</code> 方法的节点。</p>
+<p>现在，让我们手动构建表达式 <code>2 * 7 + 3</code> 的AST，并将其传递给我们的解释器，看看 <code>visit</code> 方法在求值该表达式时的执行情况。你可以在Python shell中这样做：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> spi <span class="keyword">import</span> Token, MUL, PLUS, INTEGER, Num, BinOp</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mul_token = Token(MUL, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>plus_token = Token(PLUS, <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mul_node = BinOp(</span><br><span class="line"><span class="meta">... </span>    left=Num(Token(INTEGER, <span class="number">2</span>)),</span><br><span class="line"><span class="meta">... </span>    op=mul_token,</span><br><span class="line"><span class="meta">... </span>    right=Num(Token(INTEGER, <span class="number">7</span>))</span><br><span class="line"><span class="meta">... </span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add_node = BinOp(</span><br><span class="line"><span class="meta">... </span>    left=mul_node,</span><br><span class="line"><span class="meta">... </span>    op=plus_token,</span><br><span class="line"><span class="meta">... </span>    right=Num(Token(INTEGER, <span class="number">3</span>))</span><br><span class="line"><span class="meta">... </span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> spi <span class="keyword">import</span> Interpreter</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inter = Interpreter(<span class="literal">None</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>inter.visit(add_node)</span><br><span class="line"><span class="number">17</span></span><br></pre></td></tr></table></figure>
+
+<p>正如你所看到的，我将表达式树的根节点传递给了 <code>visit</code> 方法，这触发了对树的遍历，通过调用 <code>Interpreter</code> 类的正确方法（<code>visit_BinOp</code> 和 <code>visit_Num</code>），并生成了结果。</p>
+<h2 id="完整的解释器代码"><a href="#完整的解释器代码" class="headerlink" title="完整的解释器代码"></a>完整的解释器代码</h2><p>以下是我们新解释器的完整代码，供你参考：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot; SPI - Simple Pascal Interpreter &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">#  LEXER                                                                      #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Token 类型</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># EOF（文件结束）token 表示词法分析时没有更多输入</span></span><br><span class="line">INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = (</span><br><span class="line">    <span class="string">&#x27;INTEGER&#x27;</span>, <span class="string">&#x27;PLUS&#x27;</span>, <span class="string">&#x27;MINUS&#x27;</span>, <span class="string">&#x27;MUL&#x27;</span>, <span class="string">&#x27;DIV&#x27;</span>, <span class="string">&#x27;(&#x27;</span>, <span class="string">&#x27;)&#x27;</span>, <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Token</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">type</span>, value</span>):</span><br><span class="line">        self.<span class="built_in">type</span> = <span class="built_in">type</span></span><br><span class="line">        self.value = value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;类实例的字符串表示。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        示例:</span></span><br><span class="line"><span class="string">            Token(INTEGER, 3)</span></span><br><span class="line"><span class="string">            Token(PLUS, &#x27;+&#x27;)</span></span><br><span class="line"><span class="string">            Token(MUL, &#x27;*&#x27;)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Token(&#123;type&#125;, &#123;value&#125;)&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">            <span class="built_in">type</span>=self.<span class="built_in">type</span>,</span><br><span class="line">            value=<span class="built_in">repr</span>(self.value)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Lexer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, text</span>):</span><br><span class="line">        <span class="comment"># 客户端字符串输入，例如 &quot;4 + 2 * 3 - 6 / 2&quot;</span></span><br><span class="line">        self.text = text</span><br><span class="line">        <span class="comment"># self.pos 是 self.text 的索引</span></span><br><span class="line">        self.pos = <span class="number">0</span></span><br><span class="line">        self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;无效字符&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">advance</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;前进 `pos` 指针并设置 `current_char` 变量。&quot;&quot;&quot;</span></span><br><span class="line">        self.pos += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> self.pos &gt; <span class="built_in">len</span>(self.text) - <span class="number">1</span>:</span><br><span class="line">            self.current_char = <span class="literal">None</span>  <span class="comment"># 表示输入结束</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.current_char = self.text[self.pos]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">skip_whitespace</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.current_char.isspace():</span><br><span class="line">            self.advance()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">integer</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;返回从输入中提取的多位整数。&quot;&quot;&quot;</span></span><br><span class="line">        result = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.current_char.isdigit():</span><br><span class="line">            result += self.current_char</span><br><span class="line">            self.advance()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(result)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_next_token</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;词法分析器（也称为扫描器或标记器）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        该方法负责将句子分解为token，每次一个。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">while</span> self.current_char <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char.isspace():</span><br><span class="line">                self.skip_whitespace()</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char.isdigit():</span><br><span class="line">                <span class="keyword">return</span> Token(INTEGER, self.integer())</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(PLUS, <span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(MINUS, <span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(MUL, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;/&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(DIV, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;(&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(LPAREN, <span class="string">&#x27;(&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.current_char == <span class="string">&#x27;)&#x27;</span>:</span><br><span class="line">                self.advance()</span><br><span class="line">                <span class="keyword">return</span> Token(RPAREN, <span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Token(EOF, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">#  PARSER                                                                     #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AST</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BinOp</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, left, op, right</span>):</span><br><span class="line">        self.left = left</span><br><span class="line">        self.token = self.op = op</span><br><span class="line">        self.right = right</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Num</span>(<span class="title class_ inherited__">AST</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, token</span>):</span><br><span class="line">        self.token = token</span><br><span class="line">        self.value = token.value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Parser</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, lexer</span>):</span><br><span class="line">        self.lexer = lexer</span><br><span class="line">        <span class="comment"># 设置当前token为从输入中获取的第一个token</span></span><br><span class="line">        self.current_token = self.lexer.get_next_token()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">error</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;语法错误&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">eat</span>(<span class="params">self, token_type</span>):</span><br><span class="line">        <span class="comment"># 将当前token类型与传入的token类型进行比较</span></span><br><span class="line">        <span class="comment"># 如果匹配，则“吃掉”当前token，并将下一个token赋值给self.current_token，</span></span><br><span class="line">        <span class="comment"># 否则抛出异常。</span></span><br><span class="line">        <span class="keyword">if</span> self.current_token.<span class="built_in">type</span> == token_type:</span><br><span class="line">            self.current_token = self.lexer.get_next_token()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.error()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">factor</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;factor : INTEGER | LPAREN expr RPAREN&quot;&quot;&quot;</span></span><br><span class="line">        token = self.current_token</span><br><span class="line">        <span class="keyword">if</span> token.<span class="built_in">type</span> == INTEGER:</span><br><span class="line">            self.eat(INTEGER)</span><br><span class="line">            <span class="keyword">return</span> Num(token)</span><br><span class="line">        <span class="keyword">elif</span> token.<span class="built_in">type</span> == LPAREN:</span><br><span class="line">            self.eat(LPAREN)</span><br><span class="line">            node = self.expr()</span><br><span class="line">            self.eat(RPAREN)</span><br><span class="line">            <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">term</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;term : factor ((MUL | DIV) factor)*&quot;&quot;&quot;</span></span><br><span class="line">        node = self.factor()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (MUL, DIV):</span><br><span class="line">            token = self.current_token</span><br><span class="line">            <span class="keyword">if</span> token.<span class="built_in">type</span> == MUL:</span><br><span class="line">                self.eat(MUL)</span><br><span class="line">            <span class="keyword">elif</span> token.<span class="built_in">type</span> == DIV:</span><br><span class="line">                self.eat(DIV)</span><br><span class="line"></span><br><span class="line">            node = BinOp(left=node, op=token, right=self.factor())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        expr   : term ((PLUS | MINUS) term)*</span></span><br><span class="line"><span class="string">        term   : factor ((MUL | DIV) factor)*</span></span><br><span class="line"><span class="string">        factor : INTEGER | LPAREN expr RPAREN</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        node = self.term()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.current_token.<span class="built_in">type</span> <span class="keyword">in</span> (PLUS, MINUS):</span><br><span class="line">            token = self.current_token</span><br><span class="line">            <span class="keyword">if</span> token.<span class="built_in">type</span> == PLUS:</span><br><span class="line">                self.eat(PLUS)</span><br><span class="line">            <span class="keyword">elif</span> token.<span class="built_in">type</span> == MINUS:</span><br><span class="line">                self.eat(MINUS)</span><br><span class="line"></span><br><span class="line">            node = BinOp(left=node, op=token, right=self.term())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.expr()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">#  INTERPRETER                                                                #</span></span><br><span class="line"><span class="comment">#                                                                             #</span></span><br><span class="line"><span class="comment">###############################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NodeVisitor</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit</span>(<span class="params">self, node</span>):</span><br><span class="line">        method_name = <span class="string">&#x27;visit_&#x27;</span> + <span class="built_in">type</span>(node).__name__</span><br><span class="line">        visitor = <span class="built_in">getattr</span>(self, method_name, self.generic_visit)</span><br><span class="line">        <span class="keyword">return</span> visitor(node)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generic_visit</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;没有 visit_&#123;&#125; 方法&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">type</span>(node).__name__))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interpreter</span>(<span class="title class_ inherited__">NodeVisitor</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parser</span>):</span><br><span class="line">        self.parser = parser</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit_BinOp</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">if</span> node.op.<span class="built_in">type</span> == PLUS:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) + self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == MINUS:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) - self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == MUL:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) * self.visit(node.right)</span><br><span class="line">        <span class="keyword">elif</span> node.op.<span class="built_in">type</span> == DIV:</span><br><span class="line">            <span class="keyword">return</span> self.visit(node.left) / self.visit(node.right)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">visit_Num</span>(<span class="params">self, node</span>):</span><br><span class="line">        <span class="keyword">return</span> node.value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">interpret</span>(<span class="params">self</span>):</span><br><span class="line">        tree = self.parser.parse()</span><br><span class="line">        <span class="keyword">return</span> self.visit(tree)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                text = raw_input(<span class="string">&#x27;spi&gt; &#x27;</span>)</span><br><span class="line">            <span class="keyword">except</span> NameError:  <span class="comment"># Python3</span></span><br><span class="line">                text = <span class="built_in">input</span>(<span class="string">&#x27;spi&gt; &#x27;</span>)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        lexer = Lexer(text)</span><br><span class="line">        parser = Parser(lexer)</span><br><span class="line">        interpreter = Interpreter(parser)</span><br><span class="line">        result = interpreter.interpret()</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>将上述代码保存为 <code>spi.py</code> 文件或直接从<a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/python/spi.py">GitHub</a>下载。试试看，看看你基于树的解释器是否能正确地对算术表达式求值。</p>
+<p>这是一个示例会话：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python spi.py</span></span><br><span class="line"><span class="meta prompt_">spi&gt; </span><span class="language-bash">7 + 3 * (10 / (12 / (3 + 1) - 1))</span></span><br><span class="line">22</span><br><span class="line"><span class="meta prompt_">spi&gt; </span><span class="language-bash">7 + 3 * (10 / (12 / (3 + 1) - 1)) / (2 + 3) - 5 - 3 + (8)</span></span><br><span class="line">10</span><br><span class="line"><span class="meta prompt_">spi&gt; </span><span class="language-bash">7 + (((<span class="number">3</span> + <span class="number">2</span>)))</span></span><br><span class="line">12</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天你学到了关于解析树、AST、如何构建AST以及如何遍历它们来解释由这些AST表示的输入。你还修改了解析器和解释器，并将它们分开。词法分析器、解析器和解释器之间的当前接口现在看起来如下：</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_pipeline.png"></p>
+<p>你可以理解为：“解析器从词法分析器获取token，然后返回生成的AST供解释器遍历并解释输入。”</p>
+<p>今天的内容到此为止，但在结束之前，我想简要谈谈递归下降解析器，主要是给出它们的定义，因为我上次承诺要详细谈论它们。所以，这里是：递归下降解析器是一种自顶向下的解析器，它使用一组递归过程来处理输入。自顶向下反映了解析器从解析树的顶层节点开始，然后逐渐构建较低的节点。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p>现在是时候做一些练习了 :)</p>
+<p><img src="https://ruslanspivak.com/lsbasi-part7/lsbasi_part7_exercise.png"></p>
+<ol>
+<li><p>编写一个翻译器（提示：节点访问器），该翻译器将一个算术表达式作为输入，并以后缀表示法（也称为逆波兰表示法，RPN）输出。例如，如果输入的表达式是 <code>(5 + 3) * 12 / 3</code>，则输出应为 <code>5 3 + 12 * 3 /</code>。答案在<a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/python/ex1.py">这里</a>，但请先尝试自己解决。</p>
+</li>
+<li><p>编写一个翻译器（节点访问器），该翻译器将一个算术表达式作为输入，并以LISP风格的表示法输出，即 <code>2 + 3</code> 将变为 <code>(+ 2 3)</code>，而 <code>(2 + 3 * 5)</code> 将变为 <code>(+ 2 (* 3 5))</code>。你可以在<a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/python/ex2.py">这里</a>找到答案，但还是建议先自己尝试解决。</p>
+</li>
+</ol>
+<p>在下一篇文章中，我们将为不断扩展的Pascal解释器添加赋值和一元操作符。在那之前，祝你玩得开心，我们下次再见。</p>
+<p>P.S. 我还提供了该解释器的Rust实现，你可以在<a target="_blank" rel="noopener" href="https://github.com/rspivak/lsbasi/blob/master/part7/rust/spi/src/main.rs">GitHub</a>上找到。这是我学习<a target="_blank" rel="noopener" href="https://www.rust-lang.org/">Rust</a>的一种方式，所以请记住，代码可能还不够“规范”。欢迎对如何改进代码提出意见和建议。</p>
+<p>以下是我推荐的几本书，它们将帮助你学习解释器和编译器：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/193435645X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=193435645X&linkCode=as2&tag=russblo0b-20&linkId=MP4DCXDV6DJMEJBL">《Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages (Pragmatic Programmers)》</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0470177071/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0470177071&linkCode=as2&tag=russblo0b-20&linkId=UCLGQTPIYSWYKRRM">《Writing Compilers and Interpreters: A Software Engineering Approach》</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/052182060X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=052182060X&linkCode=as2&tag=russblo0b-20&linkId=ZSKKZMV7YWR22NMW">《Modern Compiler Implementation in Java》</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/1461446988/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1461446988&linkCode=as2&tag=russblo0b-20&linkId=PAXWJP5WCPZ7RKRD">《Modern Compiler Design》</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.amazon.com/gp/product/0321486811/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321486811&linkCode=as2&tag=russblo0b-20&linkId=GOEGDQG4HIHU56FQ">《Compilers: Principles, Techniques, and Tools (2nd Edition)》</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/08/13/15lbasi/15lbasi06/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -179,10 +413,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-08-13 11:02:41 / 修改时间：21:23:54" itemprop="dateCreated datePublished" datetime="2024-08-13T11:02:41+02:00">2024-08-13</time>
+              <time title="创建时间：2024-08-13 11:02:41" itemprop="dateCreated datePublished" datetime="2024-08-13T11:02:41+02:00">2024-08-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-08-16 19:46:42" itemprop="dateModified" datetime="2024-08-16T19:46:42+02:00">2024-08-16</time>
+              </span>
 
           
   
@@ -1043,110 +1283,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/12/07/11google-adsense/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="加斯东">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="～加斯东's blog～">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/07/11google-adsense/" class="post-title-link" itemprop="url">博客搭建 (五) 接入 Google AdSense (NexT v8.2.1)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-07 21:52:37" itemprop="dateCreated datePublished" datetime="2021-12-07T21:52:37+01:00">2021-12-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-08-13 23:36:46" itemprop="dateModified" datetime="2024-08-13T23:36:46+02:00">2024-08-13</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/12/07/11google-adsense/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/12/07/11google-adsense/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够收到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/12/07/11google-adsense/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1212,7 +1352,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1254,12 +1394,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">58k</span>
+    <span title="站点总字数">73k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">52 分钟</span>
+    <span title="站点阅读时长">1:06</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-13T19:23:54.583Z</updated>
+  <updated>2024-08-20T19:52:08.997Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -17,11 +17,32 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>从零开始写个简单的解释器（7）：抽象语法树</title>
+    <link href="https://justdong.net/2024/08/16/15lbasi/15lbasi07/"/>
+    <id>https://justdong.net/2024/08/16/15lbasi/15lbasi07/</id>
+    <published>2024-08-16T16:20:09.000Z</published>
+    <updated>2024-08-20T19:52:08.997Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part7/&quot;&gt;Let’s Build A Simple Interpreter. Part 7: Abstract Syntax</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>从零开始写个简单的解释器（6）</title>
     <link href="https://justdong.net/2024/08/13/15lbasi/15lbasi06/"/>
     <id>https://justdong.net/2024/08/13/15lbasi/15lbasi06/</id>
     <published>2024-08-13T09:02:41.000Z</published>
-    <updated>2024-08-13T19:23:54.583Z</updated>
+    <updated>2024-08-16T17:46:42.659Z</updated>
     
     
     <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part6/&quot;&gt;Let’s Build A Simple Interpreter. Part 6.&lt;/a&gt;&lt;/p&gt;
@@ -179,7 +200,7 @@
     <link href="https://justdong.net/2021/12/07/11google-adsense/"/>
     <id>https://justdong.net/2021/12/07/11google-adsense/</id>
     <published>2021-12-07T20:52:37.000Z</published>
-    <updated>2024-08-13T21:36:46.230Z</updated>
+    <updated>2024-08-16T17:46:42.659Z</updated>
     
     
     <summary type="html">&lt;p&gt;既然开了博客，那就干脆把Google的AdSense接入得了，到时候要是能够收到谷歌的一点广告费，覆盖日常的VPS应用也不错。因为我用的是Next的主题，那接下来就了解一下如何将谷歌的广告接入NexT主题中。&lt;/p&gt;</summary>
@@ -334,23 +355,6 @@
     
     
     <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>博客搭建 (一) 开始</title>
-    <link href="https://justdong.net/2021/02/03/01first-post/"/>
-    <id>https://justdong.net/2021/02/03/01first-post/</id>
-    <published>2021-02-03T22:26:09.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;博客搭建结构&quot;&gt;&lt;a href=&quot;#博客搭建结构&quot; class=&quot;headerlink&quot; title=&quot;博客搭建结构&quot;&gt;&lt;/a&gt;博客搭建结构&lt;/h2&gt;&lt;p&gt;打算开个博客记录一些文字。经过好友kenshinji的提点，我决定搭建静态博客试试。经google搜索，最终确定了方案:&lt;/p&gt;</summary>
-    
-    
-    
-    
-    <category term="博客搭建 - hexo" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-hexo/"/>
     
   </entry>
   
