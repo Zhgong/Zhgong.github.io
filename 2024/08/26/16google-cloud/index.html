@@ -20,20 +20,19 @@
     var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="安装插件">
+  <meta name="description" content="解决 Google Cloud Functions 部署时的服务账号错误问题在我最近的一个项目中，我遇到了一个让人头疼的问题。当我尝试使用 Google Cloud Functions 部署函数时，突然弹出了一个错误信息： 1ERROR: (gcloud.functions.deploy) ResponseError: status&#x3D;[400], code&#x3D;[Ok], message&#x3D;[Defau">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客搭建 (四) 显示文章的字数和阅读时长">
-<meta property="og:url" content="https://justdong.net/2021/02/06/04symbol-count/index.html">
+<meta property="og:title" content="解决 Google Cloud Functions 部署时的服务账号错误问题">
+<meta property="og:url" content="https://justdong.net/2024/08/26/16google-cloud/index.html">
 <meta property="og:site_name" content="～加斯东&#39;s blog～">
-<meta property="og:description" content="安装插件">
+<meta property="og:description" content="解决 Google Cloud Functions 部署时的服务账号错误问题在我最近的一个项目中，我遇到了一个让人头疼的问题。当我尝试使用 Google Cloud Functions 部署函数时，突然弹出了一个错误信息： 1ERROR: (gcloud.functions.deploy) ResponseError: status&#x3D;[400], code&#x3D;[Ok], message&#x3D;[Defau">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-06T22:31:46.000Z">
-<meta property="article:modified_time" content="2024-03-31T20:34:13.613Z">
+<meta property="article:published_time" content="2024-08-26T19:44:00.000Z">
+<meta property="article:modified_time" content="2024-08-26T19:51:13.613Z">
 <meta property="article:author" content="加斯东">
-<meta property="article:tag" content="博客搭建">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://justdong.net/2021/02/06/04symbol-count/">
+<link rel="canonical" href="https://justdong.net/2024/08/26/16google-cloud/">
 
 
 <script id="page-configurations">
@@ -47,7 +46,7 @@
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8151465709714450"
      crossorigin="anonymous"></script>
-  <title>博客搭建 (四) 显示文章的字数和阅读时长 | ～加斯东's blog～</title>
+  <title>解决 Google Cloud Functions 部署时的服务账号错误问题 | ～加斯东's blog～</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
     <script>
@@ -162,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://justdong.net/2021/02/06/04symbol-count/">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2024/08/26/16google-cloud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -175,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          博客搭建 (四) 显示文章的字数和阅读时长
+          解决 Google Cloud Functions 部署时的服务账号错误问题
         </h1>
 
         <div class="post-meta">
@@ -184,16 +183,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-02-06 23:31:46" itemprop="dateCreated datePublished" datetime="2021-02-06T23:31:46+01:00">2021-02-06</time>
+              <time title="创建时间：2024-08-26 21:44:00 / 修改时间：21:51:13" itemprop="dateCreated datePublished" datetime="2024-08-26T21:44:00+02:00">2024-08-26</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-31 22:34:13" itemprop="dateModified" datetime="2024-03-31T22:34:13+02:00">2024-03-31</time>
-              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -211,8 +204,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/02/06/04symbol-count/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/06/04symbol-count/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2024/08/26/16google-cloud/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/08/26/16google-cloud/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -222,14 +215,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>528</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -241,17 +234,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-word-counter</span><br></pre></td></tr></table></figure>
-<h2 id="Hexo-配置"><a href="#Hexo-配置" class="headerlink" title="Hexo 配置"></a>Hexo 配置</h2><p>在hexo的_config.yml中添加以下的配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># count symbols</span><br><span class="line">symbols_count_time:</span><br><span class="line">  symbols: true</span><br><span class="line">  time: true</span><br><span class="line">  total_symbols: true</span><br><span class="line">  total_time: true</span><br><span class="line">  exclude_codeblock: false</span><br><span class="line">  awl: 4</span><br><span class="line">  wpm: 275</span><br><span class="line">  suffix: &quot;mins.&quot;</span><br></pre></td></tr></table></figure>
+        <h3 id="解决-Google-Cloud-Functions-部署时的服务账号错误问题"><a href="#解决-Google-Cloud-Functions-部署时的服务账号错误问题" class="headerlink" title="解决 Google Cloud Functions 部署时的服务账号错误问题"></a>解决 Google Cloud Functions 部署时的服务账号错误问题</h3><p>在我最近的一个项目中，我遇到了一个让人头疼的问题。当我尝试使用 Google Cloud Functions 部署函数时，突然弹出了一个错误信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: (gcloud.functions.deploy) ResponseError: status=[400], code=[Ok], message=[Default service account &#x27;xxxx@appspot.gserviceaccount.com&#x27; doesn&#x27;t exist. Please recreate this account or specify a different account. Please visit https://cloud.google.com/functions/docs/troubleshooting for in-depth troubleshooting documentation.]</span><br></pre></td></tr></table></figure>
 
-<h2 id="next-配置"><a href="#next-配置" class="headerlink" title="next 配置"></a>next 配置</h2><p>在next的_config.yml中添加以下的配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https://github.com/next-theme/hexo-word-counter</span><br><span class="line">symbols_count_time:</span><br><span class="line">  separated_meta: true</span><br><span class="line">  item_text_post: true</span><br><span class="line">  item_text_total: false</span><br></pre></td></tr></table></figure>
+<p>这个错误表明，默认的服务账号 <code>xxxx@appspot.gserviceaccount.com</code> 不存在。通过检查我的账号，我发现这个账号实际上是存在的。然而，这个错误依然导致我无法多次部署同一个 Cloud Function，除非我先删除它，然后重新创建。每次重新创建都会生成一个新的函数，这不仅浪费时间，还增加了操作的复杂性。</p>
+<p>于是，我决定深入研究这个问题，并最终找到了解决方法。希望通过分享我的经历，能帮助大家避免同样的困扰。</p>
+<span id="more"></span>
+<h3 id="问题的根源"><a href="#问题的根源" class="headerlink" title="问题的根源"></a>问题的根源</h3><p>在 Google Cloud Functions 中，服务账号负责管理函数的身份验证和权限。当我们第一次部署一个函数时，Google 会为项目自动创建一个默认的服务账号，并将其与函数关联。然而，如果这个默认服务账号被意外删除，或者出于某些原因无法访问，我们在之后的部署过程中就会遇到问题。</p>
+<p>对于我来说，每次想更新或重新部署函数时，都必须先删除现有的 Cloud Function，这让整个开发流程变得非常低效，而且也不符合直觉，通过阅读官方文档，发现同一个部署命令可以多次运行，来对函数进行更新。</p>
+<h3 id="解决方案：通过-Google-Cloud-Console-重新配置"><a href="#解决方案：通过-Google-Cloud-Console-重新配置" class="headerlink" title="解决方案：通过 Google Cloud Console 重新配置"></a>解决方案：通过 Google Cloud Console 重新配置</h3><p>经过一番探索，我发现通过 Google Cloud Console 的图形界面编辑并重新部署函数，可以有效解决这个问题。下面是具体步骤：</p>
+<ol>
+<li><p><strong>在 Google Cloud Console 中编辑并部署函数</strong>：</p>
+<ul>
+<li>首先，我进入了 <a target="_blank" rel="noopener" href="https://console.cloud.google.com/">Google Cloud Console</a>。</li>
+<li>然后，我导航到 Cloud Functions 页面，找到出现问题的函数，点击进入详情页面。</li>
+<li>在详情页面中，我点击了 “编辑” 按钮。在这里，我可以选择一个现有的服务账号，或者继续使用默认的服务账号。</li>
+<li>可以不用做任何改动，点击 “部署”。</li>
+</ul>
+</li>
+<li><p><strong>在命令行中更新部署</strong>：</p>
+<ul>
+<li>通过上述步骤，我成功修复了函数的服务账号配置。这时，我可以再次使用命令行工具来部署和更新函数了，命令如下：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcloud <span class="built_in">functions</span> deploy dummyFunction --runtime python311 --trigger-http --allow-unauthenticated --entry-point main --<span class="built_in">timeout</span> 540s --memory 128MB</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>本系列文章：<br><a href="/_posts/01first-post.md">博客搭建 (一) 开始</a><br><a href="/_posts/02google-domain.md">博客搭建 (二) 链接谷歌域名</a><br><a href="/_posts/03google-analytics.md">博客搭建 (三) 链接google分析</a><br><a href="/_posts/04symbol-count.md">博客搭建 (四) 显示文章的字数和阅读时长</a><br><a href="/_posts/11google-adsense.md">博客搭建 (五) 接入 Google AdSense (NexT v8.2.1)</a></p>
-</blockquote>
+<p>现在，部署和更新都能顺利进行，不再有任何服务账号相关的错误。</p>
+</li>
+</ol>
+<h3 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h3><p>在解决这个问题的过程中，我了解到：</p>
+<ul>
+<li><p><strong>服务账号的重要性</strong>：服务账号在 Google Cloud Platform (GCP) 中起着至关重要的作用，负责管理资源的访问权限。在部署 Cloud Functions 时，务必确保服务账号配置正确。</p>
+</li>
+<li><p><strong>错误的原因</strong>：该错误通常是因为服务账号被删除或失效导致的。通过 Google Cloud Console 重新编辑函数配置，可以恢复并正常使用服务账号。</p>
+</li>
+<li><p><strong>解决方法</strong>：通过 Google Cloud Console 界面编辑并重新部署函数，这样可以修复服务账号配置，之后在命令行工具中即可继续进行部署和更新操作。</p>
+</li>
+</ul>
+<p>在使用 Google Cloud Functions 部署项目时，服务账号配置的问题可能会带来意想不到的麻烦。希望我的经验能为你提供一些帮助，让你在处理类似问题时更加得心应手。记得定期检查和管理你的服务账号配置，确保项目的顺利进行。</p>
 
     </div>
 
@@ -260,9 +279,6 @@
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag"># 博客搭建</a>
-          </div>
 
         
 
@@ -270,13 +286,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/02/06/03google-analytics/" rel="prev" title="博客搭建 (三) 链接google分析">
-      <i class="fa fa-chevron-left"></i> 博客搭建 (三) 链接google分析
+    <a href="/2024/08/21/15lbasi/15lbasi08/" rel="prev" title="从零开始写个简单的解释器（8）">
+      <i class="fa fa-chevron-left"></i> 从零开始写个简单的解释器（8）
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/02/17/05feynman-technique/" rel="next" title="费曼学习法">
-      费曼学习法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -342,7 +355,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Hexo 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">next 配置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3-Google-Cloud-Functions-%E9%83%A8%E7%BD%B2%E6%97%B6%E7%9A%84%E6%9C%8D%E5%8A%A1%E8%B4%A6%E5%8F%B7%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">解决 Google Cloud Functions 部署时的服务账号错误问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E6%A0%B9%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text">问题的根源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E9%80%9A%E8%BF%87-Google-Cloud-Console-%E9%87%8D%E6%96%B0%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">解决方案：通过 Google Cloud Console 重新配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9"><span class="nav-number">4.</span> <span class="nav-text">关键点</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -491,9 +504,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://justdong.net/2021/02/06/04symbol-count/";
-    this.page.identifier = "2021/02/06/04symbol-count/";
-    this.page.title = "博客搭建 (四) 显示文章的字数和阅读时长";
+    this.page.url = "https://justdong.net/2024/08/26/16google-cloud/";
+    this.page.identifier = "2024/08/26/16google-cloud/";
+    this.page.title = "解决 Google Cloud Functions 部署时的服务账号错误问题";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {

@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-20T19:52:08.997Z</updated>
+  <updated>2024-08-26T19:51:13.613Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -17,20 +17,57 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>解决 Google Cloud Functions 部署时的服务账号错误问题</title>
+    <link href="https://justdong.net/2024/08/26/16google-cloud/"/>
+    <id>https://justdong.net/2024/08/26/16google-cloud/</id>
+    <published>2024-08-26T19:44:00.000Z</published>
+    <updated>2024-08-26T19:51:13.613Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;解决-Google-Cloud-Functions-部署时的服务账号错误问题&quot;&gt;&lt;a href=&quot;#解决-Google-Cloud-Functions-部署时的服务账号错误问题&quot; class=&quot;headerlink&quot; title=&quot;解决 Google Cloud Functions 部署时的服务账号错误问题&quot;&gt;&lt;/a&gt;解决 Google Cloud Functions 部署时的服务账号错误问题&lt;/h3&gt;&lt;p&gt;在我最近的一个项目中，我遇到了一个让人头疼的问题。当我尝试使用 Google Cloud Functions 部署函数时，突然弹出了一个错误信息：&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ERROR: (gcloud.functions.deploy) ResponseError: status=[400], code=[Ok], message=[Default service account &amp;#x27;xxxx@appspot.gserviceaccount.com&amp;#x27; doesn&amp;#x27;t exist. Please recreate this account or specify a different account. Please visit https://cloud.google.com/functions/docs/troubleshooting for in-depth troubleshooting documentation.]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;这个错误表明，默认的服务账号 &lt;code&gt;xxxx@appspot.gserviceaccount.com&lt;/code&gt; 不存在。通过检查我的账号，我发现这个账号实际上是存在的。然而，这个错误依然导致我无法多次部署同一个 Cloud Function，除非我先删除它，然后重新创建。每次重新创建都会生成一个新的函数，这不仅浪费时间，还增加了操作的复杂性。&lt;/p&gt;
+&lt;p&gt;于是，我决定深入研究这个问题，并最终找到了解决方法。希望通过分享我的经历，能帮助大家避免同样的困扰。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>从零开始写个简单的解释器（8）</title>
+    <link href="https://justdong.net/2024/08/21/15lbasi/15lbasi08/"/>
+    <id>https://justdong.net/2024/08/21/15lbasi/15lbasi08/</id>
+    <published>2024-08-21T19:11:01.000Z</published>
+    <updated>2024-08-26T19:45:33.692Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part8/&quot;&gt;Let’s Build A Simple Interpreter. Part 8&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;h2 id=&quot;引言与目标&quot;&gt;&lt;a href=&quot;#引言与目标&quot; class=&quot;headerlink&quot; title=&quot;引言与目标&quot;&gt;&lt;/a&gt;引言与目标&lt;/h2&gt;&lt;p&gt;今天我们将讨论&lt;strong&gt;一元运&lt;/strong&gt;算符，即一元加（+）和一元减（-）运算符。&lt;/p&gt;
+&lt;p&gt;今天的很多内容都基于前一篇文章的内容，因此如果你需要复习，可以回到第七部分重温一下。记住：反复练习是学习的关键。&lt;/p&gt;
+&lt;p&gt;今天我们将完成以下任务：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;扩展语法以处理一元加和一元减运算符</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>从零开始写个简单的解释器（7）：抽象语法树</title>
     <link href="https://justdong.net/2024/08/16/15lbasi/15lbasi07/"/>
     <id>https://justdong.net/2024/08/16/15lbasi/15lbasi07/</id>
     <published>2024-08-16T16:20:09.000Z</published>
-    <updated>2024-08-20T19:52:08.997Z</updated>
+    <updated>2024-08-26T19:45:33.691Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part7/&quot;&gt;Let’s Build A Simple Interpreter. Part 7: Abstract Syntax</summary>
-        
-      
+    <summary type="html">&lt;p&gt;原文：&lt;a href=&quot;https://ruslanspivak.com/lsbasi-part7/&quot;&gt;Let’s Build A Simple Interpreter. Part 7: Abstract Syntax Trees&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;正如我上次承诺的那样，今天我们将讨论一个在接下来整个系列中都会使用的重要数据结构，所以准备好，我们开始。&lt;/p&gt;
+&lt;p&gt;到目前为止，我们将解析器和解释器的代码混合在一起，当解析器识别出某个语言结构（例如加法、减法、乘法或除法）时，解释器会立即对表达式进行求值。这类解释器被称为语法导向解释器，它们通常只对输入进行一次处理，适用于简单的语言应用。为了处理更复杂的Pascal编程语言结构，我们需要构建一种中间表示（IR）。解析器将负责构建IR，而解释器则利用IR来解释输入。&lt;/p&gt;</summary>
     
     
     
@@ -315,41 +352,6 @@
     
     
     <summary type="html">&lt;h2 id=&quot;安装插件&quot;&gt;&lt;a href=&quot;#安装插件&quot; class=&quot;headerlink&quot; title=&quot;安装插件&quot;&gt;&lt;/a&gt;安装插件&lt;/h2&gt;</summary>
-    
-    
-    
-    
-    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>博客搭建 (三) 链接google分析</title>
-    <link href="https://justdong.net/2021/02/06/03google-analytics/"/>
-    <id>https://justdong.net/2021/02/06/03google-analytics/</id>
-    <published>2021-02-06T16:50:33.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;如何添加-google-analytics&quot;&gt;&lt;a href=&quot;#如何添加-google-analytics&quot; class=&quot;headerlink&quot; title=&quot;如何添加 google analytics&quot;&gt;&lt;/a&gt;如何添加 google analytics&lt;/h1&gt;&lt;p&gt;如果想使用流量分析工具来统计网站的流量，还需要把它添加进next中。这里我以google analytics为例，看看怎样把它添加到Next中。&lt;/p&gt;
-&lt;p&gt;工作原理，配置谷歌分析之后，next会自动在blog的html中插入一段js代码(gtags.js)，这一小段信息会将用户的数据发送到谷歌进行流量分析。如图：&lt;/p&gt;</summary>
-    
-    
-    
-    
-    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>博客搭建 (二) 链接谷歌域名</title>
-    <link href="https://justdong.net/2021/02/06/02google-domain/"/>
-    <id>https://justdong.net/2021/02/06/02google-domain/</id>
-    <published>2021-02-06T16:49:30.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;如何链接 google 域名&lt;/p&gt;</summary>
     
     
     
