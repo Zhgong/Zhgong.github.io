@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2024-08-26T19:51:13.613Z</updated>
+  <updated>2025-01-01T15:47:20.696Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,22 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Union 数据结构的特点及其在工业自动化中的应用</title>
+    <link href="https://justdong.net/2025/01/01/17union/"/>
+    <id>https://justdong.net/2025/01/01/17union/</id>
+    <published>2025-01-01T15:35:11.000Z</published>
+    <updated>2025-01-01T15:47:20.696Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Union-数据结构的特点及其在工业自动化中的应用&quot;&gt;&lt;a href=&quot;#Union-数据结构的特点及其在工业自动化中的应用&quot; class=&quot;headerlink&quot; title=&quot;Union 数据结构的特点及其在工业自动化中的应用&quot;&gt;&lt;/a&gt;&lt;strong&gt;Union 数据结构的特点及其在工业自动化中的应用&lt;/strong&gt;&lt;/h1&gt;&lt;h2 id=&quot;1-引言&quot;&gt;&lt;a href=&quot;#1-引言&quot; class=&quot;headerlink&quot; title=&quot;1. 引言&quot;&gt;&lt;/a&gt;1. 引言&lt;/h2&gt;&lt;p&gt;在工业自动化和物联网 (IIoT) 的世界里，&lt;strong&gt;如何高效地处理各种类型的数据&lt;/strong&gt;就像在厨房里使用一个多功能收纳架：调料、工具可以灵活安排，不同内容根据需要取用，而不需要为每种类型额外准备空间。随着 PLC（可编程逻辑控制器）的广泛应用，工程师常常面临多种数据类型的传输和解析需求。&lt;/p&gt;
+&lt;p&gt;但是，一旦遇到“打包”与“解包”那一连串字节流（Byte Array），很多人会头大：&lt;strong&gt;究竟该怎样快速地把这些字节转化为结构体（Structure）或其他数据类型？&lt;/strong&gt; 这里，IEC 61131-3 标准中相对低调的选手——Union（联合体），就登场了。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>解决 Google Cloud Functions 部署时的服务账号错误问题</title>
@@ -340,23 +356,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>博客搭建 (四) 显示文章的字数和阅读时长</title>
-    <link href="https://justdong.net/2021/02/06/04symbol-count/"/>
-    <id>https://justdong.net/2021/02/06/04symbol-count/</id>
-    <published>2021-02-06T22:31:46.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;安装插件&quot;&gt;&lt;a href=&quot;#安装插件&quot; class=&quot;headerlink&quot; title=&quot;安装插件&quot;&gt;&lt;/a&gt;安装插件&lt;/h2&gt;</summary>
-    
-    
-    
-    
-    <category term="博客搭建" scheme="https://justdong.net/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
