@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2025-01-01T15:47:20.696Z</updated>
+  <updated>2025-03-16T12:20:09.762Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,22 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>边缘AI在工业自动化中的最新应用：预测性维护与智能控制 [Deep Research]</title>
+    <link href="https://justdong.net/2025/03/16/18-Edge-AI-At-Industry/"/>
+    <id>https://justdong.net/2025/03/16/18-Edge-AI-At-Industry/</id>
+    <published>2025-03-16T10:36:49.000Z</published>
+    <updated>2025-03-16T12:20:09.762Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;我一直在思考，如何在工业自动化中应用边缘人工智能技术，以发挥其巨大潜力。于是，我让 Deep Research 帮我进行了一项研究。以下是它生成的报告的校对版。&lt;/p&gt;
+&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;边缘人工智能（Edge AI）指在靠近数据源的本地设备上执行 AI 算法，从而减少对云的依赖。在工业自动化中，这种本地智能能够以毫秒级延迟进行决策，提升系统实时性和可靠性。&lt;strong&gt;预测性维护&lt;/strong&gt;和&lt;strong&gt;智能控制&lt;/strong&gt;是边缘 AI 在工业领域的两个重点应用方向：前者通过分析设备运行数据提前预判故障，避免停机损失；后者则利用 AI 优化控制策略，实现生产过程和能源管理的智能调节。近年来（2023-2024），随着轻量级模型和实时数据处理技术的发展，边缘 AI 在工业现场的应用加速落地，为制造、能源、物流等行业带来新的效率提升和成本节约。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Union 数据结构的特点及其在工业自动化中的应用</title>
@@ -338,21 +354,6 @@
     
     
     <summary type="html">&lt;p&gt;本站被搜索引擎的收录情况。&lt;/p&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>费曼学习法</title>
-    <link href="https://justdong.net/2021/02/17/05feynman-technique/"/>
-    <id>https://justdong.net/2021/02/17/05feynman-technique/</id>
-    <published>2021-02-16T23:15:10.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;费曼学习法号称是可以用来学习一切知识的终极学习方法，据说要是掌握了此方法，就可以非常高效地学习任何知识。既然有这么大的好处那自然是要了解一下到底什么是费曼学习法。以及它的特点。还有是否可以适用于学习语言（比如英语）&lt;/p&gt;</summary>
     
     
     
