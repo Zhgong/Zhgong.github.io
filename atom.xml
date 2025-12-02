@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2025-03-16T12:20:09.762Z</updated>
+  <updated>2025-12-02T21:28:08.198Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>哆啦A梦的工业通信大冒险：OPC UA 漫画</title>
+    <link href="https://justdong.net/2025/12/02/19-OPC-UA-%E6%BC%AB%E7%94%BB/"/>
+    <id>https://justdong.net/2025/12/02/19-OPC-UA-%E6%BC%AB%E7%94%BB/</id>
+    <published>2025-12-02T21:21:39.000Z</published>
+    <updated>2025-12-02T21:28:08.198Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;从“协议巴别塔”到安全性、模型。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="OPC UA" scheme="https://justdong.net/tags/OPC-UA/"/>
+    
+    <category term="工业通信" scheme="https://justdong.net/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/"/>
+    
+    <category term="漫画" scheme="https://justdong.net/tags/%E6%BC%AB%E7%94%BB/"/>
+    
+  </entry>
   
   <entry>
     <title>边缘AI在工业自动化中的最新应用：预测性维护与智能控制 [Deep Research]</title>
@@ -339,21 +360,6 @@
     
     
     <summary type="html">&lt;h2 id=&quot;什么是pipenv？&quot;&gt;&lt;a href=&quot;#什么是pipenv？&quot; class=&quot;headerlink&quot; title=&quot;什么是pipenv？&quot;&gt;&lt;/a&gt;什么是pipenv？&lt;/h2&gt;&lt;p&gt;&lt;code&gt;pipenv&lt;/code&gt; 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了&lt;code&gt;pip&lt;/code&gt;和&lt;code&gt;virtualenv&lt;/code&gt;的功能.详细的功能介绍可以参考&lt;a href=&quot;https://docs.pipenv.org/&quot;&gt;官方网页&lt;/a&gt;。&lt;/p&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>本站被搜索引擎收录情况</title>
-    <link href="https://justdong.net/2021/02/21/06url-searchengine/"/>
-    <id>https://justdong.net/2021/02/21/06url-searchengine/</id>
-    <published>2021-02-21T21:14:39.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;本站被搜索引擎的收录情况。&lt;/p&gt;</summary>
     
     
     
