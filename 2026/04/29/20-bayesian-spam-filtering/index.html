@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"justdong.net","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="寓言：贝郎中的分简术大治年间，天下承平，商贾云集。京城通政司的信房每天都要接收来自全国各地成千上万的竹简。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寓言：贝郎中的分简术 (贝叶斯垃圾邮件过滤)">
+<meta property="og:url" content="https://justdong.net/2026/04/29/20-bayesian-spam-filtering/index.html">
+<meta property="og:site_name" content="～加斯东&#39;s blog～">
+<meta property="og:description" content="寓言：贝郎中的分简术大治年间，天下承平，商贾云集。京城通政司的信房每天都要接收来自全国各地成千上万的竹简。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-29T21:05:21.000Z">
+<meta property="article:modified_time" content="2026-04-29T21:08:29.214Z">
+<meta property="article:author" content="加斯东">
+<meta property="article:tag" content="贝叶斯定理">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="垃圾邮件过滤">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://justdong.net/2026/04/29/20-bayesian-spam-filtering/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8151465709714450"
+     crossorigin="anonymous"></script>
+  <title>寓言：贝郎中的分简术 (贝叶斯垃圾邮件过滤) | ～加斯东's blog～</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK17PL61NL"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZK17PL61NL');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="～加斯东's blog～" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">～加斯东's blog～</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://justdong.net/2026/04/29/20-bayesian-spam-filtering/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="加斯东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="～加斯东's blog～">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          寓言：贝郎中的分简术 (贝叶斯垃圾邮件过滤)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-04-29 23:05:21 / 修改时间：23:08:29" itemprop="dateCreated datePublished" datetime="2026-04-29T23:05:21+02:00">2026-04-29</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2026/04/29/20-bayesian-spam-filtering/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2026/04/29/20-bayesian-spam-filtering/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="寓言：贝郎中的分简术"><a href="#寓言：贝郎中的分简术" class="headerlink" title="寓言：贝郎中的分简术"></a>寓言：贝郎中的分简术</h3><p>大治年间，天下承平，商贾云集。京城通政司的信房每天都要接收来自全国各地成千上万的竹简。</p>
+<span id="more"></span>
+
+<p>起初，这些竹简多是各地官员汇报旱涝灾情、秋收粮草的军国大事。但渐渐地，信房的文书们发现，竹简里混入了大量毫无用处的“废简”。有江湖道士推销“长生仙丹”的，有西域商人声称“稳赚不赔”寻找合伙的，还有假冒远房亲戚借钱的。</p>
+<p>文书们苦不堪言。他们每天必须逐字逐句阅读每一枚竹简，才能判断这是十万火急的边关战报，还是骗人钱财的无稽之谈。由于废简太多，真正重要的“要简”常常被积压，险些误了国家大事。</p>
+<p>通政司里有一位名叫贝晔的郎中，精通算学。他见文书们日渐憔悴，便立下军令状：“给我一月时间，我能让信房只留要简，片纸废简皆不得入内。”</p>
+<p>众人皆不信。贝晔不慌不忙，他并未教文书们如何去辨别骗子的语气，而是让人把过去一年里已经确认的“废简”堆在左边，确认的“要简”堆在右边。</p>
+<p>随后，贝晔雇了几十个账房先生，什么都不做，只负责“拆字”。</p>
+<p>他让账房先生统计：在左边的十万卷废简中，“仙丹”二字出现了多少次？“稳赚”出现了多少次？“速汇”出现了多少次？同样，右边的十万卷要简中，“粮草”、“水利”、“流寇”又各自出现了多少次？</p>
+<p>一月后，贝晔编纂了一本《字眼概率大账》。</p>
+<p>这天，信使送来一卷新竹简，文书刚要解开绳结细读，贝晔拦住他，只扫了一眼简牍上的几个词：“绝密”、“祖传”、“金锭”、“速来”。</p>
+<p>贝晔翻开大账，拨动算盘：“‘绝密’一词，在过往的废简中出现过三千次，在要简中只出现过五十次；‘金锭’在废简中出现两千次，要简中三十次……综合这几个字眼同时出现的几率来算，此简为废简的可能，已达九成九。”</p>
+<p>贝晔判定：“烧了，不必细看。”</p>
+<p>文书半信半疑地打开那卷原本要烧掉的竹简，果然是一封声称在深山挖到前朝宝库，需要一点盘缠去运宝的骗子信件。</p>
+<p>众人大惊，奉若神明。此后，信房再也不用逐句读信。每来一简，只提取其中几个特殊的字眼，对照贝晔的大账一算，便知真伪。</p>
+<p>后来，江湖骗子们听闻了这套阵法，便狡猾地改变了用词。他们不再写“仙丹”，改写“神药”；不再写“金锭”，改写“通宝”。</p>
+<p>文书们本以为贝晔的阵法要失效了，谁知贝晔微微一笑：“大账并非死物。”每当有漏网的废简被识破，贝晔就会把这卷新废简扔进左边的库房，重新统计字眼。渐渐地，“神药”和“通宝”在废简中出现的数字水涨船高，很快又被大账精准地挡在了门外。</p>
+<p>通政司自此纲纪肃然，贝晔的这套算账之法，也被后人称为“贝氏分简术”。</p>
+<hr>
+<h3 id="概念解析：贝叶斯垃圾邮件过滤-Bayesian-Spam-Filtering"><a href="#概念解析：贝叶斯垃圾邮件过滤-Bayesian-Spam-Filtering" class="headerlink" title="概念解析：贝叶斯垃圾邮件过滤 (Bayesian Spam Filtering)"></a>概念解析：贝叶斯垃圾邮件过滤 (Bayesian Spam Filtering)</h3><p>在上面的寓言中，贝晔郎中使用的“分简术”，正是计算机科学中极为经典的<strong>贝叶斯垃圾邮件过滤</strong>模型。这个概念的核心不是去“理解”邮件的含义，而是利用统计学 and 概率论来计算一封邮件是垃圾邮件的可能性。</p>
+<p>以下是故事与真实技术概念的对应关系：</p>
+<ul>
+<li><strong>贝晔郎中</strong>：代表<strong>托马斯·贝叶斯 (Thomas Bayes)</strong> 提出的贝叶斯定理，以及基于该定理的分类算法。</li>
+<li><strong>废简与要简的分类堆放</strong>：代表机器学习中的**训练集 (Training Data)**。过滤器必须先“吃下”大量已知是垃圾邮件 (Spam) 和正常邮件 (Ham) 的样本，才能进行学习。</li>
+<li><strong>账房先生拆字统计</strong>：代表<strong>特征提取 (Feature Extraction) 和词频统计</strong>。系统会将邮件拆分成一个个词语（Token），并计算这些词语在垃圾邮件和正常邮件中出现的频率。</li>
+<li><strong>《字眼概率大账》</strong>：代表训练后生成的<strong>概率模型</strong>。模型知道“免费”、“中奖”、“伟哥”这类词在垃圾邮件中出现的概率极高，而在正常邮件中概率极低。</li>
+<li><strong>综合字眼计算判定</strong>：代表<strong>朴素贝叶斯分类器 (Naive Bayes Classifier)</strong> 的核心运作。当一封新邮件到来时，系统会提取其中的词汇，并使用贝叶斯定理计算在包含这些特定词汇的条件下，这封邮件是垃圾邮件的后验概率。</li>
+</ul>
+<p>其背后的核心数学逻辑是<strong>贝叶斯定理</strong>：<br>$$P(Spam|Words) = \frac{P(Words|Spam)P(Spam)}{P(Words)}$$</p>
+<p>在实际的垃圾邮件过滤中，假设一封邮件包含词汇 $W_1, W_2, … W_n$，计算它是垃圾邮件 ($S$) 的概率公式通常展开为：<br>$$P(S|W_1, …, W_n) = \frac{P(S) \prod P(W_i|S)}{P(S) \prod P(W_i|S) + P(H) \prod P(W_i|H)}$$<br><em>(其中 $S$ 代表垃圾邮件， $H$ 代表正常邮件)</em></p>
+<ul>
+<li><strong>骗子改换词汇与大账的持续更新</strong>：代表贝叶斯过滤器的**自适应与持续学习能力 (Adaptive Learning)**。垃圾邮件发送者会不断改变策略（例如将 “Viagra” 写成 “V1agra”），但只要用户手动将漏网的邮件标记为“垃圾邮件”，贝叶斯过滤器就会将这些新词汇纳入计算库，重新调整概率权重。这种“魔高一尺，道高一丈”的动态更新，是贝叶斯过滤器在早期互联网时代大获成功的关键。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%AE%9A%E7%90%86/" rel="tag"># 贝叶斯定理</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E5%9E%83%E5%9C%BE%E9%82%AE%E4%BB%B6%E8%BF%87%E6%BB%A4/" rel="tag"># 垃圾邮件过滤</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/12/02/19-OPC-UA-%E6%BC%AB%E7%94%BB/" rel="prev" title="哆啦A梦的工业通信大冒险：OPC UA 漫画">
+      <i class="fa fa-chevron-left"></i> 哆啦A梦的工业通信大冒险：OPC UA 漫画
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%93%E8%A8%80%EF%BC%9A%E8%B4%9D%E9%83%8E%E4%B8%AD%E7%9A%84%E5%88%86%E7%AE%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text">寓言：贝郎中的分简术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90%EF%BC%9A%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9E%83%E5%9C%BE%E9%82%AE%E4%BB%B6%E8%BF%87%E6%BB%A4-Bayesian-Spam-Filtering"><span class="nav-number">2.</span> <span class="nav-text">概念解析：贝叶斯垃圾邮件过滤 (Bayesian Spam Filtering)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">加斯东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">加斯东</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">91k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:23</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://justdong.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://justdong.net/2026/04/29/20-bayesian-spam-filtering/";
+    this.page.identifier = "2026/04/29/20-bayesian-spam-filtering/";
+    this.page.title = "寓言：贝郎中的分简术 (贝叶斯垃圾邮件过滤)";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://justdong.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

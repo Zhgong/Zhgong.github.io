@@ -6,7 +6,7 @@
   <link href="https://justdong.net/atom.xml" rel="self"/>
   
   <link href="https://justdong.net/"/>
-  <updated>2025-12-02T21:28:08.198Z</updated>
+  <updated>2026-04-29T21:08:29.214Z</updated>
   <id>https://justdong.net/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>寓言：贝郎中的分简术 (贝叶斯垃圾邮件过滤)</title>
+    <link href="https://justdong.net/2026/04/29/20-bayesian-spam-filtering/"/>
+    <id>https://justdong.net/2026/04/29/20-bayesian-spam-filtering/</id>
+    <published>2026-04-29T21:05:21.000Z</published>
+    <updated>2026-04-29T21:08:29.214Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;寓言：贝郎中的分简术&quot;&gt;&lt;a href=&quot;#寓言：贝郎中的分简术&quot; class=&quot;headerlink&quot; title=&quot;寓言：贝郎中的分简术&quot;&gt;&lt;/a&gt;寓言：贝郎中的分简术&lt;/h3&gt;&lt;p&gt;大治年间，天下承平，商贾云集。京城通政司的信房每天都要接收来自全国各地成千上万的竹简。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="贝叶斯定理" scheme="https://justdong.net/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%AE%9A%E7%90%86/"/>
+    
+    <category term="机器学习" scheme="https://justdong.net/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="垃圾邮件过滤" scheme="https://justdong.net/tags/%E5%9E%83%E5%9C%BE%E9%82%AE%E4%BB%B6%E8%BF%87%E6%BB%A4/"/>
+    
+  </entry>
   
   <entry>
     <title>哆啦A梦的工业通信大冒险：OPC UA 漫画</title>
@@ -345,21 +366,6 @@
     
     
     <summary type="html">&lt;p&gt;目前ubuntu系统运行在128G的SSD中，刚好最近又有一块256G的闲置SSD。后来就干脆打算把Ubuntu系统迁移到更大的磁盘中。刚开始的想法就是在新的磁盘中重装系统，后来一想，装好之后又要进行一大堆的设置，得费半天的功夫。就琢磨这有没有更加方便省事的办法。&lt;/p&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>使用pipenv虚拟环境（从github上面安装软件包）</title>
-    <link href="https://justdong.net/2021/03/01/07use-pipenv/"/>
-    <id>https://justdong.net/2021/03/01/07use-pipenv/</id>
-    <published>2021-02-28T23:04:00.000Z</published>
-    <updated>2024-03-31T20:34:13.613Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;什么是pipenv？&quot;&gt;&lt;a href=&quot;#什么是pipenv？&quot; class=&quot;headerlink&quot; title=&quot;什么是pipenv？&quot;&gt;&lt;/a&gt;什么是pipenv？&lt;/h2&gt;&lt;p&gt;&lt;code&gt;pipenv&lt;/code&gt; 是一个Python的开发虚拟环境以及包管理工具，简而言之就是集成了&lt;code&gt;pip&lt;/code&gt;和&lt;code&gt;virtualenv&lt;/code&gt;的功能.详细的功能介绍可以参考&lt;a href=&quot;https://docs.pipenv.org/&quot;&gt;官方网页&lt;/a&gt;。&lt;/p&gt;</summary>
     
     
     
